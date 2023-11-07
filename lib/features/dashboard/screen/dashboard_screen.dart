@@ -30,7 +30,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  List<DashboardModelSuccess>? dashboardModal = [];
+  DashboardModelSuccess? dashboardModal;
+  Count? count;
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +56,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: SingleChildScrollView(
           child: BlocListener<DashboardBloc, DashboardState>(
             listener: ((context, state) {
+              debugPrint('Dash list states => $state');
               if(state is DashboardSuccessState) {
-                // dashboardModal= state.dashboardModel.data!;
+                dashboardModal = state.dashboardModel.data!;
+                count = dashboardModal!.count;
+                debugPrint('Dash 10');
+              } else if(state is DashboardFailedState) {
+                debugPrint('Dash 20');
               }
             }),
             child: BlocBuilder<DashboardBloc, DashboardState>(
