@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
+import 'package:mim_whatsup/features/dashboard/repo/repo.dart';
 import 'package:mim_whatsup/features/login/bloc/bloc.dart';
 import 'package:mim_whatsup/features/login/repo/repo.dart';
 
@@ -16,6 +18,11 @@ class ParentBlocProviders extends StatelessWidget {
         BlocProvider<LoginBloc>(
           create: (BuildContext context) => LoginBloc(
             repo: LoginRepoImpl()
+          )
+        ),
+        BlocProvider<DashboardBloc>(
+          create: (BuildContext context) => DashboardBloc(
+            repo: DashboardRepoImpl()
           )
         ),
       ],

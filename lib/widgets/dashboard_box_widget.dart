@@ -51,13 +51,13 @@ class DashboardBoxWidget extends StatelessWidget {
                 Text(
                   boxTitle,
                   maxLines: 2,
-                  style: TextStyles.s14_w500_c000000,
+                  style: TextStyles.s12_w500_c000000_lato,
                   textAlign:TextAlign.center,
                 ),
                 const SizedBox(height: 5),
                 Text(
                   boxSubtitle,
-                  style: TextStyles.s14_w600_c000000,
+                  style: TextStyles.s12_w700_c000000_lato,
                 ),
               ],
             ),

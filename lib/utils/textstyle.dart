@@ -51,6 +51,13 @@ class TextStyles {
     color: c000000,
   );
 
+  static var s18_w500_c000000_lato = const TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 18,
+    color: c000000,
+    fontFamily: 'Lato',
+  );
+
   static var s14_w400_cB3AEAE = const TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 14,
@@ -109,5 +116,19 @@ class TextStyles {
     fontWeight: FontWeight.w500,
     fontSize: 16,
     color: c544FFF,
+  );
+
+  static var s12_w500_c000000_lato = const TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 12,
+    color: c000000,
+    fontFamily: 'Lato',
+  );
+
+  static var s12_w700_c000000_lato = const TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 12,
+    color: c000000,
+    fontFamily: 'Lato',
   );
 }

@@ -90,7 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: currentTabIndex,
         type: BottomNavigationBarType.fixed,
         onTap: (value) {
-          debugPrint('SIM $value');
           setState(() {
             currentTabIndex = value;
           });
