@@ -10,4 +10,28 @@ class Apis {
 
   // dashboard
   static const getDashboard  = '$domain/UserDashboard';
+
+  //ActiveChat
+  static const getActiveChat  = '$domain/GetloadChatBox';
+
+  //OldChat
+  static const getOldChat  = '$domain/GetLoadOldChatBox';
+
+  //SortChat
+  static const getChatSort = '$domain/GetLoadShortingLabelWiseChat?CheckOld=';
+
+  //UnreadChat
+  static const getUnreadChat = '$domain/GetLoadFilterUnreadChatBox?CheckOld=';
+
+  //GetChatLabel
+  static const getChatLabel = '$domain/GetFlag?CustomerMob=';
+
+  //AddChatLabel
+  static const addChatLabel = '$domain/AddNewLabel';
+
+  //EditChatLabel
+  static const editChatLabel = '$domain/EditFlag';
+
+  //DeleteChatLabel
+  static const deleteChatLabel = '$domain/DeleteFlag';
 }

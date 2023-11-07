@@ -1,8 +1,14 @@
 // ignore_for_file: prefer_final_fields
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
+import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
 import 'package:mim_whatsup/features/user_chat/screen/individual_chatting_screen.dart';
+import 'package:mim_whatsup/features/user_chat/screen/user_chat_data_loader.dart';
 import 'package:mim_whatsup/utils/colors.dart';
+import 'package:mim_whatsup/utils/static_var.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/app_bar.dart';
@@ -22,10 +28,12 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
   TextEditingController _searchController = TextEditingController();
   bool isChecked = false;
   TabController? tabController;
+  List<UserChatModel> chatList = [];
 
   @override
   void initState() {
     super.initState();
+    _loadData(context, ChatType.ACTIVE);
     tabController = TabController(length: 2, vsync: this);
   }
 
@@ -72,7 +80,23 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
                             Tab(text: Strings.actveChtTabTxt),
                             Tab(text: Strings.oldChtTabTxt),
                           ],
-                          onTap: (index) {},
+                          onTap: (index) {
+                            if(index == 0){
+                              GlobalVar.activeTab = 0;
+                              if(isChecked == true){
+                                _loadData(context, ChatType.UNREAD);
+                              } else {
+                                _loadData(context, ChatType.ACTIVE);
+                              }
+                            } else {
+                              GlobalVar.activeTab = 1;
+                              if(isChecked == true){
+                                _loadData(context, ChatType.UNREAD);
+                              } else {
+                                _loadData(context, ChatType.OLD);
+                              }
+                            }
+                          },
                         ),
                       ),
                       Expanded(
@@ -81,8 +105,10 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
                           child: TabBarView(
                             controller: tabController,
                             children: [
-                              _getChatList(),
-                              _getChatList()
+                              UserChatDataLoader(chatType: ChatType.ACTIVE),
+                              UserChatDataLoader(chatType: ChatType.OLD),
+                              // _getChatList(),
+                              // _getChatList()
                             ],
                           ),
                         ),
@@ -98,32 +124,32 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
     );
   }
 
-  _getChatList() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: 3,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return ListingCard(
-            userName: 'DILIP Sharma',
-            date: '26th July 23',
-            mobNum: '9749205923',
-            notificationNum: '2',
-            onTap: () {
-              Navigator.push(
-                context, 
-                MaterialPageRoute(
-                  builder: (context) => const ChattingScreen(
-                    userName: 'DILIP Sharma',
-                  )
-                )
-              );
-            }, 
-          );
-        } 
-      )
-    );
-  }
+  // _getChatList() {
+  //   return Expanded(
+  //     child: ListView.builder(
+  //       itemCount: 3,
+  //       shrinkWrap: true,
+  //       itemBuilder: (context, index) {
+  //         return ListingCard(
+  //           userName: 'DILIP Sharma',
+  //           date: '26th July 23',
+  //           mobNum: '9749205923',
+  //           notificationNum: '2',
+  //           onTap: () {
+  //             Navigator.push(
+  //               context,
+  //               MaterialPageRoute(
+  //                 builder: (context) => const ChattingScreen(
+  //                   userName: 'DILIP Sharma',
+  //                 )
+  //               )
+  //             );
+  //           },
+  //         );
+  //       }
+  //     )
+  //   );
+  //}
 
   _searchRow() {
     return Row(
@@ -137,6 +163,9 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
               searchEnabled: true,
               searchController: _searchController,
               barWidth: MediaQuery.of(context).size.width * 0.5,
+              onChanged: (text) {
+                // _filterChatList(text);
+              },
             ),
             InkWell(
               onTap: () {
@@ -158,10 +187,18 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
                 size: 30,
               ),
             ),
-            const Icon(
-              Icons.arrow_downward_outlined,
-              color: c137700,
-              size: 20,
+            InkWell(
+              onTap: (){
+                setState(() {
+                  isChecked = false;
+                });
+                _loadData(context, ChatType.SORT);
+              },
+              child: const Icon(
+                Icons.arrow_downward_outlined,
+                color: c137700,
+                size: 20,
+              ),
             ),
           ],
         ),
@@ -175,6 +212,13 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
                   setState(() {
                     isChecked = newValue!;
                   });
+                  if(isChecked == true){
+                    _loadData(context, ChatType.UNREAD);
+                  } else if(GlobalVar.activeTab == 0){
+                    _loadData(context, ChatType.ACTIVE);
+                  } else if(GlobalVar.activeTab == 1){
+                    _loadData(context, ChatType.OLD);
+                  }
                 },
                 value: isChecked,
                 activeColor: c137700,
@@ -188,5 +232,22 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
         ),
       ],
     );
+  }
+
+  void _loadData(BuildContext context, ChatType chatType) {
+    ChatEvent chatEvent;
+    if (chatType == ChatType.ACTIVE) {
+      chatEvent = GetActiveChatEvent();
+    } else if (chatType == ChatType.OLD) {
+      chatEvent = GetOldChatEvent();
+    } else if (chatType == ChatType.SORT) {
+      chatEvent = GetSortChatEvent(chatType: GlobalVar.activeTab == 0?"0":"1");
+    } else if (chatType == ChatType.UNREAD) {
+      chatEvent = GetUnreadChatEvent(chatType: GlobalVar.activeTab == 0?"0":"1");
+    } else {
+      chatEvent = GetActiveChatEvent();
+    }
+
+    BlocProvider.of<ChatBloc>(context).add(chatEvent);
   }
 }

@@ -10,6 +10,12 @@ class ListingCard extends StatelessWidget {
   final String mobNum;
   final String notificationNum;
   void Function()? onTap;
+  final String label1Text;
+  final String label1Color;
+  final String label2Text;
+  final String label2Color;
+  final String label3Text;
+  final String label3Color;
 
   ListingCard({Key? key, 
     required this.userName, 
@@ -17,6 +23,12 @@ class ListingCard extends StatelessWidget {
     required this.mobNum,
     required this.notificationNum,
     required this.onTap,
+    required this.label1Text,
+    required this.label1Color,
+    required this.label2Text,
+    required this.label2Color,
+    required this.label3Text,
+    required this.label3Color,
   }) : super(key: key);
 
   @override
@@ -24,34 +36,53 @@ class ListingCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(top: 20),
+        //margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
           color: cFFFFFF,
-          borderRadius: BorderRadius.circular(10),
+          //borderRadius: BorderRadius.circular(10),
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.grey.withOpacity(0.5), // You can change the color to your desired color
+              width: 0.5,         // You can adjust the border width as needed
+            ),
+          ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.only(top: 15, bottom: 15),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconAvatar(
                       userNameString: userName,
                     ),
-                    const ChipWidget(
-                      label1: 'Label1',
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     label1Text == ""?Container():ChipWidget(
+                    //       label1: label1Text??"",
+                    //     ),
+                    //     label1Text == ""?Container():const SizedBox(width: 5),
+                    //     label2Text == ""?Container():ChipWidget(
+                    //       label1: label2Text??"",
+                    //     ),
+                    //   ],
+                    // )
                   ],
                 ),
                 const SizedBox(width: 15),
                 Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      userName,
+                      userName.split(" ").first,
                       style: TextStyles.s18_w500_c000000,
                     ),
                     const SizedBox(height: 5),
@@ -59,6 +90,19 @@ class ListingCard extends StatelessWidget {
                       '($mobNum)',
                       style: TextStyles.s14_w400_cB3AEAE,
                     ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        label1Text == ""?Container():ChipWidget(
+                          label1: label1Text??"",
+                        ),
+                        label1Text == ""?Container():const SizedBox(width: 5),
+                        label2Text == ""?Container():ChipWidget(
+                          label1: label2Text??"",
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ],
@@ -68,23 +112,27 @@ class ListingCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  date,
+                  date.split(" ").first,
                   style: TextStyles.s14_w400_cB3AEAE,
                 ),
-                Container(
-                  width: 20,
-                  height: 20,
+                Text(
+                  date.split(" ").last,
+                  style: TextStyles.s14_w400_cB3AEAE,
+                ),
+                notificationNum == "0"?Container():Container(
+                  width: 18,
+                  height: 18,
                   margin: const EdgeInsets.only(top: 5),
                   padding: const EdgeInsets.all(1),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: c0FC333,
-                    border: Border.all(width: 1.5, color: c606CC4),
+                    border: Border.all(width: 1.5, color: cFFFFFF),
                   ),
                   child: Center(
                     child: Text(
                       notificationNum,
-                      style: TextStyles.s14_w500_cFFFFFF,
+                      style: TextStyles.s11_w500_cFFFFFF,
                     ),
                   ),
                 )

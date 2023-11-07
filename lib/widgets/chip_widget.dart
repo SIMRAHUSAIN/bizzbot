@@ -13,7 +13,7 @@ class ChipWidget extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 5),
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
           alignment: Alignment.center,
           decoration: const BoxDecoration(
             color: c606CC4,
@@ -21,7 +21,7 @@ class ChipWidget extends StatelessWidget {
           ),
           child: Text(
             label1!,
-            style: TextStyles.s11_w500_cFFFFFF,
+            style: TextStyles.s8_w400_cFFFFFF,
           ),
         ),
       ],
