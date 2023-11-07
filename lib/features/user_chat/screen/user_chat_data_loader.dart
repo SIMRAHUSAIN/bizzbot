@@ -26,7 +26,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:  BlocConsumer<ChatBloc, ChatState>(
+      body: BlocConsumer<ChatBloc, ChatState>(
         listener: (context, state){},
         builder: (context, state) {
           if(state is ChatInitialState){

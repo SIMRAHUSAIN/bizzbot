@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
+import 'package:mim_whatsup/features/user_chat_filter/model/chat_label_list_model.dart';
 
 abstract class ChatFilterState extends Equatable {
   @override
@@ -21,11 +22,11 @@ class FetchChatLabelLoadingState extends ChatFilterState {
 }
 
 class FetchChatLabelSuccessState extends ChatFilterState {
-  final UserChatModel userChatModel;
-  FetchChatLabelSuccessState(this.userChatModel);
+  final ChatLabelListModel chatLabelListModel;
+  FetchChatLabelSuccessState(this.chatLabelListModel);
 
   @override
-  List<Object> get props => [userChatModel];
+  List<Object> get props => [chatLabelListModel];
 }
 
 class FetchChatLabelFailedState extends ChatFilterState {

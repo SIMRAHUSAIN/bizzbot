@@ -46,6 +46,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           jsonPostData: jsonPostData,
         );
         if(loginModel.status == 200) {
+          GlobalVar.mobileNo = loginModel.success?[0].agentMob??"";
           emit(LoginSuccessState(loginModel));
         } else {
           emit(LoginFailedState(loginModel.success.toString()));

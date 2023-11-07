@@ -5,4 +5,5 @@ class GlobalVar {
     "Authorization": "Bearer ${GlobalVar.globalToken}"
   };
   static int activeTab = 0;
+  static String mobileNo = "";
 }
