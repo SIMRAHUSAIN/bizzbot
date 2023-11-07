@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, import_of_legacy_library_into_null_safe
+// ignore_for_file: prefer_const_constructors, import_of_legacy_library_into_null_safe, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +12,7 @@ import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/app_bar.dart';
 import 'package:mim_whatsup/widgets/dashboard_box_widget.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -30,8 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  DashboardModelSuccess? dashboardModal;
-  Count? count;
+  Count? dashboardCountData;
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +58,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             listener: ((context, state) {
               debugPrint('Dash list states => $state');
               if(state is DashboardSuccessState) {
-                dashboardModal = state.dashboardModel.data!;
-                count = dashboardModal!.count;
-                debugPrint('Dash 10');
+                dashboardCountData = state.dashboardModel.data!.count;
               } else if(state is DashboardFailedState) {
-                debugPrint('Dash 20');
+                // 
               }
             }),
             child: BlocBuilder<DashboardBloc, DashboardState>(
@@ -96,11 +94,190 @@ class _DashboardScreenState extends State<DashboardScreen> {
         SizedBox(height: 10),
         SizedBox(
           height: 200,
-          child: Center(child: Text('Bar chart space')),
+          child: SizedBox(
+            child: BarChart(
+              BarChartData(
+                barTouchData: barTouchData,
+                titlesData: titlesData,
+                borderData: borderData,
+                barGroups: barGroups,
+                gridData: FlGridData(show: false),
+                alignment: BarChartAlignment.spaceAround,
+                maxY: 20,
+                // backgroundColor: cECF7FF
+              )
+            ),
+          ),
         ),
       ]
     );
   }
+
+  BarTouchData get barTouchData => BarTouchData(
+        enabled: false,
+        touchTooltipData: BarTouchTooltipData(
+          tooltipBgColor: Colors.transparent,
+          tooltipPadding: EdgeInsets.zero,
+          tooltipMargin: 8,
+          getTooltipItem: (
+            BarChartGroupData group,
+            int groupIndex,
+            BarChartRodData rod,
+            int rodIndex,
+            ) {
+            return BarTooltipItem(
+              rod.toY.round().toString(),
+              TextStyles.s12_w700_c000000_lato,
+            );
+          },
+        ),
+      );
+
+  Widget getTitles(double value, TitleMeta meta) {
+    String text;
+    switch (value.toInt()) {
+      case 0:
+        text = 'Mon';
+        break;
+      case 1:
+        text = 'Tue';
+        break;
+      case 2:
+        text = 'Wed';
+        break;
+      case 3:
+        text = 'Thu';
+        break;
+      case 4:
+        text = 'Fri';
+        break;
+      case 5:
+        text = 'Sat';
+        break;
+      case 6:
+        text = 'Sun';
+        break;
+      default:
+        text = '';
+        break;
+    }
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 4,
+      child: Text(text, style: TextStyles.s14_w400_c374A5E),
+    );
+  }
+
+  FlTitlesData get titlesData => FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 30,
+            getTitlesWidget: getTitles,
+          ),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+      );
+
+  FlBorderData get borderData => FlBorderData(
+    show: false,
+  );
+
+  List<BarChartGroupData> get barGroups => [
+        BarChartGroupData(
+          x: 0,
+          barRods: [
+            BarChartRodData(
+              toY: 8,
+              color: cDEE2E6,
+              width: 20,
+              borderRadius: BorderRadius.circular(3)
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 1,
+          barRods: [
+            BarChartRodData(
+              toY: 10,
+              color: cDEE2E6,
+              width: 20,
+              borderRadius: BorderRadius.circular(3)
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 2,
+          barRods: [
+            BarChartRodData(
+              toY: 14,
+              color: cDEE2E6,
+              width: 20,
+              borderRadius: BorderRadius.circular(3)
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 3,
+          barRods: [
+            BarChartRodData(
+              toY: 15,
+              color: c0D8578,
+              width: 20,
+              borderRadius: BorderRadius.circular(3)
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 4,
+          barRods: [
+            BarChartRodData(
+              toY: 13,
+              color: cDEE2E6,
+              width: 20,
+              borderRadius: BorderRadius.circular(3)
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 5,
+          barRods: [
+            BarChartRodData(
+              toY: 10,
+              color: cDEE2E6,
+              width: 20,
+              borderRadius: BorderRadius.circular(3)
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+        BarChartGroupData(
+          x: 6,
+          barRods: [
+            BarChartRodData(
+              toY: 16,
+              color: cDEE2E6,
+              width: 20,
+              borderRadius: BorderRadius.circular(3)
+            )
+          ],
+          showingTooltipIndicators: [0],
+        ),
+      ];
 
   _getMsgSntWidgets() {
     return Column(
@@ -128,7 +305,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cFFF7EF,
               boxTitle: Strings.delvrdTtl,
-              boxSubtitle: '15 Min',
+              boxSubtitle: dashboardCountData != null 
+              ? double.parse(dashboardCountData!.dELIVERED.toString()).toString() : '',
               hasIcon: true,
               iconPath: ImageAssets.deliveredIcnPng,
             ), 
@@ -143,7 +321,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cFFF1F1,
               boxTitle: Strings.failedTtl,
-              boxSubtitle: '100',
+              boxSubtitle: dashboardCountData != null 
+              ? double.parse(dashboardCountData!.fAILED.toString()).toString() : '',
               hasIcon: true,
               iconPath: ImageAssets.failedIcnPng,
             ), 
@@ -152,7 +331,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cECF7FF,
               boxTitle: Strings.seenTtl,
-              boxSubtitle: '15 Min',
+              boxSubtitle: dashboardCountData != null 
+              ? double.parse(dashboardCountData!.sEEN.toString()).toString() : '',
               hasIcon: true,
               iconPath: ImageAssets.seenIcnPng,
             ), 
@@ -180,7 +360,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxWidth: 120,
               boxColor: cF1F5F8,
               boxTitle: Strings.totalcnvrstnTtl,
-              boxSubtitle: '11000',
+              boxSubtitle: dashboardCountData != null 
+              ? double.parse(dashboardCountData!.totalCount.toString()).toString() : '',
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -190,7 +371,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   boxWidth: 220,
                   boxColor: cEEFFF2,
                   boxTitle: Strings.openTtl,
-                  boxSubtitle: '1000',
+                  boxSubtitle: dashboardCountData != null 
+                  ? double.parse(dashboardCountData!.opened.toString()).toString() : '',
                   hasIcon: true,
                   iconPath: ImageAssets.openIcnPng,
                 ), 
@@ -200,7 +382,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   boxWidth: 220,
                   boxColor: cFFF1F1,
                   boxTitle: Strings.closedTtl,
-                  boxSubtitle: '800',
+                  boxSubtitle: dashboardCountData != null 
+                  ? double.parse(dashboardCountData!.closed.toString()).toString() : '',
                   hasIcon: true,
                   iconPath: ImageAssets.closedIcnPng,
                 )
@@ -217,7 +400,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxWidth: 120,
               boxColor: cFFF7EF,
               boxTitle: Strings.pendingTtl,
-              boxSubtitle: '100',
+              boxSubtitle: dashboardCountData != null 
+              ? double.parse(dashboardCountData!.pending.toString()).toString() : '',
               hasIcon: true,
               iconPath: ImageAssets.pendingIcnPng,
             ), 
@@ -226,7 +410,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxWidth: 220,
               boxColor: cECF7FF,
               boxTitle: Strings.avgRespTtl,
-              boxSubtitle: '15 Min',
+              boxSubtitle: dashboardCountData != null 
+              ? double.parse(dashboardCountData!.average.toString()).toString() : '',
               hasIcon: true,
               iconPath: ImageAssets.avgRespIcnPng,
             ), 

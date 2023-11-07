@@ -137,4 +137,10 @@ class TextStyles {
     color: c000000,
     fontFamily: 'Lato',
   );
+
+  static var s14_w400_c374A5E = const TextStyle(
+    color: c374A5E,
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+  );
 }
