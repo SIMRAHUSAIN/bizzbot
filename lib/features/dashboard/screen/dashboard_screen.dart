@@ -188,8 +188,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       );
 
   FlBorderData get borderData => FlBorderData(
-        show: false,
-      );
+    show: false,
+  );
 
   List<BarChartGroupData> get barGroups => [
         BarChartGroupData(
