@@ -88,6 +88,12 @@ class TextStyles {
     color: c939292,
   );
 
+  static var s8_w400_cFFFFFF = const TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 10,
+    color: cFFFFFF,
+  );
+
   static var s20_w400_cA8A3A3 = const TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 20, 

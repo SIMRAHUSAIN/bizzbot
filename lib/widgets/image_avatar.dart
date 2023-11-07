@@ -9,8 +9,8 @@ class IconAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 42,
-      height: 42,
+      width: 52,
+      height: 52,
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -20,7 +20,7 @@ class IconAvatar extends StatelessWidget {
       child: Center(
         child: Text(
           userNameString.substring(0,1),
-          style: TextStyles.s14_w500_cFFFFFF,
+          style: TextStyles.s16_w500_cFFFFFF,
         ),
       ),
     );

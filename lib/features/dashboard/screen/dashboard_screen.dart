@@ -30,7 +30,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  List<DashboardModelSuccess>? dashboardModal = [];
+  DashboardModel? dashboardModal;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: BlocListener<DashboardBloc, DashboardState>(
             listener: ((context, state) {
               if(state is DashboardSuccessState) {
-                // dashboardModal= state.dashboardModel.data!;
+                dashboardModal = state.dashboardModel;
               }
             }),
             child: BlocBuilder<DashboardBloc, DashboardState>(

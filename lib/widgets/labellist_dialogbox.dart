@@ -20,44 +20,39 @@ class _LabelListDialogBoxState extends State<LabelListDialogBox> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: SingleChildScrollView(
-        child: SizedBox(
-          height: 350,
-          width: MediaQuery.of(context).size.width * 0.9,
-          child: Column(
-            children: [
-              Container(
-                color: c0D8578,
-                height: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      Strings.labelTtl,
-                      style: TextStyles.s14_w500_cFFFFFF,
-                    ),
-                  ],
-                ),
+      child: SizedBox(
+        height: 350,
+        width: MediaQuery.of(context).size.width * 0.9,
+        child: Column(
+          children: [
+            Container(
+              color: c0D8578,
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    Strings.labelTtl,
+                    style: TextStyles.s14_w500_cFFFFFF,
+                  ),
+                ],
               ),
-              Container(
-                color: cFFFFFF,
-                padding: const EdgeInsets.only(top: 20, bottom: 10, left: 10, right: 10),
-                child: Column(
-                  children: [
-                    _getLabelWidget('Hot lead'),
-                    _getLabelWidget('Interested'),
-                    _getLabelWidget('Not Interested'),
-                    _getLabelWidget('Testing'),
-                    _getLabelWidget('Hot lead'),
-                  ],
-                ),
+            ),
+            Container(
+              color: cFFFFFF,
+              padding: const EdgeInsets.only(top: 20, bottom: 10, left: 10, right: 10),
+              child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index){
+                  return _getLabelWidget('Hot lead');
+                },
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: _getButtons(),
-              ),
-            ],
-          ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: _getButtons(),
+            ),
+          ],
         ),
       ),
     );
