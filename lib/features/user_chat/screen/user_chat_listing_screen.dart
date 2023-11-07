@@ -124,33 +124,6 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
     );
   }
 
-  // _getChatList() {
-  //   return Expanded(
-  //     child: ListView.builder(
-  //       itemCount: 3,
-  //       shrinkWrap: true,
-  //       itemBuilder: (context, index) {
-  //         return ListingCard(
-  //           userName: 'DILIP Sharma',
-  //           date: '26th July 23',
-  //           mobNum: '9749205923',
-  //           notificationNum: '2',
-  //           onTap: () {
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(
-  //                 builder: (context) => const ChattingScreen(
-  //                   userName: 'DILIP Sharma',
-  //                 )
-  //               )
-  //             );
-  //           },
-  //         );
-  //       }
-  //     )
-  //   );
-  //}
-
   _searchRow() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,

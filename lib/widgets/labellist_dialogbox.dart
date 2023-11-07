@@ -42,6 +42,7 @@ class _LabelListDialogBoxState extends State<LabelListDialogBox> {
               color: cFFFFFF,
               padding: const EdgeInsets.only(top: 20, bottom: 10, left: 10, right: 10),
               child: ListView.builder(
+                shrinkWrap: true,
                 itemCount: 5,
                 itemBuilder: (BuildContext context, int index){
                   return _getLabelWidget('Hot lead');

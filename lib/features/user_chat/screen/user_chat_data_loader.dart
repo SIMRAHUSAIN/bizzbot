@@ -28,32 +28,9 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
   Widget build(BuildContext context) {
     return Scaffold(
       body:  BlocConsumer<ChatBloc, ChatState>(
-        listener: (context, state){
-          print("State " + state.toString());
-        },
+        listener: (context, state){},
         builder: (context, state) {
           if(state is ChatInitialState){
-            // switch(widget.chatType){
-            //   case ChatType.ACTIVE:
-            //     chatEvent = GetActiveChatEvent();
-            //     break;
-            //   case ChatType.OLD:
-            //     chatEvent = GetOldChatEvent();
-            //     break;
-            //   case ChatType.SORT:
-            //     chatEvent = GetSortChatEvent(
-            //       chatType: "1"
-            //     );
-            //     break;
-            //   case ChatType.UNREAD:
-            //     chatEvent = GetSortChatEvent();
-            //     break;
-            //   default:
-            //     break;
-            // }
-            // chatEvent!=null?BlocProvider.of<ChatBloc>(context).add(
-            //   chatEvent!
-            // ):null;
             displayWidget = Container();
           } else if(state is ActiveChatLoadingState || state is OldChatLoadingState || state is SortChatLoadingState || state is UnreadChatLoadingState){
             displayWidget =  const Center(
@@ -69,11 +46,11 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
             );
           } else if(state is SortChatSuccessState){
             displayWidget =  UserChatList(
-                userChatModel: state.userChatModel
+              userChatModel: state.userChatModel
             );
           } else if(state is UnreadChatSuccessState){
             displayWidget =  UserChatList(
-                userChatModel: state.userChatModel
+              userChatModel: state.userChatModel
             );
           } else if(state is ActiveChatFailedState || state is OldChatFailedState || state is SortChatFailedState || state is UnreadChatFailedState){
             displayWidget =  Container();
