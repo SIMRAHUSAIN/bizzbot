@@ -9,14 +9,14 @@ class ChatLabelListModel {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['statusCode'] = this.statusCode;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['statusCode'] = statusCode;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -40,11 +40,11 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['FlagID'] = this.flagID;
-    data['FlagName'] = this.flagName;
-    data['FlagColorCode'] = this.flagColorCode;
-    data['chkbox'] = this.chkbox;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['FlagID'] = flagID;
+    data['FlagName'] = flagName;
+    data['FlagColorCode'] = flagColorCode;
+    data['chkbox'] = chkbox;
     return data;
   }
 }

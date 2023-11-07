@@ -36,17 +36,17 @@ class AppBarWithBackButton extends StatelessWidget{
         style: TextStyles.s16_w500_cFFFFFF,
       ),
       centerTitle: false,
-      actions: [
-        isSuffixIcon
-        ? GestureDetector(
-          onTap: () {},
-          child: Container(
-            padding: const EdgeInsets.only(right: 10),
-            child: Icon(suffixIcon),
-          ),
-        )
-        : const SizedBox.shrink()
-      ],
+      // actions: [
+      //   isSuffixIcon
+      //   ? GestureDetector(
+      //     onTap: () {},
+      //     child: Container(
+      //       padding: const EdgeInsets.only(right: 10),
+      //       child: Icon(suffixIcon),
+      //     ),
+      //   )
+      //   : const SizedBox.shrink()
+      // ],
       leading: isleadingIcon 
       ? GestureDetector(
           onTap: () {

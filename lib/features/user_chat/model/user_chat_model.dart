@@ -9,14 +9,14 @@ class UserChatModel {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['statusCode'] = this.statusCode;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['statusCode'] = statusCode;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -83,24 +83,24 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Sno'] = this.sno;
-    data['Contact'] = this.contact;
-    data['fromMob'] = this.fromMob;
-    data['inserttime'] = this.inserttime;
-    data['messagetext'] = this.messagetext;
-    data['toMob'] = this.toMob;
-    data['MsgCount'] = this.msgCount;
-    data['ssn'] = this.ssn;
-    data['has_diff'] = this.hasDiff;
-    data['insertdatetime'] = this.insertdatetime;
-    data['flag1nm'] = this.flag1nm;
-    data['flag2nm'] = this.flag2nm;
-    data['flag3nm'] = this.flag3nm;
-    data['flag1col'] = this.flag1col;
-    data['flag2col'] = this.flag2col;
-    data['flag3col'] = this.flag3col;
-    data['flagplus'] = this.flagplus;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['Sno'] = sno;
+    data['Contact'] = contact;
+    data['fromMob'] = fromMob;
+    data['inserttime'] = inserttime;
+    data['messagetext'] = messagetext;
+    data['toMob'] = toMob;
+    data['MsgCount'] = msgCount;
+    data['ssn'] = ssn;
+    data['has_diff'] = hasDiff;
+    data['insertdatetime'] = insertdatetime;
+    data['flag1nm'] = flag1nm;
+    data['flag2nm'] = flag2nm;
+    data['flag3nm'] = flag3nm;
+    data['flag1col'] = flag1col;
+    data['flag2col'] = flag2col;
+    data['flag3col'] = flag3col;
+    data['flagplus'] = flagplus;
     return data;
   }
 }
