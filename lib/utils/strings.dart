@@ -21,7 +21,8 @@ class Strings {
 
   //label widget
   static const labelTtl = 'Labels';
-  static const addNewLabel = 'Add New Labels';
+  static const addNewLabel = 'Add';
+  static const editLabel = 'Edit';
 
   //home screen 
   static const totalcnvrstnTtl = 'Total Conversations';

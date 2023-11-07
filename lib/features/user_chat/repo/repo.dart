@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
 import 'package:mim_whatsup/utils/apis.dart';
 import 'package:mim_whatsup/utils/global_variables.dart';
+import 'package:mim_whatsup/widgets/log_printer.dart';
 
 abstract class ChatRepo {
   Future<UserChatModel> getActiveChat();
@@ -20,6 +21,7 @@ class ChatRepoImpl extends ChatRepo {
         Uri.parse(Apis.getActiveChat),
         headers: GlobalVar.header
       );
+      LogPrinter().logPrinter(response, {}, jsonPretty: true);
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         UserChatModel userChatModel = UserChatModel.fromJson(data);
@@ -39,6 +41,7 @@ class ChatRepoImpl extends ChatRepo {
         Uri.parse(Apis.getOldChat),
         headers: GlobalVar.header
       );
+      LogPrinter().logPrinter(response, {}, jsonPretty: true);
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         UserChatModel userChatModel = UserChatModel.fromJson(data);
@@ -58,6 +61,7 @@ class ChatRepoImpl extends ChatRepo {
           Uri.parse(Apis.getChatSort+chatType),
           headers: GlobalVar.header
       );
+      LogPrinter().logPrinter(response, {}, jsonPretty: true);
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         UserChatModel userChatModel = UserChatModel.fromJson(data);
@@ -77,6 +81,7 @@ class ChatRepoImpl extends ChatRepo {
         Uri.parse(Apis.getUnreadChat+chatType),
         headers: GlobalVar.header
       );
+      LogPrinter().logPrinter(response, {}, jsonPretty: true);
       if (response.statusCode == 200) {
         var data = json.decode(response.body);
         UserChatModel userChatModel = UserChatModel.fromJson(data);
