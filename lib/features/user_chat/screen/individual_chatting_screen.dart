@@ -20,8 +20,8 @@ class _ChattingScreenState extends State<ChattingScreen> {
   bool show = false;
   FocusNode focusNode = FocusNode();
   bool sendButton = false;
-  TextEditingController _controller = TextEditingController();
-  ScrollController _scrollController = ScrollController();
+  final TextEditingController _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   
   @override
   Widget build(BuildContext context) {
@@ -159,13 +159,13 @@ class _ChattingScreenState extends State<ChattingScreen> {
                               minLines: 1,
                               onChanged: (value) {
                                 if (value.isNotEmpty) {
-                                        setState(() {
-                                          sendButton = true;
-                                        });
+                                  setState(() {
+                                    sendButton = true;
+                                  });
                                 } else {
-                                        setState(() {
-                                          sendButton = false;
-                                        });
+                                  setState(() {
+                                    sendButton = false;
+                                  });
                                 }
                               },
                               decoration: InputDecoration(
@@ -174,18 +174,16 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                 hintStyle: const TextStyle(color: Colors.grey),
                                 prefixIcon: IconButton(
                                   icon: Icon(
-                                          show
-                                              ? Icons.keyboard
-                                              : Icons.emoji_emotions_outlined,
-                                ),
-                                onPressed: () {
-                                  if (!show) {
-                                            focusNode.unfocus();
-                                            focusNode.canRequestFocus = false;
-                                  }
-                                          setState(() {
-                                            show = !show;
-                                          });
+                                    show ? Icons.keyboard : Icons.emoji_emotions_outlined,
+                                  ),
+                                  onPressed: () {
+                                    if (!show) {
+                                      focusNode.unfocus();
+                                      focusNode.canRequestFocus = false;
+                                    }
+                                    setState(() {
+                                      show = !show;
+                                    });
                                   },
                                 ),
                                 suffixIcon: Row(

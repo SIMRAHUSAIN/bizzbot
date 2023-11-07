@@ -4,6 +4,8 @@ import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
 import 'package:mim_whatsup/features/dashboard/repo/repo.dart';
 import 'package:mim_whatsup/features/login/bloc/bloc.dart';
 import 'package:mim_whatsup/features/login/repo/repo.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
+import 'package:mim_whatsup/features/user_chat/repo/repo.dart';
 
 class ParentBlocProviders extends StatelessWidget {
 
@@ -19,6 +21,9 @@ class ParentBlocProviders extends StatelessWidget {
           create: (BuildContext context) => LoginBloc(
             repo: LoginRepoImpl()
           )
+        ),
+        BlocProvider<ChatBloc>(
+          create: (BuildContext context) => ChatBloc(repo: ChatRepoImpl())
         ),
         BlocProvider<DashboardBloc>(
           create: (BuildContext context) => DashboardBloc(

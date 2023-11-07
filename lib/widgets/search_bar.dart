@@ -8,6 +8,7 @@ class SearchBar extends StatefulWidget {
   TextEditingController searchController;
   bool searchEnabled;
   double barWidth;
+  Function onChanged;
 
   SearchBar({
     Key? key,
@@ -15,6 +16,7 @@ class SearchBar extends StatefulWidget {
     required this.searchController,
     required this.searchEnabled,
     this.barWidth = 200,
+    required this.onChanged
   }) : super(key: key);
 
   @override
@@ -47,6 +49,9 @@ class _SearchBarState extends State<SearchBar> {
                   style: TextStyles.s14_w400_cB3AEAE,
                   textInputAction: TextInputAction.done,
                   cursorColor: c939292,
+                  onChanged: (text){
+                    widget.onChanged!(text);
+                  },
                   decoration: const InputDecoration(
                       contentPadding: EdgeInsets.only(bottom: 10, top: 10),
                       enabledBorder: InputBorder.none,
