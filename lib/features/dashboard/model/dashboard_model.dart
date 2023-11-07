@@ -8,6 +8,15 @@ class DashboardModel {
     statusCode = json['statusCode'];
     data = json['data'] != null ? DashboardModelSuccess.fromJson(json['data']) : null;
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['statusCode'] = statusCode;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
 }
 
 class DashboardModelSuccess {
@@ -24,6 +33,17 @@ class DashboardModelSuccess {
         chart!.add(Chart.fromJson(v));
       });
     }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (count != null) {
+      data['Count'] = count!.toJson();
+    }
+    if (chart != null) {
+      data['Chart'] = chart!.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 

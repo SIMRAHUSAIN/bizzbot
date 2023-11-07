@@ -13,7 +13,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ParentBlocProviders(
       child: MaterialApp(
-        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        title: 'MIM WhatsUp',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),

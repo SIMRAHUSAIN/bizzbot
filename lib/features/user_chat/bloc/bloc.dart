@@ -14,14 +14,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       try{
         UserChatModel userChatModel = await repo.getActiveChat();
         if(userChatModel.statusCode == "200") {
-          print("AAA");
           emit(ActiveChatSuccessState(userChatModel));
         } else {
-          print("BBB");
           emit(ActiveChatFailedState(userChatModel.data.toString()));
         }
       } catch(e) {
-        print("FFF");
         emit(ActiveChatFailedState(e.toString()));
       }
     });
@@ -31,14 +28,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       try{
         UserChatModel userChatModel = await repo.getOldChat();
         if(userChatModel.statusCode == "200") {
-          print("CCC");
           emit(OldChatSuccessState(userChatModel));
         } else {
-          print("DDD");
           emit(OldChatFailedState(userChatModel.data.toString()));
         }
       } catch(e) {
-        print("EEE");
         emit(OldChatFailedState(e.toString()));
       }
     });
@@ -48,14 +42,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       try{
         UserChatModel userChatModel = await repo.getSortChat(chatType: event.chatType??"");
         if(userChatModel.statusCode == "200") {
-          print("XXX");
           emit(SortChatSuccessState(userChatModel));
         } else {
-          print("YYY");
           emit(SortChatFailedState(userChatModel.data.toString()));
         }
       } catch(e) {
-        print("ZZZ");
         emit(SortChatFailedState(e.toString()));
       }
     });
@@ -65,14 +56,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       try{
         UserChatModel userChatModel = await repo.getUnreadChat(chatType: event.chatType??"");
         if(userChatModel.statusCode == "200") {
-          print("XXX1");
           emit(UnreadChatSuccessState(userChatModel));
         } else {
-          print("YYY1");
           emit(UnreadChatFailedState(userChatModel.data.toString()));
         }
       } catch(e) {
-        print("ZZZ1");
         emit(UnreadChatFailedState(e.toString()));
       }
     });

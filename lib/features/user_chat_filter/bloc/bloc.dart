@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
 import 'package:mim_whatsup/features/user_chat_filter/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat_filter/bloc/state.dart';
+import 'package:mim_whatsup/features/user_chat_filter/model/chat_label_list_model.dart';
 import 'package:mim_whatsup/features/user_chat_filter/repo/repo.dart';
 
 class ChatFilterBloc extends Bloc<ChatFilterEvent, ChatFilterState> {
@@ -14,13 +15,13 @@ class ChatFilterBloc extends Bloc<ChatFilterEvent, ChatFilterState> {
     on<GetChatLabelEvent>((event, emit) async {
       emit(FetchChatLabelLoadingState());
       try{
-        UserChatModel userChatModel = await repo.getChatLabel(mobileNo: event.mobileNo);
-        if(userChatModel.statusCode == "200") {
+        ChatLabelListModel chatLabelListModel = await repo.getChatLabel(mobileNo: event.mobileNo);
+        if(chatLabelListModel.statusCode == "200") {
           print("POP");
-          emit(FetchChatLabelSuccessState(userChatModel));
+          emit(FetchChatLabelSuccessState(chatLabelListModel));
         } else {
           print("KOK");
-          emit(FetchChatLabelFailedState(userChatModel.data.toString()));
+          emit(FetchChatLabelFailedState(chatLabelListModel.data.toString()));
         }
       } catch(e) {
         print("LOL");

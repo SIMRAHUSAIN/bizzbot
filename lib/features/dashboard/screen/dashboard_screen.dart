@@ -56,6 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: SingleChildScrollView(
           child: BlocListener<DashboardBloc, DashboardState>(
             listener: ((context, state) {
+              debugPrint('Dash list states => $state');
               if(state is DashboardSuccessState) {
                 dashboardCountData = state.dashboardModel.data!.count;
               } else if(state is DashboardFailedState) {

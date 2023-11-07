@@ -43,7 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: BlocListener<LoginBloc, LoginState>(
             listener: (context, state) {
-              debugPrint('Auth list states $state');
               if(state is AuthTokenSuccessState) {
                   BlocProvider.of<LoginBloc>(context).add(
                     GetLoginEvent(
