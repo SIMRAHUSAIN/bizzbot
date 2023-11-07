@@ -33,7 +33,7 @@ class EditChatLabelEvent extends ChatFilterEvent {
 }
 
 class DeleteChatLabelEvent extends ChatFilterEvent {
-  final String? flagId;
+  final List<String>? flagId;
 
   DeleteChatLabelEvent({this.flagId});
 

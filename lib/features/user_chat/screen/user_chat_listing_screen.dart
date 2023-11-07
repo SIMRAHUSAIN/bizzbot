@@ -140,15 +140,10 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
             ),
             InkWell(
               onTap: () {
-                showModalBottomSheet(
+                showDialog(
                   context: context,
-                  isDismissible: true,
-                  backgroundColor: Colors.transparent,
                   builder: (context) {
-                    return Align(
-                      alignment: Alignment.center,
-                      child: LabelListDialogBox()
-                    );
+                    return LabelListDialogBox();
                 });
               },
               child: const Icon(

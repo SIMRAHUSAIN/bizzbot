@@ -2,12 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
+import 'package:mim_whatsup/features/user_chat_filter/model/chat_label_list_model.dart';
 import 'package:mim_whatsup/utils/apis.dart';
 import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/widgets/log_printer.dart';
 
 abstract class ChatFilterRepo {
-  Future<UserChatModel> getChatLabel({required mobileNo});
+  Future<ChatLabelListModel> getChatLabel({required mobileNo});
   Future<UserChatModel> addChatLabel({required jsonPostData});
   Future<UserChatModel> editChatLabel({required jsonPostData});
   Future<UserChatModel> deleteChatLabel({required jsonPostData});
@@ -16,7 +17,7 @@ abstract class ChatFilterRepo {
 class ChatFilterRepoImpl extends ChatFilterRepo {
 
   @override
-  Future<UserChatModel> getChatLabel({required mobileNo}) async {
+  Future<ChatLabelListModel> getChatLabel({required mobileNo}) async {
     try {
       http.Response response = await http.get(
         Uri.parse(Apis.getChatLabel+mobileNo),
@@ -28,9 +29,9 @@ class ChatFilterRepoImpl extends ChatFilterRepo {
         print("OOO1");
         var data = json.decode(response.body);
         print("PPP1");
-        UserChatModel userChatModel = UserChatModel.fromJson(data);
+        ChatLabelListModel chatLabelListModel = ChatLabelListModel.fromJson(data);
         print("KKK1");
-        return userChatModel;
+        return chatLabelListModel;
       } else {
         throw Exception();
       }
