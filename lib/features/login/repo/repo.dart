@@ -4,7 +4,7 @@ import 'package:mim_whatsup/features/login/model/login_model.dart';
 import 'package:mim_whatsup/features/login/model/token_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:mim_whatsup/utils/apis.dart';
-import 'package:mim_whatsup/utils/static_var.dart';
+import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/widgets/log_printer.dart';
 
 abstract class LoginRepo {

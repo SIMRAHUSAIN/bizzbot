@@ -5,15 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
-import 'package:mim_whatsup/features/user_chat/screen/individual_chatting_screen.dart';
 import 'package:mim_whatsup/features/user_chat/screen/user_chat_data_loader.dart';
 import 'package:mim_whatsup/utils/colors.dart';
-import 'package:mim_whatsup/utils/static_var.dart';
+import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/app_bar.dart';
 import 'package:mim_whatsup/widgets/labellist_dialogbox.dart';
-import 'package:mim_whatsup/widgets/listing_card.dart';
 import 'package:mim_whatsup/widgets/search_bar.dart';
 
 class UserChatMainScreen extends StatefulWidget {
@@ -142,7 +140,6 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
             ),
             InkWell(
               onTap: () {
-                // Navigator.pop(context);
                 showModalBottomSheet(
                   context: context,
                   isDismissible: true,

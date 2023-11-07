@@ -7,7 +7,7 @@ import 'package:mim_whatsup/features/login/bloc/state.dart';
 import 'package:mim_whatsup/features/login/model/login_model.dart';
 import 'package:mim_whatsup/features/login/model/token_model.dart';
 import 'package:mim_whatsup/utils/jsonPostData.dart';
-import 'package:mim_whatsup/utils/static_var.dart';
+import 'package:mim_whatsup/utils/global_variables.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   

@@ -1,6 +1,11 @@
 // ignore_for_file: prefer_const_constructors, import_of_legacy_library_into_null_safe
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/event.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/state.dart';
+import 'package:mim_whatsup/features/dashboard/model/dashboard_model.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
@@ -18,6 +23,16 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<DashboardBloc>(context).add(
+      GetDashboardEvent()
+    );
+  }
+
+  List<DashboardModelSuccess>? dashboardModal = [];
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
@@ -33,20 +48,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
       ),
       backgroundColor: cFFFFFF,
-      body: SingleChildScrollView(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Column(
-            children: [
-              _getConversationWidgets(),
-              SizedBox(height: 10),
-              _getChartWidget(),
-              SizedBox(height: 10),
-              _getMsgSntWidgets()
-            ],
-          ),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: SingleChildScrollView(
+          child: BlocListener<DashboardBloc, DashboardState>(
+            listener: ((context, state) {
+              if(state is DashboardSuccessState) {
+                // dashboardModal= state.dashboardModel.data!;
+              }
+            }),
+            child: BlocBuilder<DashboardBloc, DashboardState>(
+              builder: ((context, state) {
+                return Column(
+                  children: [
+                    _getConversationWidgets(),
+                    SizedBox(height: 10),
+                    _getChartWidget(),
+                    SizedBox(height: 10),
+                    _getMsgSntWidgets()
+                  ],
+                );
+              }),
+            ),
+          )
         ),
       ),
     );
@@ -59,7 +85,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         Text(
           Strings.msgCntHome,
-          style: TextStyles.s22_w700_c000000,
+          style: TextStyles.s18_w500_c000000_lato,
         ),
         SizedBox(height: 10),
         SizedBox(
@@ -76,15 +102,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         Text(
           Strings.msgSntHome,
-          style: TextStyles.s22_w700_c000000,
+          style: TextStyles.s18_w500_c000000_lato,
         ),
         SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             DashboardBoxWidget(
-              boxHeight: MediaQuery.of(context).size.height * .105,
-              boxWidth: MediaQuery.of(context).size.width * .4,
+              boxHeight: 60,
+              boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cEEFFF2,
               boxTitle: Strings.sentTtl,
               boxSubtitle: '100',
@@ -92,8 +118,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               iconPath: ImageAssets.exportIcnPng,
             ), 
             DashboardBoxWidget(
-              boxHeight: MediaQuery.of(context).size.height * .105,
-              boxWidth: MediaQuery.of(context).size.width * .45,
+              boxHeight: 60,
+              boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cFFF7EF,
               boxTitle: Strings.delvrdTtl,
               boxSubtitle: '15 Min',
@@ -107,8 +133,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             DashboardBoxWidget(
-              boxHeight: MediaQuery.of(context).size.height * .105,
-              boxWidth: MediaQuery.of(context).size.width * .4,
+              boxHeight: 60,
+              boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cFFF1F1,
               boxTitle: Strings.failedTtl,
               boxSubtitle: '100',
@@ -116,8 +142,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               iconPath: ImageAssets.failedIcnPng,
             ), 
             DashboardBoxWidget(
-              boxHeight: MediaQuery.of(context).size.height * .105,
-              boxWidth: MediaQuery.of(context).size.width * .45,
+              boxHeight: 60,
+              boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cECF7FF,
               boxTitle: Strings.seenTtl,
               boxSubtitle: '15 Min',
@@ -136,7 +162,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         Text(
           Strings.cnvrstnChtHome,
-          style: TextStyles.s22_w700_c000000,
+          style: TextStyles.s18_w500_c000000_lato,
         ),
         SizedBox(height: 10),
         Row(
@@ -144,8 +170,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DashboardBoxWidget(
-              boxHeight: MediaQuery.of(context).size.height * .2,
-              boxWidth: MediaQuery.of(context).size.width * .4,
+              boxHeight: 136,
+              boxWidth: 120,
               boxColor: cF1F5F8,
               boxTitle: Strings.totalcnvrstnTtl,
               boxSubtitle: '11000',
@@ -154,8 +180,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 DashboardBoxWidget(
-                  boxHeight: MediaQuery.of(context).size.height * .09,
-                  boxWidth: MediaQuery.of(context).size.width * .45,
+                  boxHeight: 60,
+                  boxWidth: 220,
                   boxColor: cEEFFF2,
                   boxTitle: Strings.openTtl,
                   boxSubtitle: '1000',
@@ -164,8 +190,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ), 
                 SizedBox(height: 15),
                 DashboardBoxWidget(
-                  boxHeight: MediaQuery.of(context).size.height * .09,
-                  boxWidth: MediaQuery.of(context).size.width * .45,
+                  boxHeight: 60,
+                  boxWidth: 220,
                   boxColor: cFFF1F1,
                   boxTitle: Strings.closedTtl,
                   boxSubtitle: '800',
@@ -181,8 +207,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             DashboardBoxWidget(
-              boxHeight: MediaQuery.of(context).size.height * .105,
-              boxWidth: MediaQuery.of(context).size.width * .4,
+              boxHeight: 60,
+              boxWidth: 120,
               boxColor: cFFF7EF,
               boxTitle: Strings.pendingTtl,
               boxSubtitle: '100',
@@ -190,8 +216,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               iconPath: ImageAssets.pendingIcnPng,
             ), 
             DashboardBoxWidget(
-              boxHeight: MediaQuery.of(context).size.height * .105,
-              boxWidth: MediaQuery.of(context).size.width * .45,
+              boxHeight: 60,
+              boxWidth: 220,
               boxColor: cECF7FF,
               boxTitle: Strings.avgRespTtl,
               boxSubtitle: '15 Min',

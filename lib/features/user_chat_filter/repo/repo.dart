@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
 import 'package:mim_whatsup/utils/apis.dart';
-import 'package:mim_whatsup/utils/static_var.dart';
+import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/widgets/log_printer.dart';
 
 abstract class ChatFilterRepo {

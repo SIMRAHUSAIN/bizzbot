@@ -1,14 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mim_whatsup/features/login/bloc/event.dart';
-import 'package:mim_whatsup/features/login/bloc/state.dart';
-import 'package:mim_whatsup/features/login/model/login_model.dart';
-import 'package:mim_whatsup/features/login/model/token_model.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/state.dart';
 import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
 import 'package:mim_whatsup/features/user_chat/repo/repo.dart';
-import 'package:mim_whatsup/utils/jsonPostData.dart';
-import 'package:mim_whatsup/utils/static_var.dart';
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
   
