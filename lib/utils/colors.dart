@@ -26,4 +26,6 @@ const cEEFFF2 = Color(0xffEEFFF2);
 const cFFF1F1 = Color(0xffFFF1F1);
 const cFFF7EF = Color(0xffFFF7EF);
 const cECF7FF = Color(0xffECF7FF);
-const c9EA2AD =  Color(0xff9EA2AD);
+const c9EA2AD = Color(0xff9EA2AD);
+const cDEE2E6 = Color(0xffDEE2E6);
+const c374A5E = Color(0xff374A5E);

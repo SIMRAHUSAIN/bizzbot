@@ -37,7 +37,7 @@ class Count {
   int? dELIVERED;
   int? fAILED;
   int? sEEN;
-  int? seenPercent;
+  double? seenPercent;
 
   Count(
       {this.totalCount,
