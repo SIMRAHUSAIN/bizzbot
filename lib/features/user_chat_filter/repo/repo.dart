@@ -24,13 +24,9 @@ class ChatFilterRepoImpl extends ChatFilterRepo {
         headers: GlobalVar.header
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
-      debugPrint('Lama1 ==> ${json.decode(response.body).runtimeType}');
       if (response.statusCode == 200) {
-        print("OOO1");
         var data = json.decode(response.body);
-        print("PPP1");
         ChatLabelListModel chatLabelListModel = ChatLabelListModel.fromJson(data);
-        print("KKK1");
         return chatLabelListModel;
       } else {
         throw Exception();
@@ -52,13 +48,9 @@ class ChatFilterRepoImpl extends ChatFilterRepo {
           headers: GlobalVar.header
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
-      debugPrint('Lama2 ==> ${json.decode(response.body).runtimeType}');
       if (response.statusCode == 200) {
-        print("OOO2");
         var data = json.decode(response.body);
-        print("PPP2");
         UserChatModel userChatModel = UserChatModel.fromJson(data);
-        print("KKK2");
         return userChatModel;
       } else {
         throw Exception();
@@ -80,13 +72,9 @@ class ChatFilterRepoImpl extends ChatFilterRepo {
           headers: GlobalVar.header
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
-      debugPrint('Lama3 ==> ${json.decode(response.body).runtimeType}');
       if (response.statusCode == 200) {
-        print("OOO3");
         var data = json.decode(response.body);
-        print("PPP3");
         UserChatModel userChatModel = UserChatModel.fromJson(data);
-        print("KKK3");
         return userChatModel;
       } else {
         throw Exception();
@@ -108,13 +96,9 @@ class ChatFilterRepoImpl extends ChatFilterRepo {
           headers: GlobalVar.header
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
-      debugPrint('Lama4 ==> ${json.decode(response.body).runtimeType}');
       if (response.statusCode == 200) {
-        print("OOO4");
         var data = json.decode(response.body);
-        print("PPP4");
         UserChatModel userChatModel = UserChatModel.fromJson(data);
-        print("KKK4");
         return userChatModel;
       } else {
         throw Exception();
