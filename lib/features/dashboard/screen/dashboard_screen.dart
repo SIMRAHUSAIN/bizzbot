@@ -39,6 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         preferredSize: const Size.fromHeight(55),
         child: AppBar(
           backgroundColor: cFFFFFF,
+          elevation: 1,
           actions: [
             GestureDetector(
               onTap: () {},
