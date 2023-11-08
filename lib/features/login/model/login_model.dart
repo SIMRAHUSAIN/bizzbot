@@ -1,167 +1,157 @@
 class LoginModel {
-  int? status;
-  List<LoginModelSuccess>? success;
+  int? statusCode;
+  LoginSuccessModel? data;
 
-  LoginModel({
-    this.status,
-    this.success,
-  });
+  LoginModel({this.statusCode, this.data});
 
   LoginModel.fromJson(Map<String, dynamic> json) {
-    status = json["statusCode"];
-    success = json["data"];
+    statusCode = json['statusCode'];
+    data = json['data'] != null ? LoginSuccessModel.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data["statusCode"] = status;
-    if (success != null) {
-      data['data'] = success!.map((v) => v.toJson()).toList();
+    data['statusCode'] = statusCode;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
-class LoginModelSuccess {
-  String? agentUsrNm;
-  String? agentId;
-  String? userNm;
-  String? wabaBlnc;
-  String? usrTyp;
+class LoginSuccessModel {
+  String? userName;
+  String? wabaBalance;
+  String? userType;
   String? smsBal;
-  String? urlBlnc;
-  String? noOfHit;
+  String? urlBalance;
+  String? noOfhit;
   String? urlRate;
-  String? dltChrg;
-  String? rateNrmlSms;
-  String? rateSmrtSms;
-  String? rateCmpgn;
+  String? dltCharge;
+  String? rateNormalSms;
+  String? rateSmartSms;
+  String? rateCampaign;
   String? rateOtp;
   String? email;
-  String? ccEmail;
+  String? cCEmail;
   String? mobile;
-  String? domainNm;
-  String? shwSmsDlr;
-  String? shwMobxx;
-  String? dftCntry;
+  String? domainName;
+  String? showSmsDLR;
+  String? showMobilexxxx;
+  String? defaultCountry;
   String? dltNo;
-  String? aRuthKy;
+  String? aruthKey;
   String? apiUrl;
   String? wabaNo;
   String? wabaId;
   String? hsmId;
   String? hsmPwd;
-  String? prvdrNm;
-  String? wabaMobNum;
-  String? prflImagePth;
-  String? wabaMobNo;
-  String? agentMob;
+  String? providerName;
+  String? wabaMobileNumber;
+  String? agentId;
+  String? agentMobile;
+  String? profileImagePath;
 
-  LoginModelSuccess({
-    this.aRuthKy,
-    this.agentId,
-    this.agentMob,
-    this.agentUsrNm,
-    this.apiUrl,
-    this.ccEmail,
-    this.dftCntry,
-    this.dltChrg,
-    this.dltNo,
-    this.domainNm,
-    this.email,
-    this.hsmId,
-    this.hsmPwd,
-    this.mobile,
-    this.noOfHit,
-    this.prflImagePth,
-    this.prvdrNm,
-    this.rateCmpgn,
-    this.rateNrmlSms,
-    this.rateSmrtSms,
-    this.rateOtp,
-    this.shwMobxx,
-    this.shwSmsDlr,
-    this.smsBal,
-    this.urlBlnc,
-    this.urlRate,
-    this.userNm,
-    this.usrTyp,
-    this.wabaBlnc,
-    this.wabaId,
-    this.wabaMobNo,
-  });
+  LoginSuccessModel(
+      {this.userName,
+      this.wabaBalance,
+      this.userType,
+      this.smsBal,
+      this.urlBalance,
+      this.noOfhit,
+      this.urlRate,
+      this.dltCharge,
+      this.rateNormalSms,
+      this.rateSmartSms,
+      this.rateCampaign,
+      this.rateOtp,
+      this.email,
+      this.cCEmail,
+      this.mobile,
+      this.domainName,
+      this.showSmsDLR,
+      this.showMobilexxxx,
+      this.defaultCountry,
+      this.dltNo,
+      this.aruthKey,
+      this.apiUrl,
+      this.wabaNo,
+      this.wabaId,
+      this.hsmId,
+      this.hsmPwd,
+      this.providerName,
+      this.wabaMobileNumber,
+      this.agentId,
+      this.agentMobile,
+      this.profileImagePath});
 
-  LoginModelSuccess.fromJson(Map<String, dynamic> json) {
-    agentUsrNm = json["AgentUserName"];
-    agentId = json["AgentId"];
-    userNm = json["UserName"];
-    wabaBlnc = json["WabaBalance"];
-    usrTyp = json["UserType"];
-    smsBal = json["SmsBal"];
-    urlBlnc = json["UrlBalance"];
-    noOfHit = json["NoOfhit"];
-    urlRate = json["UrlRate"];
-    dltChrg = json["DltCharge"];
-    rateNrmlSms = json["RateNormalSms"];
-    rateSmrtSms = json["RateSmartSms"];
-    rateCmpgn = json["RateCampaign"];
-    rateOtp = json["rateOtp"];
-    email = json["Email"];
-    ccEmail = json["CCEmail"];
-    mobile = json["Mobile"];
-    domainNm = json["DomainName"];
-    shwSmsDlr = json["ShowSmsDLR"];
-    shwMobxx = json["ShowMobilexxxx"];
-    dftCntry = json["DefaultCountry"];
-    dltNo = json["DltNo"];
-    aRuthKy = json["AruthKey"];
-    apiUrl = json["ApiUrl"];
-    wabaNo = json["WabaNo"];
-    wabaId = json["WabaId"];
-    hsmId = json["HsmId"];
-    hsmPwd = json["HsmPwd"];
-    prvdrNm = json["ProviderName"];
-    wabaMobNum = json["WabaMobileNumber"];
-    prflImagePth = json["ProfileImagePath"];
-    wabaMobNo = json["WabaMobileNo"];
-    agentMob = json["AgentMobile"];
-  } 
+  LoginSuccessModel.fromJson(Map<String, dynamic> json) {
+    userName = json['UserName'];
+    wabaBalance = json['WabaBalance'];
+    userType = json['UserType'];
+    smsBal = json['SmsBal'];
+    urlBalance = json['UrlBalance'];
+    noOfhit = json['NoOfhit'];
+    urlRate = json['UrlRate'];
+    dltCharge = json['DltCharge'];
+    rateNormalSms = json['RateNormalSms'];
+    rateSmartSms = json['RateSmartSms'];
+    rateCampaign = json['RateCampaign'];
+    rateOtp = json['RateOtp'];
+    email = json['Email'];
+    cCEmail = json['CCEmail'];
+    mobile = json['Mobile'];
+    domainName = json['DomainName'];
+    showSmsDLR = json['ShowSmsDLR'];
+    showMobilexxxx = json['ShowMobilexxxx'];
+    defaultCountry = json['DefaultCountry'];
+    dltNo = json['DltNo'];
+    aruthKey = json['AruthKey'];
+    apiUrl = json['ApiUrl'];
+    wabaNo = json['WabaNo'];
+    wabaId = json['WabaId'];
+    hsmId = json['HsmId'];
+    hsmPwd = json['HsmPwd'];
+    providerName = json['ProviderName'];
+    wabaMobileNumber = json['WabaMobileNumber'];
+    agentId = json['AgentId'];
+    agentMobile = json['AgentMobile'];
+    profileImagePath = json['ProfileImagePath'];
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data["AgentUserName"] = agentUsrNm;
-    data["AgentId"] = agentId;
-    data["UserName"] = userNm;
-    data["WabaBalance"] = wabaBlnc;
-    data["UserType"] = usrTyp;
-    data["SmsBal"] = smsBal;
-    data["UrlBalance"] = urlBlnc;
-    data["NoOfhit"] = noOfHit;
-    data["UrlRate"] = urlRate;
-    data["DltCharge"] = dltChrg;
-    data["RateNormalSms"] = rateNrmlSms;
-    data["RateSmartSms"] = rateSmrtSms;
-    data["RateCampaign"] = rateCmpgn;
-    data["rateOtp"] = rateOtp;
-    data["Email"] = email;
-    data["CCEmail"] = ccEmail;
-    data["Mobile"] = mobile;
-    data["DomainName"] = domainNm;
-    data["ShowSmsDLR"] = shwSmsDlr;
-    data["ShowMobilexxxx"] = shwMobxx;
-    data["DefaultCountry"] = dftCntry;
-    data["DltNo"] = dltNo;
-    data["AruthKey"] = aRuthKy;
-    data["ApiUrl"] = apiUrl;
-    data["WabaNo"] = wabaNo;
-    data["WabaId"] = wabaId;
-    data["HsmId"] = hsmId;
-    data["HsmPwd"] = hsmPwd;
-    data["ProviderName"] = prvdrNm;
-    data["WabaMobileNumber"] = wabaMobNum;
-    data["ProfileImagePath"] = prflImagePth;
-    data["WabaMobileNo"] = wabaMobNo;
-    data["AgentMobile"] = agentMob;
+    data['UserName'] = userName;
+    data['WabaBalance'] = wabaBalance;
+    data['UserType'] = userType;
+    data['SmsBal'] = smsBal;
+    data['UrlBalance'] = urlBalance;
+    data['NoOfhit'] = noOfhit;
+    data['UrlRate'] = urlRate;
+    data['DltCharge'] = dltCharge;
+    data['RateNormalSms'] = rateNormalSms;
+    data['RateSmartSms'] = rateSmartSms;
+    data['RateCampaign'] = rateCampaign;
+    data['RateOtp'] = rateOtp;
+    data['Email'] = email;
+    data['CCEmail'] = cCEmail;
+    data['Mobile'] = mobile;
+    data['DomainName'] = domainName;
+    data['ShowSmsDLR'] = showSmsDLR;
+    data['ShowMobilexxxx'] = showMobilexxxx;
+    data['DefaultCountry'] = defaultCountry;
+    data['DltNo'] = dltNo;
+    data['AruthKey'] = aruthKey;
+    data['ApiUrl'] = apiUrl;
+    data['WabaNo'] = wabaNo;
+    data['WabaId'] = wabaId;
+    data['HsmId'] = hsmId;
+    data['HsmPwd'] = hsmPwd;
+    data['ProviderName'] = providerName;
+    data['WabaMobileNumber'] = wabaMobileNumber;
+    data['AgentId'] = agentId;
+    data['AgentMobile'] = agentMobile;
+    data['ProfileImagePath'] = profileImagePath;
     return data;
   }
 }

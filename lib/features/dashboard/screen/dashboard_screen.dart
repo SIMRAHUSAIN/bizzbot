@@ -10,7 +10,6 @@ import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
-import 'package:mim_whatsup/widgets/app_bar.dart';
 import 'package:mim_whatsup/widgets/dashboard_box_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -37,15 +36,31 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: AppBarWithBackButton(
-          title: '',
-          onLeadingPressed: () {},
-          onSuffixPressed: () {},
-          isleadingIcon: true,
-          leadingIcon: Icons.menu_sharp,
-          isSuffixIcon: true,
-          suffixIcon: Icons.circle_outlined,
+        preferredSize: const Size.fromHeight(55),
+        child: AppBar(
+          backgroundColor: cFFFFFF,
+          elevation: 1,
+          actions: [
+            GestureDetector(
+              onTap: () {},
+              child: Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: Icon(
+                  Icons.circle_outlined, 
+                  color: c000000,
+                  size: 30,
+                ),
+              ),
+            )
+          ],
+          leadingWidth: MediaQuery.of(context).size.width * 0.4,
+          leading: GestureDetector(
+            onTap: () {},
+            child: Padding(
+              padding: EdgeInsets.only(left: 10, bottom: 3, top: 3),
+              child: Image.asset(ImageAssets.appBarLogo, fit: BoxFit.cover),
+            ),
+          ),
         ),
       ),
       backgroundColor: cFFFFFF,
@@ -296,7 +311,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cEEFFF2,
               boxTitle: Strings.sentTtl,
-              boxSubtitle: '100',
+              boxSubtitle: dashboardCountData != null 
+              ? double.parse(dashboardCountData!.sUBMITTED.toString()).toString() : '',
               hasIcon: true,
               iconPath: ImageAssets.exportIcnPng,
             ), 
@@ -331,6 +347,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cECF7FF,
               boxTitle: Strings.seenTtl,
+              // + dashboardCountData != null 
+              // ? double.parse(dashboardCountData!.seenPercent.toString()).toString() : '',
               boxSubtitle: dashboardCountData != null 
               ? double.parse(dashboardCountData!.sEEN.toString()).toString() : '',
               hasIcon: true,

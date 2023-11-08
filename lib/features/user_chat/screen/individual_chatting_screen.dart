@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
-import 'package:mim_whatsup/widgets/image_avatar.dart';
 import 'package:mim_whatsup/widgets/message_widget.dart';
 
 class ChattingScreen extends StatefulWidget {
