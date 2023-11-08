@@ -143,4 +143,10 @@ class TextStyles {
     fontWeight: FontWeight.w400,
     fontSize: 14,
   );
+
+  static var s14_w400_c939292 = const TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    color: c939292
+  );
 }

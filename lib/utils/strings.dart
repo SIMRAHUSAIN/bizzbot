@@ -4,6 +4,10 @@ class Strings {
   static const usrnmeTxtFldLbl = 'Username';
   static const psswrdTxtFldLbl = 'Password';
 
+  //validation txt
+  static const emptyUsrNmTxt = 'Please enter the username';
+  static const emptyPsswrdTxt = 'Please enter the password';
+
   //title
   static const userChatAppBar = 'User Chats';
   static const cnvrstnChtHome = 'Conversation Chats';

@@ -30,15 +30,18 @@ class LoginRepoImpl extends LoginRepo {
         headers: {"Content-Type": "application/json"}
       );
       LogPrinter().logPrinter(response, map, jsonPretty: true);
-      debugPrint('SIM ==> ${json.decode(response.body).runtimeType}');
+      // debugPrint('SIM ==> ${json.decode(response.body).runtimeType}');
       if (response.statusCode == 200) {
+        debugPrint('Auth 01');
         var data = json.decode(response.body);
         TokenModel tokenModel = TokenModel.fromJson(data);
         return tokenModel;
       } else {
+        debugPrint('Auth 02');
         throw Exception();
       }
     } catch(e) {
+      debugPrint('Auth 03');
       throw Exception();
     }
   }
@@ -56,13 +59,16 @@ class LoginRepoImpl extends LoginRepo {
       );
       LogPrinter().logPrinter(response, map, jsonPretty: true);
       if (response.statusCode == 200) {
+        debugPrint('Log 01');
         var data = json.decode(response.body);
         LoginModel loginModel = LoginModel.fromJson(data);
         return loginModel;
       } else {
+        debugPrint('Log 02');
         throw Exception();
       }
     } catch(e) {
+      debugPrint('Log 03');
       throw Exception();
     }
   } 

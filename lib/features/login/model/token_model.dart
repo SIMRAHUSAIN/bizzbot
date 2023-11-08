@@ -21,20 +21,23 @@ class TokenModel {
 
 class TokenModelSuccess {
 
-String? expiry;
+  String? expiry;
   String? token;
+  String? message;
 
-  TokenModelSuccess({this.expiry, this.token});
+  TokenModelSuccess({this.expiry, this.token, this.message});
 
   TokenModelSuccess.fromJson(Map<String, dynamic> json) {
     expiry = json['Expiry'];
     token = json['Token'];
+    message = json["Message"];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['Expiry'] = expiry;
     data['Token'] = token;
+    data["Message"] = message;
     return data;
   }
 }

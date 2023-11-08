@@ -43,16 +43,20 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: BlocListener<LoginBloc, LoginState>(
             listener: (context, state) {
-              if(state is AuthTokenSuccessState) {
+              debugPrint('Login states ==> $state');
+                if(state is AuthTokenSuccessState) {
                   BlocProvider.of<LoginBloc>(context).add(
                     GetLoginEvent(
                       userName: 'MIM2200038',
                       passWord: 'FE1F\$FD9_738'
                     )
                   );
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                 } else if(state is AuthTokenFailedState) {
-                  // show alert
+                  _getAlertSnackbar(state.message.toString());
+                } else if(state is LoginSuccessState) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+                } else if(state is LoginFailedState) {
+                  _getAlertSnackbar(state.message.toString());
                 }
             },
             child: BlocBuilder<LoginBloc, LoginState>(
@@ -62,6 +66,18 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           )
         ),
+      ),
+    );
+  }
+
+  _getAlertSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+        )
       ),
     );
   }
@@ -90,34 +106,34 @@ class _LoginScreenState extends State<LoginScreen> {
         onSaved: (String? val) {
           _userNameController.text = val!;
         },
-        autovalidateMode: AutovalidateMode.always,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return Strings.emptyUsrNmTxt;
+          }
+          return null;
+        },
         controller: _userNameController,
         enabled: true,
-        maxLength: 1,
-        style: TextStyles.s14_w400_cFFE3E1,
-        decoration: const InputDecoration(
+        style: TextStyles.s14_w400_cB3AEAE,
+        decoration: InputDecoration(
           hintText: Strings.usrnmeTxtFldLbl,
-          hintStyle: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: c939292
-          ),
+          hintStyle: TextStyles.s14_w400_c939292,
           filled: true,
           fillColor: cFFFFFF,
           counterText: '',
-          border: OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(width: 0.75, color: c939292)
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(width: 0.75, color: c939292)
           ),
-          disabledBorder: OutlineInputBorder(
+          disabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(width: 0.75, color: c939292)
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(width: 0.75, color: c939292)
           ),
@@ -137,34 +153,34 @@ class _LoginScreenState extends State<LoginScreen> {
         onSaved: (String? val) {
           _passwordController.text = val!;
         },
-        autovalidateMode: AutovalidateMode.always,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return Strings.emptyPsswrdTxt;
+          }
+          return null;
+        },
         controller: _passwordController,
         enabled: true,
-        maxLength: 1,
-        style: TextStyles.s14_w400_cFFE3E1,
-        decoration: const InputDecoration(
+        style: TextStyles.s14_w400_cB3AEAE,
+        decoration: InputDecoration(
           hintText: Strings.psswrdTxtFldLbl,
-          hintStyle: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-            color: c939292
-          ),
+          hintStyle: TextStyles.s14_w400_c939292,
           filled: true,
           fillColor: cFFFFFF,
           counterText: '',
-          border: OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(width: 0.75, color: c939292)
           ),
-          enabledBorder: OutlineInputBorder(
+          enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(width: 0.75, color: c939292)
           ),
-          disabledBorder: OutlineInputBorder(
+          disabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(width: 0.75, color: c939292)
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
             borderSide: BorderSide(width: 0.75, color: c939292)
           ),
@@ -212,12 +228,20 @@ class _LoginScreenState extends State<LoginScreen> {
         textStyle: TextStyles.s16_w800,
         verticalSpacing: 15,
         onPressed: () {
-          BlocProvider.of<LoginBloc>(context).add(
-            GetAuthTokenEvent(
-              userName: 'MIM2200038',
-              passWord: 'FE1F\$FD9_738'
-            )
-          );
+          if(_userNameController.text.isEmpty) {
+            _getAlertSnackbar(Strings.emptyUsrNmTxt);
+          } else if(_passwordController.text.isEmpty) {
+            _getAlertSnackbar(Strings.emptyPsswrdTxt);
+          } else {
+            BlocProvider.of<LoginBloc>(context).add(
+              GetAuthTokenEvent(
+                // userName: 'MIM2200038',
+                // passWord: 'FE1F\$FD9_738'
+                userName: _userNameController.text,
+                passWord: _passwordController.text,
+              )
+            );
+          }
         },
       ),
     );
