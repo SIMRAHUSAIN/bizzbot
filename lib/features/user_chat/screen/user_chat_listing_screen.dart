@@ -66,7 +66,7 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
                     children: [
                       Container(
                         height: 45,
-                        width: MediaQuery.of(context).size.width * 0.8,
+                        width: MediaQuery.of(context).size.width * 1,
                         margin: const EdgeInsets.all(4.0),
                         alignment: Alignment.centerLeft,
                         child: TabBar(
