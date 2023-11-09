@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
 import 'package:mim_whatsup/features/user_chat/screen/individual_chatting_screen.dart';
+import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/widgets/listing_card.dart';
 
 class UserChatList extends StatefulWidget {
@@ -16,7 +17,11 @@ class _UserChatListState extends State<UserChatList> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: ListView.builder(
+      child: widget.userChatModel!.data!.isEmpty?const Center(
+        child: Text(
+          Strings.noDataAvailable,
+        ),
+      ):ListView.builder(
         itemCount: widget.userChatModel.data?.length??0,
         itemBuilder: (context, index) {
           return ListingCard(
