@@ -9,9 +9,6 @@ class ChipWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Rahul");
-    print(labelColor);
-    print("Lama");
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [

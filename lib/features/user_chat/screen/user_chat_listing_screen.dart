@@ -138,6 +138,7 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
                 // _filterChatList(text);
               },
             ),
+            const SizedBox(width: 10),
             InkWell(
               onTap: () {
                 showDialog(
