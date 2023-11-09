@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_final_fields
 
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
@@ -37,7 +36,7 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
     super.initState();
     _loadData(context, ChatType.ACTIVE);
     tabController = TabController(length: 2, vsync: this);
-    // Timer.periodic(const Duration(seconds: 60), (timer) {
+    // Timer.periodic(const Duration(seconds: 5), (timer) {
     //   GlobalVar.activeTab == 0?
     //   _loadData(context, GlobalVar.unreadBox?ChatType.UNREAD:ChatType.ACTIVE):null;
     // });

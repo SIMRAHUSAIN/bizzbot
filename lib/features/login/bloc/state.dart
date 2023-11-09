@@ -21,6 +21,13 @@ class LoginLoadingState extends LoginState {
   List<Object> get props => [];
 }
 
+class AuthLoadingState extends LoginState {
+  AuthLoadingState();
+  
+  @override
+  List<Object> get props => [];
+}
+
 class AuthTokenSuccessState extends LoginState {
   final TokenModel tokenModel;
   AuthTokenSuccessState(this.tokenModel);

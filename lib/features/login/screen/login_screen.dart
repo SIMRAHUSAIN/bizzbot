@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: BlocListener<LoginBloc, LoginState>(
             listener: (context, state) {
-              debugPrint('Login states ==> $state');
+              debugPrint('Login listener states ==> $state');
                 if(state is AuthTokenSuccessState) {
                   BlocProvider.of<LoginBloc>(context).add(
                     GetLoginEvent(
@@ -61,6 +61,10 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             child: BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) {
+                debugPrint('Login builder states ==> $state');
+                if(state is LoginLoadingState) {
+                  return const Center(child: CircularProgressIndicator());
+                }
                 return _getBodyContent();
               },
             ),
@@ -106,12 +110,12 @@ class _LoginScreenState extends State<LoginScreen> {
         onSaved: (String? val) {
           _userNameController.text = val!;
         },
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return Strings.emptyUsrNmTxt;
-          }
-          return null;
-        },
+        // validator: (value) {
+        //   if (value == null || value.isEmpty) {
+        //     return Strings.emptyUsrNmTxt;
+        //   }
+        //   return null;
+        // },
         controller: _userNameController,
         enabled: true,
         style: TextStyles.s14_w400_cB3AEAE,
@@ -153,12 +157,12 @@ class _LoginScreenState extends State<LoginScreen> {
         onSaved: (String? val) {
           _passwordController.text = val!;
         },
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return Strings.emptyPsswrdTxt;
-          }
-          return null;
-        },
+        // validator: (value) {
+        //   if (value == null || value.isEmpty) {
+        //     return Strings.emptyPsswrdTxt;
+        //   }
+        //   return null;
+        // },
         controller: _passwordController,
         enabled: true,
         style: TextStyles.s14_w400_cB3AEAE,
@@ -228,11 +232,11 @@ class _LoginScreenState extends State<LoginScreen> {
         textStyle: TextStyles.s16_w800,
         verticalSpacing: 15,
         onPressed: () {
-          if(_userNameController.text.isEmpty) {
-            _getAlertSnackbar(Strings.emptyUsrNmTxt);
-          } else if(_passwordController.text.isEmpty) {
-            _getAlertSnackbar(Strings.emptyPsswrdTxt);
-          } else {
+          // if(_userNameController.text.isEmpty) {
+          //   _getAlertSnackbar(Strings.emptyUsrNmTxt);
+          // } else if(_passwordController.text.isEmpty) {
+          //   _getAlertSnackbar(Strings.emptyPsswrdTxt);
+          // } else {
             BlocProvider.of<LoginBloc>(context).add(
               GetAuthTokenEvent(
                 userName: 'MIM2200038',
@@ -241,7 +245,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 // passWord: _passwordController.text,
               )
             );
-          }
+          // }
         },
       ),
     );

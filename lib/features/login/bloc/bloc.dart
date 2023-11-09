@@ -15,7 +15,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc({this.repo}) : super(LoginInitialState()) {
 
     on<GetAuthTokenEvent>((event, emit) async {
-      emit(LoginLoadingState());
+      emit(AuthLoadingState());
       try{
         debugPrint('Auth 1');
         Map jsonPostData  = RequestUtils().getAuthToken(
