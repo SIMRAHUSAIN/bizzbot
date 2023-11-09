@@ -29,16 +29,18 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
   bool isChecked = false;
   TabController? tabController;
   List<UserChatModel> chatList = [];
+  UserChatModel? userChatModel;
+  UserChatModel? userFilterChatModel, unfilteredChatModel, tempDataModel;
 
   @override
   void initState() {
     super.initState();
     _loadData(context, ChatType.ACTIVE);
     tabController = TabController(length: 2, vsync: this);
-    Timer.periodic(const Duration(seconds: 30), (timer) {
-      GlobalVar.activeTab == 0?
-      _loadData(context, GlobalVar.unreadBox?ChatType.UNREAD:ChatType.ACTIVE):null;
-    });
+    // Timer.periodic(const Duration(seconds: 60), (timer) {
+    //   GlobalVar.activeTab == 0?
+    //   _loadData(context, GlobalVar.unreadBox?ChatType.UNREAD:ChatType.ACTIVE):null;
+    // });
   }
 
   @override
@@ -109,8 +111,14 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
                           child: TabBarView(
                             controller: tabController,
                             children: [
-                              UserChatDataLoader(chatType: ChatType.ACTIVE),
-                              UserChatDataLoader(chatType: ChatType.OLD),
+                              UserChatDataLoader(chatType: ChatType.ACTIVE, callBackData: (UserChatModel userChatModel){
+                                userFilterChatModel = userChatModel;
+                                unfilteredChatModel ??= userChatModel;
+                              }, modelData: userChatModel),
+                              UserChatDataLoader(chatType: ChatType.OLD, callBackData: (UserChatModel userChatModel){
+                                userFilterChatModel = userChatModel;
+                                unfilteredChatModel ??= userChatModel;
+                              }, modelData: userChatModel),
                               // _getChatList(),
                               // _getChatList()
                             ],
@@ -128,6 +136,21 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
     );
   }
 
+  void _filterChatList(String searchText) {
+    setState(() {
+      tempDataModel = userFilterChatModel!.data!.isEmpty?unfilteredChatModel:userFilterChatModel;
+      if(searchText.isNotEmpty){
+        userChatModel = UserChatModel(
+          statusCode: tempDataModel!.statusCode,
+          data: tempDataModel!.data!.where((data) =>
+              data.contact!.toLowerCase().contains(searchText.toLowerCase())).toList(),
+        );
+      } else {
+        userChatModel = unfilteredChatModel;
+      }
+    });
+  }
+
   _searchRow() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -141,7 +164,7 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
               searchController: _searchController,
               barWidth: MediaQuery.of(context).size.width * 0.5,
               onChanged: (text) {
-                // _filterChatList(text);
+                _filterChatList(text);
               },
             ),
             const SizedBox(width: 10),
