@@ -7,6 +7,7 @@ import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
 import 'package:mim_whatsup/features/user_chat/screen/user_chat_data_loader.dart';
+import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/strings.dart';
@@ -188,11 +189,12 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
                 });
                 _loadData(context, ChatType.SORT);
               },
-              child: const Icon(
-                Icons.arrow_downward_outlined,
-                color: c137700,
-                size: 20,
-              ),
+              child: Image.asset(
+                ImageAssets.sortIcon, 
+                fit: BoxFit.fill, 
+                height: 25, 
+                width: 25,
+              )
             ),
           ],
         ),
