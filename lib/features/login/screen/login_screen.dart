@@ -235,10 +235,10 @@ class _LoginScreenState extends State<LoginScreen> {
           } else {
             BlocProvider.of<LoginBloc>(context).add(
               GetAuthTokenEvent(
-                // userName: 'MIM2200038',
-                // passWord: 'FE1F\$FD9_738'
-                userName: _userNameController.text,
-                passWord: _passwordController.text,
+                userName: 'MIM2200038',
+                passWord: 'FE1F\$FD9_738'
+                // userName: _userNameController.text,
+                // passWord: _passwordController.text,
               )
             );
           }
