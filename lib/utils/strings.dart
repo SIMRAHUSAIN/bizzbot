@@ -45,4 +45,7 @@ class Strings {
   static const saveBtn = 'Save';
   static const cancelBtn = 'Cancel';
   static const deleteBtn = 'Delete';
+
+  //Error and No Data
+static const noDataAvailable = "No Data Available";
 }
