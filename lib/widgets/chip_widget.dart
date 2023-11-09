@@ -3,8 +3,9 @@ import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 
 class ChipWidget extends StatelessWidget {
-  final String? label1;
-  const ChipWidget({Key? key, this.label1}) : super(key: key);
+  final String? labelText;
+  final Color? labelColor;
+  const ChipWidget({Key? key, this.labelText, this.labelColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +14,14 @@ class ChipWidget extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.only(top: 5),
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            color: c606CC4,
-            borderRadius: BorderRadius.all(Radius.circular(12)),
+          decoration: BoxDecoration(
+            color: labelColor,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
           child: Text(
-            label1!,
+            labelText!,
             style: TextStyles.s8_w400_cFFFFFF,
           ),
         ),

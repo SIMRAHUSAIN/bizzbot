@@ -82,8 +82,10 @@ class ListingCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      userName.split(" ").first,
-                      style: TextStyles.s18_w500_c000000,
+                      "${userName.split(" ")[0]} ${userName.split(" ")[1]}",
+                      style: TextStyles.s14_w500_c9EA2AD,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                     const SizedBox(height: 5),
                     Text(
@@ -95,11 +97,18 @@ class ListingCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         label1Text == ""?Container():ChipWidget(
-                          label1: label1Text??"",
+                          labelText: label1Text??"",
+                          labelColor: Color(int.parse(label1Color.replaceFirst('#', '0xFF'))),
                         ),
                         label1Text == ""?Container():const SizedBox(width: 5),
                         label2Text == ""?Container():ChipWidget(
-                          label1: label2Text??"",
+                          labelText: label2Text??"",
+                          labelColor: Color(int.parse(label2Color.replaceFirst('#', '0xFF'))),
+                        ),
+                        label2Text == ""?Container():const SizedBox(width: 5),
+                        label3Text == ""?Container():ChipWidget(
+                          labelText: label3Text??"",
+                          labelColor: Color(int.parse(label3Color.replaceFirst('#', '0xFF'))),
                         ),
                       ],
                     )

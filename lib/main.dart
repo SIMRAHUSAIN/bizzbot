@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mim_whatsup/features/splash_screen/screen/splash_screen.dart';
 import 'package:mim_whatsup/utils/bloc_providers.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.white, // navigation bar color
+    statusBarColor: Colors.transparent, // status bar color
+  ));
   runApp(const MyApp());
 }
 

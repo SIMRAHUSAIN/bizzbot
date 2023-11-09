@@ -22,6 +22,10 @@ class UserChatModel {
     }
     return data;
   }
+  @override
+  String toString() {
+    return 'UserChatModel{statusCode: $statusCode, data: $data}';
+  }
 }
 
 class Data {
@@ -102,5 +106,10 @@ class Data {
     data['flag3col'] = flag3col;
     data['flagplus'] = flagplus;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'Data{sno: $sno, contact: $contact, fromMob: $fromMob, inserttime: $inserttime, messagetext: $messagetext, toMob: $toMob, msgCount: $msgCount, ssn: $ssn, hasDiff: $hasDiff, insertdatetime: $insertdatetime, flag1nm: $flag1nm, flag2nm: $flag2nm, flag3nm: $flag3nm, flag1col: $flag1col, flag2col: $flag2col, flag3col: $flag3col, flagplus: $flagplus}';
   }
 }

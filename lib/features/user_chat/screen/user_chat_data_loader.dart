@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/state.dart';
+import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
 import 'package:mim_whatsup/features/user_chat/screen/user_chat_list.dart';
 
 enum ChatType{
@@ -14,7 +15,9 @@ enum ChatType{
 
 class UserChatDataLoader extends StatefulWidget {
   ChatType chatType;
-  UserChatDataLoader({required this.chatType, Key? key}) : super(key: key);
+  Function callBackData;
+  UserChatModel? modelData;
+  UserChatDataLoader({required this.chatType, required this.callBackData, this.modelData, Key? key}) : super(key: key);
 
   @override
   State<UserChatDataLoader> createState() => _UserChatDataLoaderState();
@@ -29,6 +32,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
       body: BlocConsumer<ChatBloc, ChatState>(
         listener: (context, state){},
         builder: (context, state) {
+          dynamic data;
           if(state is ChatInitialState){
             displayWidget = Container();
           } else if(state is ActiveChatLoadingState || state is OldChatLoadingState || state is SortChatLoadingState || state is UnreadChatLoadingState){
@@ -36,8 +40,14 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
               child: CircularProgressIndicator(),
             );
           } else if(state is ActiveChatSuccessState){
+            if(widget.modelData != null){
+              data = widget.modelData;
+            } else {
+              data = state.userChatModel;
+            }
+            widget.callBackData(state.userChatModel);
             displayWidget =  UserChatList(
-              userChatModel: state.userChatModel
+              userChatModel: data
             );
           } else if(state is OldChatSuccessState){
             displayWidget =  UserChatList(
