@@ -31,6 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Count? dashboardCountData;
+  List<Chart>? dashboardChartData;
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +75,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               debugPrint('Dash list states => $state');
               if(state is DashboardSuccessState) {
                 dashboardCountData = state.dashboardModel.data!.count;
+                dashboardChartData = state.dashboardModel.data!.chart;
               } else if(state is DashboardFailedState) {
                 // 
               }
@@ -312,7 +314,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxColor: cEEFFF2,
               boxTitle: Strings.sentTtl,
               boxSubtitle: dashboardCountData != null 
-              ? double.parse(dashboardCountData!.sUBMITTED.toString()).toString() : '',
+              ? double.parse(dashboardCountData!.sUBMITTED.toString()).truncate().toString() : '',
               hasIcon: true,
               iconPath: ImageAssets.exportIcnPng,
             ), 
@@ -322,7 +324,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxColor: cFFF7EF,
               boxTitle: Strings.delvrdTtl,
               boxSubtitle: dashboardCountData != null 
-              ? double.parse(dashboardCountData!.dELIVERED.toString()).toString() : '',
+              ? double.parse(dashboardCountData!.dELIVERED.toString()).truncate().toString() : '',
               hasIcon: true,
               iconPath: ImageAssets.deliveredIcnPng,
             ), 
@@ -338,7 +340,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxColor: cFFF1F1,
               boxTitle: Strings.failedTtl,
               boxSubtitle: dashboardCountData != null 
-              ? double.parse(dashboardCountData!.fAILED.toString()).toString() : '',
+              ? double.parse(dashboardCountData!.fAILED.toString()).truncate().toString() : '',
               hasIcon: true,
               iconPath: ImageAssets.failedIcnPng,
             ), 
@@ -350,7 +352,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               // + dashboardCountData != null 
               // ? double.parse(dashboardCountData!.seenPercent.toString()).toString() : '',
               boxSubtitle: dashboardCountData != null 
-              ? double.parse(dashboardCountData!.sEEN.toString()).toString() : '',
+              ? double.parse(dashboardCountData!.sEEN.toString()).truncate().toString() : '',
               hasIcon: true,
               iconPath: ImageAssets.seenIcnPng,
             ), 
@@ -379,7 +381,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxColor: cF1F5F8,
               boxTitle: Strings.totalcnvrstnTtl,
               boxSubtitle: dashboardCountData != null 
-              ? double.parse(dashboardCountData!.totalCount.toString()).toString() : '',
+              ? double.parse(dashboardCountData!.totalCount.toString()).truncate().toString() : '',
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -390,7 +392,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   boxColor: cEEFFF2,
                   boxTitle: Strings.openTtl,
                   boxSubtitle: dashboardCountData != null 
-                  ? double.parse(dashboardCountData!.opened.toString()).toString() : '',
+                  ? double.parse(dashboardCountData!.opened.toString()).truncate().toString() : '',
                   hasIcon: true,
                   iconPath: ImageAssets.openIcnPng,
                 ), 
@@ -401,7 +403,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   boxColor: cFFF1F1,
                   boxTitle: Strings.closedTtl,
                   boxSubtitle: dashboardCountData != null 
-                  ? double.parse(dashboardCountData!.closed.toString()).toString() : '',
+                  ? double.parse(dashboardCountData!.closed.toString()).truncate().toString() : '',
                   hasIcon: true,
                   iconPath: ImageAssets.closedIcnPng,
                 )
@@ -419,7 +421,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxColor: cFFF7EF,
               boxTitle: Strings.pendingTtl,
               boxSubtitle: dashboardCountData != null 
-              ? double.parse(dashboardCountData!.pending.toString()).toString() : '',
+              ? double.parse(dashboardCountData!.pending.toString()).truncate().toString() : '',
               hasIcon: true,
               iconPath: ImageAssets.pendingIcnPng,
             ), 
@@ -429,7 +431,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               boxColor: cECF7FF,
               boxTitle: Strings.avgRespTtl,
               boxSubtitle: dashboardCountData != null 
-              ? double.parse(dashboardCountData!.average.toString()).toString() : '',
+              ? double.parse(dashboardCountData!.average.toString()).truncate().toString() : '',
               hasIcon: true,
               iconPath: ImageAssets.avgRespIcnPng,
             ), 

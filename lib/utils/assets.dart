@@ -17,4 +17,5 @@ class ImageAssets {
   static const String sendMsgNav = 'assets/send_msg.png';
   static const String reportNav = 'assets/report.png';
   static const String appBarLogo = 'assets/appbar_logo.png';
+  static const String sortIcon = 'assets/sort.png';
 }
