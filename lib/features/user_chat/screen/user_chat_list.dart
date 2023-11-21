@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/bloc.dart';
+import 'package:mim_whatsup/features/individual_chat/repo/repo.dart';
 import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
-import 'package:mim_whatsup/features/user_chat/screen/individual_chatting_screen.dart';
+import 'package:mim_whatsup/features/individual_chat/screen/individual_chatting_screen.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/widgets/listing_card.dart';
 
@@ -39,8 +42,14 @@ class _UserChatListState extends State<UserChatList> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ChattingScreen(
-                    userName: widget.userChatModel.data?[index].contact??"",
+                  builder: (context) => BlocProvider<IndividualChatBloc>(
+                    create: (BuildContext context) => IndividualChatBloc(
+                        repo: IndividualChatRepoImpl()
+                    ),
+                    child: IndividualChattingScreen(
+                      userName: widget.userChatModel.data?[index].contact??"",
+                      userMobileNumber: widget.userChatModel.data?[index].fromMob??"",
+                    ),
                   )
                 )
               );
