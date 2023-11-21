@@ -75,7 +75,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               debugPrint('Dash list states => $state');
               if(state is DashboardSuccessState) {
                 dashboardCountData = state.dashboardModel.data!.count;
-                dashboardChartData = state.dashboardModel.data!.chart;
+                // dashboardChartData = state.dashboardModel.data!.chart;
+                // var d1 = DateTime.parse(dashboardChartData.toString());
+                // debugPrint('SIM $dashboardChartData');
+                // debugPrint('SIM 1 $d1');
               } else if(state is DashboardFailedState) {
                 // 
               }
@@ -110,20 +113,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         SizedBox(height: 10),
         SizedBox(
-          height: 200,
-          child: SizedBox(
-            child: BarChart(
-              BarChartData(
-                barTouchData: barTouchData,
-                titlesData: titlesData,
-                borderData: borderData,
-                barGroups: barGroups,
-                gridData: FlGridData(show: false),
-                alignment: BarChartAlignment.spaceAround,
-                maxY: 20,
-                // backgroundColor: cECF7FF
-              )
-            ),
+          height: 140,
+          child: BarChart(
+            BarChartData(
+              barTouchData: barTouchData,
+              titlesData: titlesData,
+              borderData: borderData,
+              barGroups: barGroups,
+              gridData: FlGridData(show: false),
+              alignment: BarChartAlignment.spaceAround,
+              maxY: 20,
+              // backgroundColor: cECF7FF
+            )
           ),
         ),
       ]
@@ -376,7 +377,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DashboardBoxWidget(
-              boxHeight: 136,
+              boxHeight: 104,
               boxWidth: 120,
               boxColor: cF1F5F8,
               boxTitle: Strings.totalcnvrstnTtl,
@@ -387,7 +388,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 DashboardBoxWidget(
-                  boxHeight: 60,
+                  boxHeight: 46,
                   boxWidth: 220,
                   boxColor: cEEFFF2,
                   boxTitle: Strings.openTtl,
@@ -398,7 +399,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ), 
                 SizedBox(height: 15),
                 DashboardBoxWidget(
-                  boxHeight: 60,
+                  boxHeight: 46,
                   boxWidth: 220,
                   boxColor: cFFF1F1,
                   boxTitle: Strings.closedTtl,

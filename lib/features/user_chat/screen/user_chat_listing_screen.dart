@@ -207,7 +207,7 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
                 onChanged: (newValue) {
                   setState(() {
                     isChecked = newValue!;
-                    GlobalVar.unreadBox = newValue!;
+                    GlobalVar.unreadBox = newValue;
                   });
                   if(isChecked == true){
                     _loadData(context, ChatType.UNREAD);
