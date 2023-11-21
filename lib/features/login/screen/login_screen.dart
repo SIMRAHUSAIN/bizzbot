@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/login/bloc/bloc.dart';
 import 'package:mim_whatsup/features/login/bloc/event.dart';
 import 'package:mim_whatsup/features/login/bloc/state.dart';
+import 'package:mim_whatsup/features/login/model/login_model.dart';
 import 'package:mim_whatsup/home_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
@@ -21,6 +22,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  LoginSuccessModel loginSuccessModel = LoginSuccessModel();
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +57,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 } else if(state is AuthTokenFailedState) {
                   _getAlertSnackbar(state.message.toString());
                 } else if(state is LoginSuccessState) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+                  loginSuccessModel = state.loginModel.data!;
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(loginSuccessModel: loginSuccessModel)));
                 } else if(state is LoginFailedState) {
                   _getAlertSnackbar(state.message.toString());
                 }

@@ -10,6 +10,7 @@ class Strings {
 
   //title
   static const userChatAppBar = 'User Chats';
+  static const profileAppBar = 'Profile';
   static const cnvrstnChtHome = 'Conversation Chats';
   static const msgCntHome = 'Message Count';
   static const msgSntHome = 'Messages Sent (Campaign)';
@@ -38,6 +39,10 @@ class Strings {
   static const delvrdTtl = 'Delivered';
   static const failedTtl = 'Failed';
   static const seenTtl = 'Seen';
+
+  //profile screen
+  static const userIdTtl = 'User Id: ';
+  static const wabaMobNo = 'Waba Mobile No: ';
   
   //buttons
   static const getStartedBtn = 'Get Started';
@@ -45,7 +50,8 @@ class Strings {
   static const saveBtn = 'Save';
   static const cancelBtn = 'Cancel';
   static const deleteBtn = 'Delete';
+  static const logOutBtn = 'Logout';
 
   //Error and No Data
-static const noDataAvailable = "No Data Available";
+  static const noDataAvailable = "No Data Available";
 }

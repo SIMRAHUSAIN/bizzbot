@@ -160,9 +160,29 @@ class TextStyles {
     fontSize: 14,
   );
 
+  static var s14_w500_c374A5E = const TextStyle(
+    color: c374A5E,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+  );
+
   static var s14_w400_c939292 = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: c939292
+  );
+
+  static var s16_w500_c374A5E = const TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+    color: c374A5E,
+    fontFamily: 'Lato',
+  );
+
+  static var s16_w700_c374A5E = const TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 16,
+    color: c374A5E,
+    fontFamily: 'Lato',
   );
 }

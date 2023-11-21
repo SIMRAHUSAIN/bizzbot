@@ -6,6 +6,8 @@ import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
 import 'package:mim_whatsup/features/dashboard/bloc/event.dart';
 import 'package:mim_whatsup/features/dashboard/bloc/state.dart';
 import 'package:mim_whatsup/features/dashboard/model/dashboard_model.dart';
+import 'package:mim_whatsup/features/login/model/login_model.dart';
+import 'package:mim_whatsup/features/profile/screen/profile_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
@@ -14,7 +16,9 @@ import 'package:mim_whatsup/widgets/dashboard_box_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  final LoginSuccessModel loginSuccessModel;
+
+  const DashboardScreen({Key? key, required this.loginSuccessModel}) : super(key: key);
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -43,7 +47,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           elevation: 1,
           actions: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(loginSuccessModel: widget.loginSuccessModel)
+                  )
+                );
+              },
               child: Padding(
                 padding: EdgeInsets.only(right: 10),
                 child: Icon(
