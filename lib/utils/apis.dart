@@ -34,4 +34,13 @@ class Apis {
 
   //DeleteChatLabel
   static const deleteChatLabel = '$domain/DeleteFlag';
+
+  //GetIndividualChatMessage
+  static const getIndividualChatMessage = '$domain/GetClickChatMessage';
+
+  //SendMessage
+  static const sendMessage = '$domain/sendwaba';
+
+  //SendFile
+  static const sendFile = '$domain/UploadFile';
 }

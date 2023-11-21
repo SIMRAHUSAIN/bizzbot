@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
 import 'package:mim_whatsup/features/dashboard/repo/repo.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/bloc.dart';
+import 'package:mim_whatsup/features/individual_chat/repo/repo.dart';
 import 'package:mim_whatsup/features/login/bloc/bloc.dart';
 import 'package:mim_whatsup/features/login/repo/repo.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';

@@ -31,6 +31,7 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
   List<UserChatModel> chatList = [];
   UserChatModel? userChatModel;
   UserChatModel? userFilterChatModel, unfilteredChatModel, tempDataModel;
+  bool sortButton = false;
 
   @override
   void initState() {
@@ -184,10 +185,11 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
             ),
             InkWell(
               onTap: (){
+                sortButton = sortButton?false:true;
                 setState(() {
                   isChecked = false;
                 });
-                _loadData(context, ChatType.SORT);
+                _loadData(context, sortButton?ChatType.SORT:GlobalVar.activeTab == 0?ChatType.ACTIVE:ChatType.OLD);
               },
               child: Image.asset(
                 ImageAssets.sortIcon, 
