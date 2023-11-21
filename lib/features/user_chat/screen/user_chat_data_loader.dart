@@ -50,19 +50,41 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
               userChatModel: data
             );
           } else if(state is OldChatSuccessState){
+            if(widget.modelData != null){
+              data = widget.modelData;
+            } else {
+              data = state.userChatModel;
+            }
+            widget.callBackData(state.userChatModel);
             displayWidget =  UserChatList(
-              userChatModel: state.userChatModel
+              userChatModel: data
             );
           } else if(state is SortChatSuccessState){
+            if(widget.modelData != null){
+              data = widget.modelData;
+            } else {
+              data = state.userChatModel;
+            }
+            widget.callBackData(state.userChatModel);
             displayWidget =  UserChatList(
-              userChatModel: state.userChatModel
+              userChatModel: data
             );
           } else if(state is UnreadChatSuccessState){
+            if(widget.modelData != null){
+              data = widget.modelData;
+            } else {
+              data = state.userChatModel;
+            }
+            widget.callBackData(state.userChatModel);
             displayWidget =  UserChatList(
-              userChatModel: state.userChatModel
+              userChatModel: data
             );
           } else if(state is ActiveChatFailedState || state is OldChatFailedState || state is SortChatFailedState || state is UnreadChatFailedState){
-            displayWidget =  Container();
+            displayWidget =  Container(
+              child: Center(
+                child: Text("No Data"),
+              ),
+            );
           }
           return displayWidget;
         },

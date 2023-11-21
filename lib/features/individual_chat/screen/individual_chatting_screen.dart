@@ -1,29 +1,45 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/bloc.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/event.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/state.dart';
 import 'package:mim_whatsup/utils/colors.dart';
+import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/message_widget.dart';
+import 'package:file_picker/file_picker.dart';
 
-class ChattingScreen extends StatefulWidget {
+class IndividualChattingScreen extends StatefulWidget {
   
   final String userName;
-  const ChattingScreen({Key? key, required this.userName}) : super(key: key);
+  final String userMobileNumber;
+  const IndividualChattingScreen({Key? key, required this.userName, required this.userMobileNumber}) : super(key: key);
 
   @override
-  State<ChattingScreen> createState() => _ChattingScreenState();
+  State<IndividualChattingScreen> createState() => _IndividualChattingScreenState();
 }
 
-class _ChattingScreenState extends State<ChattingScreen> {
+class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
 
   bool show = false;
   FocusNode focusNode = FocusNode();
   bool sendButton = false;
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  
+  dynamic displayWidget;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    focusNode.requestFocus();
     return Scaffold(
       appBar: PreferredSize(
             preferredSize: const Size.fromHeight(60),
@@ -80,7 +96,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   onSelected: (value) {
                     print(value);
                   },
-                  itemBuilder: (BuildContext contesxt) {
+                  itemBuilder: (BuildContext context) {
                     return [
                       const PopupMenuItem(
                         value: "Search",
@@ -97,16 +113,59 @@ class _ChattingScreenState extends State<ChattingScreen> {
             ),
           ),
       body: Container(
-        height: MediaQuery.of(context).size.height,
+        // height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Column(
           children: [
             Expanded(
-                    child: ListView.builder(
+              child: BlocConsumer<IndividualChatBloc, IndividualChatState>(
+                listener: (context, state){
+                  print("RAHUL " + state.toString());
+                  if(state is SendFileSuccessState){
+                    BlocProvider.of<IndividualChatBloc>(context).add(
+                      SendMessageEvent(
+                        customerMobile: widget.userMobileNumber,
+                        templateName: "",
+                        text: "",
+                        type: "Image",
+                        fileName: state.sendFileModel.data?.file??""
+                      )
+                    );
+                  } else if(state is SendMessageSuccessState){
+                    _controller.text = "";
+                    BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: widget.userMobileNumber, checkOld: '1'));
+                  }
+                },
+                builder: (context, state){
+                  if(state is IndividualChatInitialState){
+                    BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: widget.userMobileNumber, checkOld: '1'));
+                    displayWidget = const Center(
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Center(
+                          child: CircularProgressIndicator()
+                        )
+                      ),
+                    );
+                  }
+                  else if(state is IndividualChatLoadingState){
+                    displayWidget = const Center(
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Center(
+                            child: CircularProgressIndicator()
+                        )
+                      ),
+                    );
+                  } else if(state is IndividualChatSuccessState){
+                    displayWidget = ListView.builder(
                       shrinkWrap: true,
                       controller: _scrollController,
-                      itemCount: 3,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: state.individualChatModel.data?.conversation?.length??0,
                       itemBuilder: (context, index) {
                         // if (index == messages.length) {
                         //   return Container(
@@ -124,14 +183,24 @@ class _ChattingScreenState extends State<ChattingScreen> {
                         //     time: messages[index].time,
                         //   );
                         // }
-                        return const ChatMessageWidget(
-                          text: 'Hi',
-                          sender: 'us',
-                          time: ''
+                        return ChatMessageWidget(
+                            text: state.individualChatModel?.data?.conversation?[index].msgtext??"",
+                            time: state.individualChatModel?.data?.conversation?[index].inserttime??"",
+                            sendFrom: state.individualChatModel?.data?.conversation?[index].sentfrom??"",
                         );
                       },
-                    ),
-                  ),
+                    );
+                    // Scroll to the last item after the ListView.builder has been built
+                    WidgetsBinding.instance?.addPostFrameCallback((_) {
+                      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+                    });
+                  } else if(state is IndividualChatFailedState){
+                    displayWidget = Container();
+                  }
+                  return displayWidget;
+                },
+              ),
+            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(
@@ -173,23 +242,39 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                 hintStyle: const TextStyle(color: Colors.grey),
                                 prefixIcon: IconButton(
                                   icon: Icon(
-                                    show ? Icons.keyboard : Icons.emoji_emotions_outlined,
+                                    //show ?
+                                    Icons.keyboard
+                                        //: Icons.emoji_emotions_outlined,
                                   ),
                                   onPressed: () {
-                                    if (!show) {
-                                      focusNode.unfocus();
-                                      focusNode.canRequestFocus = false;
-                                    }
-                                    setState(() {
-                                      show = !show;
-                                    });
+                                    // if (!show) {
+                                    //   focusNode.unfocus();
+                                    //   focusNode.canRequestFocus = false;
+                                    // }
+                                    // setState(() {
+                                    //   show = !show;
+                                    // });
                                   },
                                 ),
                                 suffixIcon: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
-                                      onPressed: () {},
+                                      onPressed: () async {
+                                        //Future<void> pickFile() async {
+                                          FilePickerResult? result = await FilePicker.platform.pickFiles();
+                                          if (result != null) {
+                                            String filePath = result.files.single.path!;
+                                            print('Selected file path: $filePath');
+                                            BlocProvider.of<IndividualChatBloc>(context).add(
+                                              SendFileEvent(fileType: File(filePath))
+                                            );
+                                            // Use the file path as needed
+                                          } else {
+                                            // User canceled the file picking
+                                          }
+                                        //}
+                                      },
                                       icon: const Icon(Icons.attach_file),
                                     ),
                                     IconButton(
@@ -213,7 +298,19 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                 sendButton ? Icons.send : Icons.mic,
                                 color: cFFFFFF,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                if(sendButton){
+                                  BlocProvider.of<IndividualChatBloc>(context).add(
+                                    SendMessageEvent(
+                                      customerMobile: widget.userMobileNumber,
+                                      templateName: "",
+                                      type: "Text",
+                                      text: _controller.text,
+                                      fileName: ""
+                                    )
+                                  );
+                                }
+                              },
                             ),
                           ),
                         )
