@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mim_whatsup/features/login/model/login_model.dart';
+import 'package:mim_whatsup/features/login/screen/login_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
@@ -38,7 +39,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _getProfileImage(),
+              // _getProfileImage(),
+              const SizedBox(height: 50),
               _getUserData(),
               _getDashlineSeparator(),
               _getLogOutBtn(),
@@ -62,22 +64,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  _getProfileImage() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.32,
-      height: MediaQuery.of(context).size.height * 0.32,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.grey
-      ),
-    );
-  }
+  // _getProfileImage() {
+  //   return Container(
+  //     width: MediaQuery.of(context).size.width * 0.32,
+  //     height: MediaQuery.of(context).size.height * 0.32,
+  //     decoration: const BoxDecoration(
+  //       shape: BoxShape.circle,
+  //       color: Colors.grey
+  //     ),
+  //     // child: 
+  //     // const Img(
+  //     //   ImageAssets.noProfileIcon,
+  //     // ),
+  //     // Image.network(widget.loginSuccessModel.profileImagePath!)
+  //   );
+  // }
 
   _getUserData() {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               Strings.userIdTtl,
@@ -92,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               Strings.wabaMobNo,
@@ -112,7 +119,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   _getLogOutBtn() {
     return InkWell(
       onTap: () {
-        
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => const LoginScreen()
+        ));
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
