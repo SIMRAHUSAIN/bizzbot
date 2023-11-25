@@ -17,6 +17,12 @@ dependencies:
   flutter_bloc: 8.0.1
   fl_chart:
   file_picker:
+  open_file:
+  mime:
+  path_provider:
+  permission_handler:
+  flutter_downloader: 1.7.2
+  platform_device_id:
 
 dev_dependencies:
   flutter_test:

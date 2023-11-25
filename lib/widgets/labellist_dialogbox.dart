@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat_filter/bloc/bloc.dart';
 import 'package:mim_whatsup/features/user_chat_filter/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat_filter/bloc/state.dart';
@@ -14,6 +16,11 @@ import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/addnewlabel_dialogbox.dart';
 
 class LabelListDialogBox extends StatefulWidget {
+
+  final String mobileNo;
+  final bool? filter;
+
+  const LabelListDialogBox({required this.mobileNo, this.filter = false});
 
   @override
   State<LabelListDialogBox> createState() => _LabelListDialogBoxState();
@@ -56,7 +63,7 @@ class _LabelListDialogBoxState extends State<LabelListDialogBox> {
                   listener: (context, state){},
                   builder: (context, state) {
                     if(state is ChatFilterInitialState){
-                      BlocProvider.of<ChatFilterBloc>(context).add(GetChatLabelEvent(mobileNo: GlobalVar.mobileNo));
+                      BlocProvider.of<ChatFilterBloc>(context).add(GetChatLabelEvent(mobileNo: widget.mobileNo));
                       displayWidget = const Center(
                         child: SizedBox(
                           height: 50,
@@ -93,8 +100,18 @@ class _LabelListDialogBoxState extends State<LabelListDialogBox> {
                         shrinkWrap: true,
                         itemCount: state.chatLabelListModel.data?.length??0,
                         itemBuilder: (BuildContext context, int index){
-                          return _getLabelWidget(state.chatLabelListModel.data?[index].flagName??"", index,
-                              state.chatLabelListModel.data?[index].flagID??"", state.chatLabelListModel.data?[index].flagColorCode??"");
+                          if(state.chatLabelListModel.data?[index].chkbox == "1"){
+                            isCheckedList[index] = true;
+                            checkBoxId.add(state.chatLabelListModel.data?[index].flagID??"");
+                          }
+                          //isCheckedList[index] = state.chatLabelListModel.data?[index].chkbox == "1"?true:false;
+                          return _getLabelWidget(
+                            state.chatLabelListModel.data?[index].flagName??"",
+                            index,
+                            state.chatLabelListModel.data?[index].flagID??"",
+                            state.chatLabelListModel.data?[index].flagColorCode??"",
+                            state.chatLabelListModel.data?[index].chkbox??"0"
+                          );
                         },
                       );
                     } else if(state is FetchChatLabelFailedState){
@@ -105,7 +122,28 @@ class _LabelListDialogBoxState extends State<LabelListDialogBox> {
                 ),
               ),
             ),
-            Align(
+            widget.filter == true?InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 10, right: 10, top: 20),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 6, vertical: 8),
+                decoration: BoxDecoration(
+                  color: cCC2525,
+                  border: Border.all(
+                    color: cCC2525,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  Strings.cancelBtn,
+                  style: TextStyles.s14_w500_cFFFFFF,
+                ),
+              ),
+            ):Align(
               alignment: Alignment.bottomCenter,
               child: _getButtons(),
             ),
@@ -140,26 +178,47 @@ class _LabelListDialogBoxState extends State<LabelListDialogBox> {
               style: TextStyles.s16_w500_c544FFF,
             ),
           ),
-          InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-              margin: const EdgeInsets.only(left: 10, right: 8),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 6, vertical: 8),
-              decoration: BoxDecoration(
-                color: cCC2525,
-                border: Border.all(
-                  color: cCC2525,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                Strings.saveBtn,
-                style: TextStyles.s14_w500_cFFFFFF,
-              ),
+          BlocProvider<ChatFilterBloc>(
+            create: (BuildContext context) => ChatFilterBloc(
+                repo: ChatFilterRepoImpl()
+            ),
+            child: BlocConsumer<ChatFilterBloc, ChatFilterState>(
+              listener: (context, state){
+                if(state is SaveFlagSuccessState){
+                  Navigator.pop(context, true);
+                } else if(state is SaveFlagFailedState){
+                  Navigator.pop(context);
+                }
+              },
+              builder: (context, state){
+                return  InkWell(
+                  onTap: () {
+                    BlocProvider.of<ChatFilterBloc>(context).add(
+                      SaveFlagEvent(
+                        customerMobile: widget.mobileNo,
+                        flagId: checkBoxId
+                      )
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 10, right: 8),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 6, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: cCC2525,
+                      border: Border.all(
+                        color: cCC2525,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      Strings.saveBtn,
+                      style: TextStyles.s14_w500_cFFFFFF,
+                    ),
+                  ),
+                );
+              },
             ),
           ),
           BlocProvider<ChatFilterBloc>(
@@ -231,34 +290,44 @@ class _LabelListDialogBoxState extends State<LabelListDialogBox> {
     );
   }
 
-  _getLabelWidget(String label, int index, String id, String colorCode) {
+  _getLabelWidget(String label, int index, String id, String colorCode, String checkBoxEnabled) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(right: 15),
-                width: 20,
-                height: 20,
-                child: Image.asset(
-                  ImageAssets.labelPng,
-                  fit: BoxFit.fill,
+          InkWell(
+            onTap: widget.filter == true?(){
+              BlocProvider.of<ChatBloc>(context).add(GetFilteredChatEvent(
+                chatType: GlobalVar.activeTab == 0?"0":"1",
+                flagName: label,
+                flagId: id
+              ));
+              Navigator.pop(context, true);
+            }:null,
+            child: Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 15),
+                  width: 20,
+                  height: 20,
+                  child: Image.asset(
+                    ImageAssets.labelPng,
+                    fit: BoxFit.fill,
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.45,
-                child: Text(
-                  label,
-                  style: TextStyles.s14_w500_c000000,
-                  overflow: TextOverflow.ellipsis,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Text(
+                    label,
+                    style: TextStyles.s14_w500_c000000,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          Row(
+          widget.filter == true?Container():Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(

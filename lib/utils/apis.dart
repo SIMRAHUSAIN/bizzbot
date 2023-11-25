@@ -43,4 +43,13 @@ class Apis {
 
   //SendFile
   static const sendFile = '$domain/UploadFile';
+
+  //Save Flag
+  static const saveFlag = '$domain/SaveFlag';
+
+  //Unread Message
+  static const unreadMessage = '$domain/UpdateUnreadMessage';
+
+  //Get Filtered Chat
+  static const getFilteredChat = '$domain/GetLoadFilterChatBox?';
 }

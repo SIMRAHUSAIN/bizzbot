@@ -64,5 +64,19 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         emit(UnreadChatFailedState(e.toString()));
       }
     });
+
+    on<GetFilteredChatEvent>((event, emit) async {
+      emit(FilteredChatLoadingState());
+      try{
+        UserChatModel userChatModel = await repo.getFilteredChat(chatType: event.chatType??"", flagName: event.flagName??"", flagId: event.flagId??"");
+        if(userChatModel.statusCode == "200") {
+          emit(FilteredChatSuccessState(userChatModel));
+        } else {
+          emit(FilteredChatFailedState(userChatModel.data.toString()));
+        }
+      } catch(e) {
+        emit(FilteredChatFailedState(e.toString()));
+      }
+    });
   }
 }

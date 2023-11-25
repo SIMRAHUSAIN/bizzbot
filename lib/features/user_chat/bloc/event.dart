@@ -37,3 +37,13 @@ class GetUnreadChatEvent extends ChatEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetFilteredChatEvent extends ChatEvent {
+  final String? chatType;
+  final String? flagName;
+  final String? flagId;
+  GetFilteredChatEvent({this.chatType, this.flagName, this.flagId});
+
+  @override
+  List<Object> get props => [];
+}

@@ -104,3 +104,26 @@ class UnreadChatFailedState extends ChatState {
   @override
   List<Object> get props => [];
 }
+
+class FilteredChatLoadingState extends ChatState {
+  FilteredChatLoadingState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class FilteredChatSuccessState extends ChatState {
+  final UserChatModel userChatModel;
+  FilteredChatSuccessState(this.userChatModel);
+
+  @override
+  List<Object> get props => [userChatModel];
+}
+
+class FilteredChatFailedState extends ChatState {
+  final String? message;
+  FilteredChatFailedState(this.message);
+
+  @override
+  List<Object> get props => [];
+}
