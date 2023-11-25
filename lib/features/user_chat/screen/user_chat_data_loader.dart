@@ -35,7 +35,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
           dynamic data;
           if(state is ChatInitialState){
             displayWidget = Container();
-          } else if(state is ActiveChatLoadingState || state is OldChatLoadingState || state is SortChatLoadingState || state is UnreadChatLoadingState){
+          } else if(state is ActiveChatLoadingState || state is OldChatLoadingState || state is SortChatLoadingState || state is UnreadChatLoadingState || state is FilteredChatLoadingState){
             displayWidget =  const Center(
               child: CircularProgressIndicator(),
             );
@@ -79,7 +79,17 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
             displayWidget =  UserChatList(
               userChatModel: data
             );
-          } else if(state is ActiveChatFailedState || state is OldChatFailedState || state is SortChatFailedState || state is UnreadChatFailedState){
+          } else if(state is FilteredChatSuccessState){
+            if(widget.modelData != null){
+              data = widget.modelData;
+            } else {
+              data = state.userChatModel;
+            }
+            widget.callBackData(state.userChatModel);
+            displayWidget =  UserChatList(
+              userChatModel: data
+            );
+          } else if(state is ActiveChatFailedState || state is OldChatFailedState || state is SortChatFailedState || state is UnreadChatFailedState || state is FilteredChatFailedState){
             displayWidget =  Container(
               child: Center(
                 child: Text("No Data"),

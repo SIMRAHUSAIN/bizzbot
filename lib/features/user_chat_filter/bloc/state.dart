@@ -105,3 +105,49 @@ class DeleteChatLabelFailedState extends ChatFilterState {
   @override
   List<Object> get props => [];
 }
+
+class SaveFlagLoadingState extends ChatFilterState {
+  SaveFlagLoadingState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SaveFlagSuccessState extends ChatFilterState {
+  // final UserChatModel userChatModel;
+  // SaveFlagSuccessState(this.userChatModel);
+
+  @override
+  List<Object> get props => [];
+}
+
+class SaveFlagFailedState extends ChatFilterState {
+  final String? message;
+  SaveFlagFailedState(this.message);
+
+  @override
+  List<Object> get props => [];
+}
+
+class UnreadMessageLoadingState extends ChatFilterState {
+  UnreadMessageLoadingState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class UnreadMessageSuccessState extends ChatFilterState {
+  // final UserChatModel userChatModel;
+  // UnreadMessageSuccessState(this.userChatModel);
+
+  @override
+  List<Object> get props => [];
+}
+
+class UnreadMessageFailedState extends ChatFilterState {
+  final String? message;
+  UnreadMessageFailedState(this.message);
+
+  @override
+  List<Object> get props => [];
+}
