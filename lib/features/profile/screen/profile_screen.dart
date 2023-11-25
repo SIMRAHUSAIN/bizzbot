@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
+import 'package:flutter_img/flutter_img.dart';
 import 'package:mim_whatsup/features/login/model/login_model.dart';
 import 'package:mim_whatsup/features/login/screen/login_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
@@ -39,8 +40,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // _getProfileImage(),
-              const SizedBox(height: 50),
+              _getProfileImage(),
+              // const SizedBox(height: 50),
               _getUserData(),
               _getDashlineSeparator(),
               _getLogOutBtn(),
@@ -64,21 +65,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // _getProfileImage() {
-  //   return Container(
-  //     width: MediaQuery.of(context).size.width * 0.32,
-  //     height: MediaQuery.of(context).size.height * 0.32,
-  //     decoration: const BoxDecoration(
-  //       shape: BoxShape.circle,
-  //       color: Colors.grey
-  //     ),
-  //     // child: 
-  //     // const Img(
-  //     //   ImageAssets.noProfileIcon,
-  //     // ),
-  //     // Image.network(widget.loginSuccessModel.profileImagePath!)
-  //   );
-  // }
+  _getProfileImage() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.32,
+      height: MediaQuery.of(context).size.height * 0.32,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.grey
+      ),
+      child: widget.loginSuccessModel.profileImagePath != null 
+      ? Image.network(
+        widget.loginSuccessModel.profileImagePath!,
+      ): const SizedBox.shrink(),
+    );
+  }
 
   _getUserData() {
     return Column(

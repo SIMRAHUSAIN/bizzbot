@@ -61,12 +61,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   height: 35,
                   width: 35,
                   margin: EdgeInsets.symmetric(vertical: 2),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: cFFFFFF,
-                    border: Border.all(width: 1),
+                    color: Colors.grey
                   ),
-                  child: Icon(Icons.person, color: cFFFFFF, size: 25),
+                  child: widget.loginSuccessModel.profileImagePath != null 
+                  ? Image.network(
+                    widget.loginSuccessModel.profileImagePath!,
+                  ): const SizedBox.shrink(),
                 )
               ),
             )
