@@ -6,6 +6,8 @@ import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
 import 'package:mim_whatsup/features/dashboard/bloc/event.dart';
 import 'package:mim_whatsup/features/dashboard/bloc/state.dart';
 import 'package:mim_whatsup/features/dashboard/model/dashboard_model.dart';
+import 'package:mim_whatsup/features/login/model/login_model.dart';
+import 'package:mim_whatsup/features/profile/screen/profile_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
@@ -14,7 +16,9 @@ import 'package:mim_whatsup/widgets/dashboard_box_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  final LoginSuccessModel loginSuccessModel;
+
+  const DashboardScreen({Key? key, required this.loginSuccessModel}) : super(key: key);
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -43,14 +47,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
           elevation: 1,
           actions: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(loginSuccessModel: widget.loginSuccessModel)
+                  )
+                );
+              },
               child: Padding(
                 padding: EdgeInsets.only(right: 10),
-                child: Icon(
-                  Icons.circle_outlined, 
-                  color: c000000,
-                  size: 30,
-                ),
+                child: Container(
+                  height: 35,
+                  width: 35,
+                  margin: EdgeInsets.symmetric(vertical: 2),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey
+                  ),
+                  child: widget.loginSuccessModel.profileImagePath != null 
+                  ? Image.network(
+                    widget.loginSuccessModel.profileImagePath!,
+                  ): const SizedBox.shrink(),
+                )
               ),
             )
           ],
@@ -76,9 +95,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               if(state is DashboardSuccessState) {
                 dashboardCountData = state.dashboardModel.data!.count;
                 dashboardChartData = state.dashboardModel.data!.chart;
-              } else if(state is DashboardFailedState) {
-                // 
-              }
+              } 
             }),
             child: BlocBuilder<DashboardBloc, DashboardState>(
               builder: ((context, state) {
@@ -108,29 +125,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Strings.msgCntHome,
           style: TextStyles.s18_w500_c000000_lato,
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 28),
         SizedBox(
-          height: 200,
-          child: SizedBox(
-            child: BarChart(
-              BarChartData(
-                barTouchData: barTouchData,
-                titlesData: titlesData,
-                borderData: borderData,
-                barGroups: barGroups,
-                gridData: FlGridData(show: false),
-                alignment: BarChartAlignment.spaceAround,
-                maxY: 20,
-                // backgroundColor: cECF7FF
-              )
-            ),
+          height: 140,
+          child: BarChart(
+            BarChartData(
+              barTouchData: barTouchData,
+              titlesData: titlesData,
+              borderData: borderData,
+              barGroups: barGroups,
+              gridData: FlGridData(show: false),
+              alignment: BarChartAlignment.spaceAround,
+              // backgroundColor: cECF7FF
+            )
           ),
         ),
       ]
     );
   }
 
-  BarTouchData get barTouchData => BarTouchData(
+      BarTouchData get barTouchData => BarTouchData(
         enabled: false,
         touchTooltipData: BarTouchTooltipData(
           tooltipBgColor: Colors.transparent,
@@ -154,25 +168,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
     String text;
     switch (value.toInt()) {
       case 0:
-        text = 'Mon';
+        text = dashboardChartData != null
+        ? '${dashboardChartData![0].day!.split('-').last}/${dashboardChartData![0].day!.split('-')[1]}' : '';
         break;
       case 1:
-        text = 'Tue';
+        text = dashboardChartData != null
+        ? '${dashboardChartData![1].day!.split('-').last}/${dashboardChartData![0].day!.split('-')[1]}' : '';
         break;
       case 2:
-        text = 'Wed';
+        text = dashboardChartData != null
+        ? '${dashboardChartData![2].day!.split('-').last}/${dashboardChartData![0].day!.split('-')[1]}' : '';
         break;
       case 3:
-        text = 'Thu';
+        text = dashboardChartData != null
+        ? '${dashboardChartData![3].day!.split('-').last}/${dashboardChartData![0].day!.split('-')[1]}' : '';
         break;
       case 4:
-        text = 'Fri';
+        text = dashboardChartData != null
+        ? '${dashboardChartData![4].day!.split('-').last}/${dashboardChartData![0].day!.split('-')[1]}' : '';
         break;
       case 5:
-        text = 'Sat';
+        text = dashboardChartData != null
+        ? '${dashboardChartData![5].day!.split('-').last}/${dashboardChartData![0].day!.split('-')[1]}' : '';
         break;
       case 6:
-        text = 'Sun';
+        text = dashboardChartData != null
+        ? '${dashboardChartData![6].day!.split('-').last}/${dashboardChartData![0].day!.split('-')[1]}' : '';
         break;
       default:
         text = '';
@@ -214,7 +235,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           x: 0,
           barRods: [
             BarChartRodData(
-              toY: 8,
+              toY: dashboardChartData != null
+              ? double.parse(dashboardChartData![0].countOfRecords.toString())
+              : 0.0,
               color: cDEE2E6,
               width: 20,
               borderRadius: BorderRadius.circular(3)
@@ -226,7 +249,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           x: 1,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              toY: dashboardChartData != null
+              ? double.parse(dashboardChartData![1].countOfRecords.toString())
+              : 0.0,
               color: cDEE2E6,
               width: 20,
               borderRadius: BorderRadius.circular(3)
@@ -238,7 +263,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           x: 2,
           barRods: [
             BarChartRodData(
-              toY: 14,
+              toY: dashboardChartData != null
+              ? double.parse(dashboardChartData![2].countOfRecords.toString())
+              : 0.0,
               color: cDEE2E6,
               width: 20,
               borderRadius: BorderRadius.circular(3)
@@ -250,8 +277,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           x: 3,
           barRods: [
             BarChartRodData(
-              toY: 15,
-              color: c0D8578,
+              toY: dashboardChartData != null
+              ? double.parse(dashboardChartData![3].countOfRecords.toString())
+              : 0.0,
+              color: cDEE2E6,
               width: 20,
               borderRadius: BorderRadius.circular(3)
             )
@@ -262,7 +291,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           x: 4,
           barRods: [
             BarChartRodData(
-              toY: 13,
+              toY: dashboardChartData != null
+              ? double.parse(dashboardChartData![4].countOfRecords.toString())
+              : 0.0,
               color: cDEE2E6,
               width: 20,
               borderRadius: BorderRadius.circular(3)
@@ -274,7 +305,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           x: 5,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              toY: dashboardChartData != null
+              ? double.parse(dashboardChartData![5].countOfRecords.toString())
+              : 0.0,
               color: cDEE2E6,
               width: 20,
               borderRadius: BorderRadius.circular(3)
@@ -286,7 +319,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           x: 6,
           barRods: [
             BarChartRodData(
-              toY: 16,
+              toY: dashboardChartData != null
+              ? double.parse(dashboardChartData![6].countOfRecords.toString())
+              : 0.0,
               color: cDEE2E6,
               width: 20,
               borderRadius: BorderRadius.circular(3)
@@ -304,7 +339,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Strings.msgSntHome,
           style: TextStyles.s18_w500_c000000_lato,
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 5),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -370,13 +405,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Strings.cnvrstnChtHome,
           style: TextStyles.s18_w500_c000000_lato,
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 5),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DashboardBoxWidget(
-              boxHeight: 136,
+              boxHeight: 104,
               boxWidth: 120,
               boxColor: cF1F5F8,
               boxTitle: Strings.totalcnvrstnTtl,
@@ -387,7 +422,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 DashboardBoxWidget(
-                  boxHeight: 60,
+                  boxHeight: 46,
                   boxWidth: 220,
                   boxColor: cEEFFF2,
                   boxTitle: Strings.openTtl,
@@ -396,9 +431,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   hasIcon: true,
                   iconPath: ImageAssets.openIcnPng,
                 ), 
-                SizedBox(height: 15),
+                SizedBox(height: 10),
                 DashboardBoxWidget(
-                  boxHeight: 60,
+                  boxHeight: 46,
                   boxWidth: 220,
                   boxColor: cFFF1F1,
                   boxTitle: Strings.closedTtl,
@@ -411,7 +446,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ],
         ),
-        SizedBox(height: 15),
+        SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

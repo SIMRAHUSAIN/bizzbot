@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mim_whatsup/features/dashboard/screen/dashboard_screen.dart';
+import 'package:mim_whatsup/features/login/model/login_model.dart';
 import 'package:mim_whatsup/features/report/report_main.dart';
 import 'package:mim_whatsup/features/send_msg/send_msg_main.dart';
 import 'package:mim_whatsup/features/user_chat/screen/user_chat_listing_screen.dart';
@@ -10,7 +11,9 @@ import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final LoginSuccessModel loginSuccessModel;
+
+  const HomeScreen({Key? key, required this.loginSuccessModel}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -25,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     tabs = [
-      const DashboardScreen(),
+      DashboardScreen(loginSuccessModel: widget.loginSuccessModel),
       const UserChatMainScreen(),
       const SendMsgMainScreen(),
       const ReportMainScreen(),

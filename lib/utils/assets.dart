@@ -18,4 +18,5 @@ class ImageAssets {
   static const String reportNav = 'assets/report.png';
   static const String appBarLogo = 'assets/appbar_logo.png';
   static const String sortIcon = 'assets/sort.png';
+  static const String logOutIcon = 'assets/logout.png';
 }

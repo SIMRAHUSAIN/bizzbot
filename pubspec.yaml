@@ -17,6 +17,8 @@ dependencies:
   flutter_bloc: 8.0.1
   fl_chart:
   file_picker:
+  flutter_svg:
+  flutter_img:
   open_file:
   mime:
   path_provider:

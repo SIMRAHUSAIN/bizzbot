@@ -24,7 +24,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: [0.1, 0.9],
+            stops: [0.2, 0.9],
             colors: [
               c577D91,
               cFFFFFF,
@@ -51,9 +51,9 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
-        margin: const EdgeInsets.only(top: 150, bottom: 30),
-        width: 290,
-        height: 330,
+        margin: const EdgeInsets.only(top: 120, bottom: 20),
+        width: MediaQuery.of(context).size.width * 0.7,
+        height: MediaQuery.of(context).size.height * 0.5,
         child: Image.asset(
           ImageAssets.splashScreenPng,
           fit: BoxFit.fill,
@@ -71,7 +71,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
           style: TextStyles.s22_w700_c000000,
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 25),
         Text(
           Strings.splshscrnTxt2,
           style: TextStyles.s20_w400_cA8A3A3,
@@ -82,7 +82,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
 
   _getStartedBtn() {
     return Container(
-      margin: const EdgeInsets.only(top: 50),
+      margin: const EdgeInsets.only(top: 45),
       child: SoliButton(
         text: Strings.getStartedBtn,
         backgroundColor: cAAD4E7,

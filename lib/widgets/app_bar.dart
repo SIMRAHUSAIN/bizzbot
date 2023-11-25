@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mim_whatsup/features/login/model/login_model.dart';
 import 'package:mim_whatsup/home_screen.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
@@ -28,6 +29,7 @@ class AppBarWithBackButton extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    LoginSuccessModel loginSuccessModel = LoginSuccessModel();
     return AppBar(
       backgroundColor: backgroundColor ?? c577D91,
       automaticallyImplyLeading: false,
@@ -67,7 +69,7 @@ class AppBarWithBackButton extends StatelessWidget{
             }
             if (Navigator.canPop(context)) {
               Navigator.push(context, MaterialPageRoute(
-                builder: (context) => const HomeScreen()));
+                builder: (context) => HomeScreen(loginSuccessModel: loginSuccessModel)));
             }
           },
           child: Container(
