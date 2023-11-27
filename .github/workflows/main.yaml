@@ -1,0 +1,30 @@
+name: Build and Package IPA
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Xcode
+        uses: actions/setup-xcode@v2
+        with:
+          xcode-version: '13'  # Adjust to your Xcode version
+
+      - name: Build IPA
+        run: |
+          xcodebuild -workspace mim_whatsup.xcworkspace -scheme mim_whatsup -configuration Release -archivePath build/mim_whatsup.xcarchive archive
+          xcodebuild -exportArchive -archivePath build/mim_whatsup.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath build
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v2
+        with:
+          name: mim_whatsup
+          path: build/mim_whatsup.ipa
