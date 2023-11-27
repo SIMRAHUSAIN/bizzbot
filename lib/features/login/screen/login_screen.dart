@@ -236,20 +236,20 @@ class _LoginScreenState extends State<LoginScreen> {
         textStyle: TextStyles.s16_w800,
         verticalSpacing: 15,
         onPressed: () {
-          // if(_userNameController.text.isEmpty) {
-          //   _getAlertSnackbar(Strings.emptyUsrNmTxt);
-          // } else if(_passwordController.text.isEmpty) {
-          //   _getAlertSnackbar(Strings.emptyPsswrdTxt);
-          // } else {
+          if(_userNameController.text.isEmpty) {
+            _getAlertSnackbar(Strings.emptyUsrNmTxt);
+          } else if(_passwordController.text.isEmpty) {
+            _getAlertSnackbar(Strings.emptyPsswrdTxt);
+          } else {
             BlocProvider.of<LoginBloc>(context).add(
               GetAuthTokenEvent(
-                userName: 'MIM2200038',
-                passWord: 'FE1F\$FD9_738' 
-                // userName: _userNameController.text,
-                // passWord: _passwordController.text,
+                // userName: 'MIM2200038',
+                // passWord: 'FE1F\$FD9_738' 
+                userName: _userNameController.text,
+                passWord: _passwordController.text,
               )
             );
-          // }
+          }
         },
       ),
     );
