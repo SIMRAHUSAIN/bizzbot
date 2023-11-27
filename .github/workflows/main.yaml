@@ -13,10 +13,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Setup Xcode
-        uses: swift-actions/setup-swift@latest
-        with:
-          swift-version: '5.5'
+      - name: check Xcode version
+        run: /usr/bin/xcodebuild -version
 #        with:
 #          xcode-version: '13'  # Adjust to your Xcode version
 
