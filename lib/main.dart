@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:mim_whatsup/features/splash_screen/screen/splash_screen.dart';
 import 'package:mim_whatsup/utils/bloc_providers.dart';
 
@@ -8,6 +9,8 @@ void main() {
     systemNavigationBarColor: Colors.white, // navigation bar color
     statusBarColor: Colors.transparent, // status bar color
   ));
+  WidgetsFlutterBinding.ensureInitialized();
+  FlutterDownloader.initialize();
   runApp(const MyApp());
 }
 

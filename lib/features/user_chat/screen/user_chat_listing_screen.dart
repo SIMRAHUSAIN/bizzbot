@@ -32,6 +32,7 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
   UserChatModel? userChatModel;
   UserChatModel? userFilterChatModel, unfilteredChatModel, tempDataModel;
   bool sortButton = false;
+  bool filterButton = false;
 
   @override
   void initState() {
@@ -171,14 +172,31 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
             const SizedBox(width: 10),
             InkWell(
               onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return LabelListDialogBox();
-                });
+                if(filterButton == true){
+                  _loadData(context, GlobalVar.activeTab == 0?ChatType.ACTIVE:ChatType.OLD);
+                  setState(() {
+                    isChecked = false;
+                    filterButton = false;
+                  });
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return LabelListDialogBox(mobileNo: GlobalVar.mobileNo, filter: true);
+                    }
+                  ).then((value){
+                    if(value == null){
+                      filterButton = false;
+                    } else {
+                      filterButton = true;
+                    }
+                    isChecked = false;
+                    setState(() {});
+                  });
+                }
               },
-              child: const Icon(
-                Icons.filter_alt_sharp,
+              child: Icon(
+                filterButton == true?Icons.filter_alt_off_sharp:Icons.filter_alt_sharp,
                 color: c137700,
                 size: 30,
               ),

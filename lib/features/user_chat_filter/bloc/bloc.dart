@@ -91,5 +91,46 @@ class ChatFilterBloc extends Bloc<ChatFilterEvent, ChatFilterState> {
         emit(DeleteChatLabelFailedState(e.toString()));
       }
     });
+
+    on<SaveFlagEvent>((event, emit) async {
+      emit(SaveFlagLoadingState());
+      try{
+        Map jsonPostData = {
+          "CustomerMob": event.customerMobile,
+          "FlagId": event.flagId,
+        };
+        Map saveFlagModel = await repo.saveFlag(jsonPostData: jsonPostData);
+        if(saveFlagModel["statusCode"] == "200") {
+          print("POP3");
+          emit(SaveFlagSuccessState());
+        } else {
+          print("KOK3");
+          emit(SaveFlagFailedState("Error"));
+        }
+      } catch(e) {
+        print("LOL3");
+        emit(SaveFlagFailedState(e.toString()));
+      }
+    });
+
+    on<UnreadMessageEvent>((event, emit) async {
+      emit(UnreadMessageLoadingState());
+      try{
+        Map jsonPostData = {
+          "CustomerMob": event.customerMobile,
+        };
+        Map unreadMessageModel = await repo.unreadMessage(jsonPostData: jsonPostData);
+        if(unreadMessageModel["statusCode"] == "200") {
+          print("POP3");
+          emit(UnreadMessageSuccessState());
+        } else {
+          print("KOK3");
+          emit(UnreadMessageFailedState("Error"));
+        }
+      } catch(e) {
+        print("LOL3");
+        emit(UnreadMessageFailedState(e.toString()));
+      }
+    });
   }
 }

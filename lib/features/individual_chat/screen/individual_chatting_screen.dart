@@ -31,6 +31,8 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   dynamic displayWidget;
+  String date = "";
+  late Widget customWidget;
 
   @override
   void initState() {
@@ -81,7 +83,7 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                         style: TextStyles.s18_w700_cFFFFFF,
                       ),
                       Text(
-                        "last seen today at 12:05",
+                        "Last seen today at 12:05",
                         style: TextStyles.s14_w500_cFFFFFF,
                       )
                     ],
@@ -90,25 +92,25 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
               ),
               backgroundColor: c577D91,
               actions: [
-                IconButton(icon: const Icon(Icons.search), onPressed: () {}),
-                PopupMenuButton<String>(
-                  padding: const EdgeInsets.all(0),
-                  onSelected: (value) {
-                    print(value);
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return [
-                      const PopupMenuItem(
-                        value: "Search",
-                        child: Text("Search"),
-                      ),
-                      const PopupMenuItem(
-                        value: "Mute Notification",
-                        child: Text("Mute Notification"),
-                      ),
-                    ];
-                  },
-                ),
+                //IconButton(icon: const Icon(Icons.search), onPressed: () {}),
+                // PopupMenuButton<String>(
+                //   padding: const EdgeInsets.all(0),
+                //   onSelected: (value) {
+                //     print(value);
+                //   },
+                //   itemBuilder: (BuildContext context) {
+                //     return [
+                //       const PopupMenuItem(
+                //         value: "Search",
+                //         child: Text("Search"),
+                //       ),
+                //       const PopupMenuItem(
+                //         value: "Mute Notification",
+                //         child: Text("Mute Notification"),
+                //       ),
+                //     ];
+                //   },
+                // ),
               ],
             ),
           ),
@@ -135,6 +137,16 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                   } else if(state is SendMessageSuccessState){
                     _controller.text = "";
                     BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: widget.userMobileNumber, checkOld: '1'));
+                  } else if(state is IndividualChatSuccessState){
+                    Future.delayed(Duration(milliseconds: 500), () {
+                      WidgetsBinding.instance?.addPostFrameCallback((_) {
+                        _scrollController.animateTo(
+                          _scrollController.position.maxScrollExtent,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        );
+                      });
+                    });
                   }
                 },
                 builder: (context, state){
@@ -167,6 +179,33 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: state.individualChatModel.data?.conversation?.length??0,
                       itemBuilder: (context, index) {
+                        if(date != state.individualChatModel?.data?.conversation?[index].datePrint){
+                          date = state.individualChatModel?.data?.conversation?[index].datePrint??"";
+                          customWidget = Column(
+                            children: [
+                              Align(
+                                  alignment: AlignmentDirectional.center,
+                                  child: Container(
+                                    padding: const EdgeInsets.only(top: 30, bottom: 10),
+                                    child: Text(date),
+                                  )
+                              ),
+                              ChatMessageWidget(
+                                text: state.individualChatModel?.data?.conversation?[index].msgtext??"",
+                                time: state.individualChatModel?.data?.conversation?[index].inserttime??"",
+                                sendFrom: state.individualChatModel?.data?.conversation?[index].sentfrom??"",
+                                filePath: state.individualChatModel?.data?.conversation?[index].filePath??"",
+                              )
+                            ],
+                          );
+                        } else {
+                          customWidget = ChatMessageWidget(
+                            text: state.individualChatModel?.data?.conversation?[index].msgtext??"",
+                            time: state.individualChatModel?.data?.conversation?[index].inserttime??"",
+                            sendFrom: state.individualChatModel?.data?.conversation?[index].sentfrom??"",
+                            filePath: state.individualChatModel?.data?.conversation?[index].filePath??"",
+                          );
+                        }
                         // if (index == messages.length) {
                         //   return Container(
                         //     height: 70,
@@ -183,17 +222,10 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                         //     time: messages[index].time,
                         //   );
                         // }
-                        return ChatMessageWidget(
-                            text: state.individualChatModel?.data?.conversation?[index].msgtext??"",
-                            time: state.individualChatModel?.data?.conversation?[index].inserttime??"",
-                            sendFrom: state.individualChatModel?.data?.conversation?[index].sentfrom??"",
-                        );
+                        return customWidget;
                       },
                     );
                     // Scroll to the last item after the ListView.builder has been built
-                    WidgetsBinding.instance?.addPostFrameCallback((_) {
-                      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-                    });
                   } else if(state is IndividualChatFailedState){
                     displayWidget = Container();
                   }
@@ -277,10 +309,10 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                                       },
                                       icon: const Icon(Icons.attach_file),
                                     ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.camera_alt),
-                                    )
+                                    // IconButton(
+                                    //   onPressed: () {},
+                                    //   icon: const Icon(Icons.camera_alt),
+                                    // )
                                   ],
                                 ),
                                 contentPadding: const EdgeInsets.all(5),
@@ -295,7 +327,9 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                             backgroundColor: const Color(0xFF128C7E),
                             child: IconButton(
                               icon: Icon(
-                                sendButton ? Icons.send : Icons.mic,
+                                // sendButton ?
+                                Icons.send ,
+                                    // : Icons.mic,
                                 color: cFFFFFF,
                               ),
                               onPressed: () {

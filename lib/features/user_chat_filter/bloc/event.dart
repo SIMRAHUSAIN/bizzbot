@@ -40,3 +40,22 @@ class DeleteChatLabelEvent extends ChatFilterEvent {
   @override
   List<Object> get props => [];
 }
+
+class SaveFlagEvent extends ChatFilterEvent {
+  final List<String>? flagId;
+  final String customerMobile;
+
+  SaveFlagEvent({required this.flagId, required this.customerMobile});
+
+  @override
+  List<Object> get props => [];
+}
+
+class UnreadMessageEvent extends ChatFilterEvent {
+  final String customerMobile;
+
+  UnreadMessageEvent({required this.customerMobile});
+
+  @override
+  List<Object> get props => [];
+}

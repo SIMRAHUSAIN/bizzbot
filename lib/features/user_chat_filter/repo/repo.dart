@@ -11,6 +11,8 @@ abstract class ChatFilterRepo {
   Future<UserChatModel> addChatLabel({required jsonPostData});
   Future<UserChatModel> editChatLabel({required jsonPostData});
   Future<UserChatModel> deleteChatLabel({required jsonPostData});
+  Future<Map> saveFlag({required jsonPostData});
+  Future<Map> unreadMessage({required jsonPostData});
 }
 
 class ChatFilterRepoImpl extends ChatFilterRepo {
@@ -99,6 +101,50 @@ class ChatFilterRepoImpl extends ChatFilterRepo {
         var data = json.decode(response.body);
         UserChatModel userChatModel = UserChatModel.fromJson(data);
         return userChatModel;
+      } else {
+        throw Exception();
+      }
+    } catch(e) {
+      throw Exception();
+    }
+  }
+
+  @override
+  Future<Map> saveFlag({required jsonPostData}) async {
+    try {
+      Map map = {
+        'JSONPostData': jsonPostData,
+      };
+      http.Response response = await http.post(
+          Uri.parse(Apis.saveFlag),
+          body: json.encode(map),
+          headers: GlobalVar.header
+      );
+      LogPrinter().logPrinter(response, {}, jsonPretty: true);
+      if (response.statusCode == 200) {
+        return {"statusCode": "200"};
+      } else {
+        throw Exception();
+      }
+    } catch(e) {
+      throw Exception();
+    }
+  }
+
+  @override
+  Future<Map> unreadMessage({required jsonPostData}) async {
+    try {
+      Map map = {
+        'JSONPostData': jsonPostData,
+      };
+      http.Response response = await http.post(
+          Uri.parse(Apis.unreadMessage),
+          body: json.encode(map),
+          headers: GlobalVar.header
+      );
+      LogPrinter().logPrinter(response, {}, jsonPretty: true);
+      if (response.statusCode == 200) {
+        return {"statusCode": "200"};
       } else {
         throw Exception();
       }

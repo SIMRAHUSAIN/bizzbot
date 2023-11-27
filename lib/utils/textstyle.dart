@@ -103,7 +103,7 @@ class TextStyles {
 
   static var s8_w400_cFFFFFF = const TextStyle(
     fontWeight: FontWeight.bold,
-    fontSize: 10,
+    fontSize: 8,
     color: cFFFFFF,
     fontFamily: 'Lato',
   );

@@ -38,6 +38,7 @@ class _UserChatListState extends State<UserChatList> {
             label2Color: widget.userChatModel.data?[index].flag2col??"",
             label3Text: widget.userChatModel.data?[index].flag3nm??"",
             label3Color: widget.userChatModel.data?[index].flag3col??"",
+            label4Text: widget.userChatModel.data?[index].flagplus??"0",
             onTap: () {
               Navigator.push(
                 context,
