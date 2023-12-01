@@ -26,77 +26,167 @@ class UserChatDataLoader extends StatefulWidget {
 class _UserChatDataLoaderState extends State<UserChatDataLoader> {
   dynamic displayWidget;
   ChatEvent? chatEvent;
+  UserChatModel? data;
+  int counter = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<ChatBloc, ChatState>(
-        listener: (context, state){},
+        listener: (context, state){
+          // if(state is ChatInitialState){
+          //   displayWidget = Container();
+          // }
+          // else if(state is ActiveChatLoadingState || state is OldChatLoadingState || state is SortChatLoadingState || state is UnreadChatLoadingState || state is FilteredChatLoadingState){
+          //   displayWidget =  const Center(
+          //     child: CircularProgressIndicator(),
+          //   );
+          // }
+          //else
+          if(state is ActiveChatSuccessState){
+            if(widget.modelData != null){
+              data = widget.modelData;
+            } else {
+              data = state.userChatModel;
+            }
+            widget.callBackData(state.userChatModel);
+            // displayWidget =  UserChatList(
+            //     userChatModel: data
+            // );
+          }
+          else if(state is OldChatSuccessState){
+            if(widget.modelData != null){
+              data = widget.modelData;
+            } else {
+              data = state.userChatModel;
+            }
+            // widget.callBackData(state.userChatModel);
+            // displayWidget =  UserChatList(
+            //     userChatModel: data
+            // );
+          }
+          else if(state is SortChatSuccessState){
+            if(widget.modelData != null){
+              data = widget.modelData;
+            } else {
+              data = state.userChatModel;
+            }
+            // widget.callBackData(state.userChatModel);
+            // displayWidget =  UserChatList(
+            //     userChatModel: data
+            // );
+          }
+          else if(state is UnreadChatSuccessState){
+            if(widget.modelData != null){
+              data = widget.modelData;
+            } else {
+              data = state.userChatModel;
+            }
+            // widget.callBackData(state.userChatModel);
+            // displayWidget =  UserChatList(
+            //     userChatModel: data
+            // );
+          }
+          else if(state is FilteredChatSuccessState){
+            if(widget.modelData != null){
+              data = widget.modelData;
+            } else {
+              data = state.userChatModel;
+            }
+            // widget.callBackData(state.userChatModel);
+            // displayWidget =  UserChatList(
+            //     userChatModel: data
+            // );
+          }
+          // else if(state is ActiveChatFailedState || state is OldChatFailedState || state is SortChatFailedState || state is UnreadChatFailedState || state is FilteredChatFailedState){
+          //   displayWidget =  Container(
+          //     child: Center(
+          //       child: Text("No Data"),
+          //     ),
+          //   );
+          // }
+        },
         builder: (context, state) {
-          dynamic data;
-          if(state is ChatInitialState){
-            displayWidget = Container();
-          } else if(state is ActiveChatLoadingState || state is OldChatLoadingState || state is SortChatLoadingState || state is UnreadChatLoadingState || state is FilteredChatLoadingState){
-            displayWidget =  const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if(state is ActiveChatSuccessState){
-            if(widget.modelData != null){
-              data = widget.modelData;
-            } else {
-              data = state.userChatModel;
-            }
-            widget.callBackData(state.userChatModel);
-            displayWidget =  UserChatList(
-              userChatModel: data
-            );
-          } else if(state is OldChatSuccessState){
-            if(widget.modelData != null){
-              data = widget.modelData;
-            } else {
-              data = state.userChatModel;
-            }
-            widget.callBackData(state.userChatModel);
-            displayWidget =  UserChatList(
-              userChatModel: data
-            );
-          } else if(state is SortChatSuccessState){
-            if(widget.modelData != null){
-              data = widget.modelData;
-            } else {
-              data = state.userChatModel;
-            }
-            widget.callBackData(state.userChatModel);
-            displayWidget =  UserChatList(
-              userChatModel: data
-            );
-          } else if(state is UnreadChatSuccessState){
-            if(widget.modelData != null){
-              data = widget.modelData;
-            } else {
-              data = state.userChatModel;
-            }
-            widget.callBackData(state.userChatModel);
-            displayWidget =  UserChatList(
-              userChatModel: data
-            );
-          } else if(state is FilteredChatSuccessState){
-            if(widget.modelData != null){
-              data = widget.modelData;
-            } else {
-              data = state.userChatModel;
-            }
-            widget.callBackData(state.userChatModel);
-            displayWidget =  UserChatList(
-              userChatModel: data
-            );
-          } else if(state is ActiveChatFailedState || state is OldChatFailedState || state is SortChatFailedState || state is UnreadChatFailedState || state is FilteredChatFailedState){
-            displayWidget =  Container(
-              child: Center(
-                child: Text("No Data"),
-              ),
+          if(counter == 0){
+            counter++;
+            return Center(
+              child: CircularProgressIndicator()
             );
           }
-          return displayWidget;
+          else if (data == null){
+            return Center(
+              child: Text("No Data Found"),
+            );
+          }
+          else {
+            return UserChatList(
+                userChatModel: data!
+            );
+          }
+          // dynamic data;
+          // if(state is ChatInitialState){
+          //   displayWidget = Container();
+          // } else if(state is ActiveChatLoadingState || state is OldChatLoadingState || state is SortChatLoadingState || state is UnreadChatLoadingState || state is FilteredChatLoadingState){
+          //   displayWidget =  const Center(
+          //     child: CircularProgressIndicator(),
+          //   );
+          // } else if(state is ActiveChatSuccessState){
+          //   if(widget.modelData != null){
+          //     data = widget.modelData;
+          //   } else {
+          //     data = state.userChatModel;
+          //   }
+          //   widget.callBackData(state.userChatModel);
+          //   displayWidget =  UserChatList(
+          //     userChatModel: data
+          //   );
+          // } else if(state is OldChatSuccessState){
+          //   if(widget.modelData != null){
+          //     data = widget.modelData;
+          //   } else {
+          //     data = state.userChatModel;
+          //   }
+          //   widget.callBackData(state.userChatModel);
+          //   displayWidget =  UserChatList(
+          //     userChatModel: data
+          //   );
+          // } else if(state is SortChatSuccessState){
+          //   if(widget.modelData != null){
+          //     data = widget.modelData;
+          //   } else {
+          //     data = state.userChatModel;
+          //   }
+          //   widget.callBackData(state.userChatModel);
+          //   displayWidget =  UserChatList(
+          //     userChatModel: data
+          //   );
+          // } else if(state is UnreadChatSuccessState){
+          //   if(widget.modelData != null){
+          //     data = widget.modelData;
+          //   } else {
+          //     data = state.userChatModel;
+          //   }
+          //   widget.callBackData(state.userChatModel);
+          //   displayWidget =  UserChatList(
+          //     userChatModel: data
+          //   );
+          // } else if(state is FilteredChatSuccessState){
+          //   if(widget.modelData != null){
+          //     data = widget.modelData;
+          //   } else {
+          //     data = state.userChatModel;
+          //   }
+          //   widget.callBackData(state.userChatModel);
+          //   displayWidget =  UserChatList(
+          //     userChatModel: data
+          //   );
+          // } else if(state is ActiveChatFailedState || state is OldChatFailedState || state is SortChatFailedState || state is UnreadChatFailedState || state is FilteredChatFailedState){
+          //   displayWidget =  Container(
+          //     child: Center(
+          //       child: Text("No Data"),
+          //     ),
+          //   );
+          // }
+          // return displayWidget;
         },
       ),
     );

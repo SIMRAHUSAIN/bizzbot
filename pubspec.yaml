@@ -23,6 +23,7 @@ dependencies:
   permission_handler:
   flutter_downloader: 1.7.2
   platform_device_id:
+  camera:
 
 dev_dependencies:
   flutter_test:
