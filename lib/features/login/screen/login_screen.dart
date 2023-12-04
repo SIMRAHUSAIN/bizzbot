@@ -229,28 +229,52 @@ class _LoginScreenState extends State<LoginScreen> {
   _getLoginButton() {
     return Container(
       margin: const EdgeInsets.only(top: 50),
-      child: SoliButton(
-        text: Strings.loginBtn,
-        backgroundColor: cAAD4E7,
-        textColor: c000000,
-        textStyle: TextStyles.s16_w800,
-        verticalSpacing: 15,
-        onPressed: () {
-          if(_userNameController.text.isEmpty) {
-            _getAlertSnackbar(Strings.emptyUsrNmTxt);
-          } else if(_passwordController.text.isEmpty) {
-            _getAlertSnackbar(Strings.emptyPsswrdTxt);
-          } else {
-            BlocProvider.of<LoginBloc>(context).add(
-              GetAuthTokenEvent(
-                // userName: 'MIM2200038',
-                // passWord: 'FE1F\$FD9_738' 
-                userName: _userNameController.text,
-                passWord: _passwordController.text,
-              )
-            );
-          }
-        },
+      child: Column(
+        children: [
+          SoliButton(
+            text: Strings.loginBtn,
+            backgroundColor: cAAD4E7,
+            textColor: c000000,
+            textStyle: TextStyles.s16_w800,
+            verticalSpacing: 15,
+            onPressed: () {
+              // if(_userNameController.text.isEmpty) {
+              //   _getAlertSnackbar(Strings.emptyUsrNmTxt);
+              // } else if(_passwordController.text.isEmpty) {
+              //   _getAlertSnackbar(Strings.emptyPsswrdTxt);
+              // } else {
+                BlocProvider.of<LoginBloc>(context).add(
+                  GetAuthTokenEvent(
+                    userName: 'MIM2200038',
+                    passWord: 'FE1F\$FD9_738' 
+                    // userName: _userNameController.text,
+                    // passWord: _passwordController.text,
+                  )
+                );
+              }
+            // },
+          ),
+          const SizedBox(height: 10),
+          InkWell(
+            onTap: () async {
+              // const url = 'https://privacypolicy.myinboxmedia.in/privacy-policy.html';
+              // if (await canLaunchUrl(Uri.parse(url))) {
+              //   await launchUrl(Uri.parse(url));
+              // } else {
+              //   throw 'Could not launch $url';
+              // }
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Privacy Policy', 
+                  style: TextStyles.s12_w500_c000000_lato,
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
