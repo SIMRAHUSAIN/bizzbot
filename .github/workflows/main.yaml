@@ -1,0 +1,30 @@
+name: Build and Package IPA
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: check Xcode version
+        run: /usr/bin/xcodebuild -version
+#        with:
+#          xcode-version: '13'  # Adjust to your Xcode version
+
+      - name: Build IPA
+        run: |
+          xcodebuild -workspace mim.xcworkspace -scheme mim -configuration Release -archivePath build/mim.xcarchive archive
+          xcodebuild -exportArchive -archivePath build/mim.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath build
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v2
+        with:
+          name: mim
+          path: build/mim.ipa
