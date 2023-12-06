@@ -315,6 +315,7 @@ class _LabelListDialogBoxState extends State<LabelListDialogBox> {
                   child: Image.asset(
                     ImageAssets.labelPng,
                     fit: BoxFit.fill,
+                    color: Color(int.parse(colorCode.contains("#")?colorCode.replaceFirst('#', '0xFF'):"${0xFF}$colorCode")),
                   ),
                 ),
                 SizedBox(
