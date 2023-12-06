@@ -107,15 +107,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
             }),
             child: BlocBuilder<DashboardBloc, DashboardState>(
               builder: ((context, state) {
-                if(state is DashboardLoadingState) {
-                  return SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.75,
-                    child: Center(
-                      child: CircularProgressIndicator()
-                    ),
-                  );
-                } else if(state is DashboardSuccessState) {
+                // if(state is DashboardLoadingState) {
+                //   return SizedBox(
+                //     width: MediaQuery.of(context).size.width,
+                //     height: MediaQuery.of(context).size.height * 0.75,
+                //     child: Center(
+                //       child: CircularProgressIndicator()
+                //     ),
+                //   );
+                // } else 
+                if(state is DashboardSuccessState) {
                   return Column(
                     children: [
                       _getConversationWidgets(),
