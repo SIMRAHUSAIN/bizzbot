@@ -10,6 +10,7 @@ import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/solid_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -24,6 +25,31 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   LoginSuccessModel loginSuccessModel = LoginSuccessModel();
+
+  bool _hasCallSupport = false;
+  Future<void>? _launched;
+  String _phone = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // Check for phone call support.
+    canLaunchUrl(Uri(scheme: 'tel', path: '123')).then((bool result) {
+      setState(() {
+        _hasCallSupport = result;
+      });
+    });
+  }
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+    final Uri toLaunch =  Uri(scheme: 'https', path: '//privacypolicy.myinboxmedia.in/privacy-policy.html');
 
   @override
   Widget build(BuildContext context) {
@@ -238,31 +264,26 @@ class _LoginScreenState extends State<LoginScreen> {
             textStyle: TextStyles.s16_w800,
             verticalSpacing: 15,
             onPressed: () {
-              // if(_userNameController.text.isEmpty) {
-              //   _getAlertSnackbar(Strings.emptyUsrNmTxt);
-              // } else if(_passwordController.text.isEmpty) {
-              //   _getAlertSnackbar(Strings.emptyPsswrdTxt);
-              // } else {
+              if(_userNameController.text.isEmpty) {
+                _getAlertSnackbar(Strings.emptyUsrNmTxt);
+              } else if(_passwordController.text.isEmpty) {
+                _getAlertSnackbar(Strings.emptyPsswrdTxt);
+              } else {
                 BlocProvider.of<LoginBloc>(context).add(
                   GetAuthTokenEvent(
-                    userName: 'MIM2200038',
-                    passWord: 'FE1F\$FD9_738' 
-                    // userName: _userNameController.text,
-                    // passWord: _passwordController.text,
+                    // userName: 'MIM2200038',
+                    // passWord: 'FE1F\$FD9_738' 
+                    userName: _userNameController.text,
+                    passWord: _passwordController.text,
                   )
                 );
               }
-            // },
+            },
           ),
           const SizedBox(height: 10),
           InkWell(
             onTap: () async {
-              // const url = 'https://privacypolicy.myinboxmedia.in/privacy-policy.html';
-              // if (await canLaunchUrl(Uri.parse(url))) {
-              //   await launchUrl(Uri.parse(url));
-              // } else {
-              //   throw 'Could not launch $url';
-              // }
+              _launched = _launchInBrowser(toLaunch);
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
