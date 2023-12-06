@@ -66,9 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
             child: BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) {
                 debugPrint('Login builder states ==> $state');
-                if(state is LoginLoadingState) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+                // if(state is LoginLoadingState) {
+                //   return const Center(child: CircularProgressIndicator());
+                // }
                 return _getBodyContent();
               },
             ),

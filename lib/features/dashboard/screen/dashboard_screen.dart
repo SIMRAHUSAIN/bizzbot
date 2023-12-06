@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, import_of_legacy_library_into_null_safe, unnecessary_null_comparison
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
@@ -29,9 +31,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<DashboardBloc>(context).add(
-      GetDashboardEvent()
-    );
+    // BlocProvider.of<DashboardBloc>(context).add(
+    //   GetDashboardEvent()
+    // );
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      debugPrint('SIM dashboard timer called');
+      BlocProvider.of<DashboardBloc>(context).add(
+        GetDashboardEvent()
+      );
+    });
   }
 
   Count? dashboardCountData;
@@ -91,7 +99,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: SingleChildScrollView(
           child: BlocListener<DashboardBloc, DashboardState>(
             listener: ((context, state) {
-              debugPrint('Dash list states => $state');
+              debugPrint('SIM Dash list states => $state');
               if(state is DashboardSuccessState) {
                 dashboardCountData = state.dashboardModel.data!.count;
                 dashboardChartData = state.dashboardModel.data!.chart;
@@ -99,16 +107,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
             }),
             child: BlocBuilder<DashboardBloc, DashboardState>(
               builder: ((context, state) {
-                return Column(
-                  children: [
-                    _getConversationWidgets(),
-                    SizedBox(height: 10),
-                    _getChartWidget(),
-                    SizedBox(height: 10),
-                    _getMsgSntWidgets()
-                  ],
-                );
-              }),
+                if(state is DashboardLoadingState) {
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Center(
+                      child: CircularProgressIndicator()
+                    ),
+                  );
+                } else if(state is DashboardSuccessState) {
+                  return Column(
+                    children: [
+                      _getConversationWidgets(),
+                      SizedBox(height: 10),
+                      _getChartWidget(),
+                      SizedBox(height: 10),
+                      _getMsgSntWidgets()
+                    ],
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      _getConversationWidgets(),
+                      SizedBox(height: 10),
+                      _getChartWidget(),
+                      SizedBox(height: 10),
+                      _getMsgSntWidgets()
+                    ],
+                  );
+                }
+              })
             ),
           )
         ),

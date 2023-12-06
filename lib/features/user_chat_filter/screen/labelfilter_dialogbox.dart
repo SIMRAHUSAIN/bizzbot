@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
+import 'package:mim_whatsup/features/user_chat_filter/screen/addnewlabel_dialogbox.dart';
 import 'package:mim_whatsup/features/user_chat_filter/bloc/bloc.dart';
 import 'package:mim_whatsup/features/user_chat_filter/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat_filter/bloc/state.dart';
@@ -13,7 +14,7 @@ import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
-import 'package:mim_whatsup/widgets/addnewlabel_dialogbox.dart';
+import 'package:mim_whatsup/features/user_chat_filter/screen/addnewlabel_dialogbox.dart';
 
 class LabelListDialogBox extends StatefulWidget {
 
@@ -337,7 +338,7 @@ class _LabelListDialogBoxState extends State<LabelListDialogBox> {
                   builder: (context, stateChange){
                     return Checkbox(
                       onChanged: (newValue) {
-                        print(newValue.toString() + index.toString() + label);
+                        // print(newValue.toString() + index.toString() + label);
                         stateChange(() {
                           isCheckedList[index] = newValue ?? true;
                         });
