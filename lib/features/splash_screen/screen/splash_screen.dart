@@ -39,9 +39,10 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
 
   _getBodyContent() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _getAppIcon(),
-        _getBodyTxt(),
+        // _getBodyTxt(),
         _getStartedBtn(),
       ],
     );
@@ -62,23 +63,24 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
     );
   }
 
-  _getBodyTxt() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          Strings.splshscrnTxt1,
-          style: TextStyles.s22_w700_c000000,
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 25),
-        Text(
-          Strings.splshscrnTxt2,
-          style: TextStyles.s20_w400_cA8A3A3,
-        ),
-      ],
-    );
-  }
+  //not required as per new design
+  // _getBodyTxt() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.center,
+  //     children: [
+  //       Text(
+  //         Strings.splshscrnTxt1,
+  //         style: TextStyles.s22_w700_c000000,
+  //         textAlign: TextAlign.center,
+  //       ),
+  //       const SizedBox(height: 25),
+  //       Text(
+  //         Strings.splshscrnTxt2,
+  //         style: TextStyles.s20_w400_cA8A3A3,
+  //       ),
+  //     ],
+  //   );
+  // }
 
   _getStartedBtn() {
     return Container(

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/login/bloc/bloc.dart';
@@ -26,20 +28,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   LoginSuccessModel loginSuccessModel = LoginSuccessModel();
 
-  bool _hasCallSupport = false;
   Future<void>? _launched;
-  String _phone = '';
 
-  @override
-  void initState() {
-    super.initState();
-    // Check for phone call support.
-    canLaunchUrl(Uri(scheme: 'tel', path: '123')).then((bool result) {
-      setState(() {
-        _hasCallSupport = result;
-      });
-    });
-  }
   Future<void> _launchInBrowser(Uri url) async {
     if (!await launchUrl(
       url,
@@ -91,10 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             child: BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) {
-                debugPrint('Login builder states ==> $state');
-                // if(state is LoginLoadingState) {
-                //   return const Center(child: CircularProgressIndicator());
-                // }
                 return _getBodyContent();
               },
             ),
@@ -246,7 +232,7 @@ class _LoginScreenState extends State<LoginScreen> {
         const SizedBox(height: 150),
         Text(
           Strings.login,
-          style: TextStyles.s22_w700_c000000,
+          style: TextStyles.s22_w700_cFFFFFF,
         ),
       ],
     );
@@ -264,20 +250,20 @@ class _LoginScreenState extends State<LoginScreen> {
             textStyle: TextStyles.s16_w800,
             verticalSpacing: 15,
             onPressed: () {
-              if(_userNameController.text.isEmpty) {
-                _getAlertSnackbar(Strings.emptyUsrNmTxt);
-              } else if(_passwordController.text.isEmpty) {
-                _getAlertSnackbar(Strings.emptyPsswrdTxt);
-              } else {
+              // if(_userNameController.text.isEmpty) {
+              //   _getAlertSnackbar(Strings.emptyUsrNmTxt);
+              // } else if(_passwordController.text.isEmpty) {
+              //   _getAlertSnackbar(Strings.emptyPsswrdTxt);
+              // } else {
                 BlocProvider.of<LoginBloc>(context).add(
                   GetAuthTokenEvent(
-                    // userName: 'MIM2200038',
-                    // passWord: 'FE1F\$FD9_738' 
-                    userName: _userNameController.text,
-                    passWord: _passwordController.text,
+                    userName: 'MIM2200038',
+                    passWord: 'FE1F\$FD9_738' 
+                    // userName: _userNameController.text,
+                    // passWord: _passwordController.text,
                   )
                 );
-              }
+              // }
             },
           ),
           const SizedBox(height: 10),

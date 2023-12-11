@@ -4,7 +4,7 @@ class DashlineSeprator extends StatelessWidget {
   final double height;
   final Color? color;
 
-  const DashlineSeprator({this.height = 0.5, this.color});
+  const DashlineSeprator({Key? key, this.height = 0.5, this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +15,7 @@ class DashlineSeprator extends StatelessWidget {
         final dashHeight = height;
         final dashCount = (boxWidth / (2 * dashWidth)).floor();
         return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(dashCount, (_) {
             return SizedBox(
               width: dashWidth,
@@ -24,7 +25,6 @@ class DashlineSeprator extends StatelessWidget {
               ),
             );
           }),
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
         );
       },
     );

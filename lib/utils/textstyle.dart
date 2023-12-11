@@ -11,6 +11,13 @@ class TextStyles {
     fontFamily: 'Lato',
   );
 
+  static var s22_w700_cFFFFFF = const TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.w700,
+    color: cFFFFFF,
+    fontFamily: 'Lato',
+  );
+
   static var s14_w400_cFFE3E1 = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
