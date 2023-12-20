@@ -1,17 +1,23 @@
 // ignore_for_file: avoid_print
 
+import 'dart:async';
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/individual_chat/bloc/bloc.dart';
 import 'package:mim_whatsup/features/individual_chat/bloc/event.dart';
 import 'package:mim_whatsup/features/individual_chat/bloc/state.dart';
+import 'package:mim_whatsup/features/individual_chat/model/individual_chat_model.dart';
+import 'package:mim_whatsup/features/individual_chat/screen/camera_screen.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/message_widget.dart';
 import 'package:file_picker/file_picker.dart';
+
+import 'audio_record_screen.dart';
 
 class IndividualChattingScreen extends StatefulWidget {
   
@@ -33,10 +39,47 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
   dynamic displayWidget;
   String date = "";
   late Widget customWidget;
+  List<Conversation>? message = [];
+  late Timer periodicTimer;
+  late List<CameraDescription> _cameras;
+  late CameraController controller;
 
   @override
   void initState() {
     super.initState();
+    cameraCheck();
+    periodicTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: widget.userMobileNumber, checkOld: '1'));
+    });
+  }
+
+  cameraCheck() async {
+    _cameras = await availableCameras();
+    controller = CameraController(_cameras[0], ResolutionPreset.max);
+    controller.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    }).catchError((Object e) {
+      if (e is CameraException) {
+        switch (e.code) {
+          case 'CameraAccessDenied':
+          // Handle access errors here.
+            break;
+          default:
+          // Handle other errors here.
+            break;
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    periodicTimer.cancel();
+    super.dispose();
   }
 
   @override
@@ -138,12 +181,15 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                     _controller.text = "";
                     BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: widget.userMobileNumber, checkOld: '1'));
                   } else if(state is IndividualChatSuccessState){
+                    setState((){
+                      message = state.individualChatModel.data?.conversation;
+                    });
                     Future.delayed(Duration(milliseconds: 500), () {
                       WidgetsBinding.instance?.addPostFrameCallback((_) {
-                        _scrollController.animateTo(
+                        _scrollController.jumpTo(
                           _scrollController.position.maxScrollExtent,
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.easeInOut,
+                          // duration: Duration(milliseconds: 500),
+                          // curve: Curves.easeInOut,
                         );
                       });
                     });
@@ -152,35 +198,36 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                 builder: (context, state){
                   if(state is IndividualChatInitialState){
                     BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: widget.userMobileNumber, checkOld: '1'));
-                    displayWidget = const Center(
-                      child: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: Center(
-                          child: CircularProgressIndicator()
-                        )
-                      ),
-                    );
+                    // displayWidget = const Center(
+                    //   child: SizedBox(
+                    //     height: 50,
+                    //     width: 50,
+                    //     child: Center(
+                    //       child: CircularProgressIndicator()
+                    //     )
+                    //   ),
+                    // );
                   }
-                  else if(state is IndividualChatLoadingState){
-                    displayWidget = const Center(
-                      child: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: Center(
-                            child: CircularProgressIndicator()
-                        )
-                      ),
-                    );
-                  } else if(state is IndividualChatSuccessState){
-                    displayWidget = ListView.builder(
+                  // else if(state is IndividualChatLoadingState){
+                  //   displayWidget = const Center(
+                  //     child: SizedBox(
+                  //       height: 50,
+                  //       width: 50,
+                  //       child: Center(
+                  //           child: CircularProgressIndicator()
+                  //       )
+                  //     ),
+                  //   );
+                  // }
+                  //else if(state is IndividualChatSuccessState){
+                    return ListView.builder(
                       shrinkWrap: true,
                       controller: _scrollController,
                       physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: state.individualChatModel.data?.conversation?.length??0,
+                      itemCount: message?.length??0,
                       itemBuilder: (context, index) {
-                        if(date != state.individualChatModel?.data?.conversation?[index].datePrint){
-                          date = state.individualChatModel?.data?.conversation?[index].datePrint??"";
+                        if(date != message?[index].datePrint){
+                          date = message?[index].datePrint??"";
                           customWidget = Column(
                             children: [
                               Align(
@@ -191,19 +238,19 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                                   )
                               ),
                               ChatMessageWidget(
-                                text: state.individualChatModel?.data?.conversation?[index].msgtext??"",
-                                time: state.individualChatModel?.data?.conversation?[index].inserttime??"",
-                                sendFrom: state.individualChatModel?.data?.conversation?[index].sentfrom??"",
-                                filePath: state.individualChatModel?.data?.conversation?[index].filePath??"",
+                                text: message?[index].msgtext??"",
+                                time: message?[index].inserttime??"",
+                                sendFrom: message?[index].sentfrom??"",
+                                filePath: message?[index].filePath??"",
                               )
                             ],
                           );
                         } else {
                           customWidget = ChatMessageWidget(
-                            text: state.individualChatModel?.data?.conversation?[index].msgtext??"",
-                            time: state.individualChatModel?.data?.conversation?[index].inserttime??"",
-                            sendFrom: state.individualChatModel?.data?.conversation?[index].sentfrom??"",
-                            filePath: state.individualChatModel?.data?.conversation?[index].filePath??"",
+                            text: message?[index].msgtext??"",
+                            time: message?[index].inserttime??"",
+                            sendFrom: message?[index].sentfrom??"",
+                            filePath: message?[index].filePath??"",
                           );
                         }
                         // if (index == messages.length) {
@@ -226,10 +273,10 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                       },
                     );
                     // Scroll to the last item after the ListView.builder has been built
-                  } else if(state is IndividualChatFailedState){
-                    displayWidget = Container();
-                  }
-                  return displayWidget;
+                  // } else if(state is IndividualChatFailedState){
+                  //   displayWidget = Container();
+                  // }
+                  //return displayWidget;
                 },
               ),
             ),
@@ -299,20 +346,25 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                                             String filePath = result.files.single.path!;
                                             print('Selected file path: $filePath');
                                             BlocProvider.of<IndividualChatBloc>(context).add(
-                                              SendFileEvent(fileType: File(filePath))
+                                                SendFileEvent(fileType: File(filePath))
                                             );
                                             // Use the file path as needed
-                                          } else {
-                                            // User canceled the file picking
                                           }
                                         //}
                                       },
                                       icon: const Icon(Icons.attach_file),
                                     ),
-                                    // IconButton(
-                                    //   onPressed: () {},
-                                    //   icon: const Icon(Icons.camera_alt),
-                                    // )
+                                    IconButton(
+                                      onPressed: () {
+                                        print("HELLO");
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => CameraScreen())).then((value){
+                                          BlocProvider.of<IndividualChatBloc>(context).add(
+                                              SendFileEvent(fileType: File(value))
+                                          );
+                                        });
+                                      },
+                                      icon: const Icon(Icons.camera_alt),
+                                    )
                                   ],
                                 ),
                                 contentPadding: const EdgeInsets.all(5),
@@ -327,9 +379,7 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                             backgroundColor: const Color(0xFF128C7E),
                             child: IconButton(
                               icon: Icon(
-                                // sendButton ?
-                                Icons.send ,
-                                    // : Icons.mic,
+                                sendButton ? Icons.send : Icons.mic,
                                 color: cFFFFFF,
                               ),
                               onPressed: () {
@@ -342,6 +392,13 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                                       text: _controller.text,
                                       fileName: ""
                                     )
+                                  );
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AudioRecordScreen();
+                                      }
                                   );
                                 }
                               },
