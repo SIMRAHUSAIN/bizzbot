@@ -9,10 +9,13 @@ import 'package:mim_whatsup/features/individual_chat/bloc/bloc.dart';
 import 'package:mim_whatsup/features/individual_chat/bloc/event.dart';
 import 'package:mim_whatsup/features/individual_chat/bloc/state.dart';
 import 'package:mim_whatsup/features/individual_chat/model/individual_chat_model.dart';
+import 'package:mim_whatsup/features/individual_chat/screen/camera_screen.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/message_widget.dart';
 import 'package:file_picker/file_picker.dart';
+
+import 'audio_record_screen.dart';
 
 class IndividualChattingScreen extends StatefulWidget {
   
@@ -344,11 +347,9 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                                             String filePath = result.files.single.path!;
                                             print('Selected file path: $filePath');
                                             BlocProvider.of<IndividualChatBloc>(context).add(
-                                              SendFileEvent(fileType: File(filePath))
+                                                SendFileEvent(fileType: File(filePath))
                                             );
                                             // Use the file path as needed
-                                          } else {
-                                            // User canceled the file picking
                                           }
                                         //}
                                       },
@@ -356,7 +357,12 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                                     ),
                                     IconButton(
                                       onPressed: () {
-                                        CameraPreview(controller);
+                                        print("HELLO");
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => CameraScreen())).then((value){
+                                          BlocProvider.of<IndividualChatBloc>(context).add(
+                                              SendFileEvent(fileType: File(value))
+                                          );
+                                        });
                                       },
                                       icon: const Icon(Icons.camera_alt),
                                     )
@@ -373,10 +379,8 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                             radius: 25,
                             backgroundColor: const Color(0xFF128C7E),
                             child: IconButton(
-                              icon: const Icon(
-                                // sendButton ?
-                                Icons.send ,
-                                    // : Icons.mic,
+                              icon: Icon(
+                                sendButton ? Icons.send : Icons.mic,
                                 color: cFFFFFF,
                               ),
                               onPressed: () {
@@ -389,6 +393,13 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                                       text: _controller.text,
                                       fileName: ""
                                     )
+                                  );
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AudioRecordScreen();
+                                      }
                                   );
                                 }
                               },
