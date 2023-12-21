@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, import_of_legacy_library_into_null_safe, unnecessary_null_comparison
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
@@ -14,6 +16,7 @@ import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/dashboard_box_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:mim_whatsup/widgets/dashline_separator.dart';
 
 class DashboardScreen extends StatefulWidget {
   final LoginSuccessModel loginSuccessModel;
@@ -29,9 +32,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+    //required for initial data load
     BlocProvider.of<DashboardBloc>(context).add(
       GetDashboardEvent()
     );
+    //required for refresh
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      BlocProvider.of<DashboardBloc>(context).add(
+        GetDashboardEvent()
+      );
+    });
   }
 
   Count? dashboardCountData;
@@ -91,7 +101,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         child: SingleChildScrollView(
           child: BlocListener<DashboardBloc, DashboardState>(
             listener: ((context, state) {
-              debugPrint('Dash list states => $state');
+              debugPrint('SIM Dash list states => $state');
               if(state is DashboardSuccessState) {
                 dashboardCountData = state.dashboardModel.data!.count;
                 dashboardChartData = state.dashboardModel.data!.chart;
@@ -99,16 +109,66 @@ class _DashboardScreenState extends State<DashboardScreen> {
             }),
             child: BlocBuilder<DashboardBloc, DashboardState>(
               builder: ((context, state) {
-                return Column(
-                  children: [
-                    _getConversationWidgets(),
-                    SizedBox(height: 10),
-                    _getChartWidget(),
-                    SizedBox(height: 10),
-                    _getMsgSntWidgets()
-                  ],
-                );
-              }),
+                //if loader is required
+                // if(state is DashboardLoadingState) {
+                //   return SizedBox(
+                //     width: MediaQuery.of(context).size.width,
+                //     height: MediaQuery.of(context).size.height * 0.75,
+                //     child: Center(
+                //       child: CircularProgressIndicator()
+                //     ),
+                //   );
+                // } else 
+                if(state is DashboardSuccessState) {
+                  return Column(
+                    children: [
+                      _getConversationWidgets(),
+                      Divider(
+                        height: 20,
+                        thickness: 1.5,
+                        indent: 0,
+                        endIndent: 0,
+                        color: c000000,
+                      ),
+                      // SizedBox(height: 10),
+                      _getChartWidget(),
+                      Divider(
+                        height: 20,
+                        thickness: 1.5,
+                        indent: 0,
+                        endIndent: 0,
+                        color: c000000,
+                      ),
+                      // SizedBox(height: 10),
+                      _getMsgSntWidgets()
+                    ],
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      _getConversationWidgets(),
+                      Divider(
+                        height: 20,
+                        thickness: 1.5,
+                        indent: 0,
+                        endIndent: 0,
+                        color: c000000,
+                      ),
+                      // SizedBox(height: 10),
+                      _getChartWidget(),
+                      Divider(
+                        height: 20,
+                        thickness: 1.5,
+                        indent: 0,
+                        endIndent: 0,
+                        color: c000000,
+                      ),
+                      // SizedBox(height: 10),
+                      _getMsgSntWidgets()
+                    ],
+                  );
+                }
+              })
             ),
           )
         ),
@@ -144,7 +204,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-      BarTouchData get barTouchData => BarTouchData(
+  BarTouchData get barTouchData => BarTouchData(
         enabled: false,
         touchTooltipData: BarTouchTooltipData(
           tooltipBgColor: Colors.transparent,
@@ -344,7 +404,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             DashboardBoxWidget(
-              boxHeight: 60,
+              boxHeight: MediaQuery.of(context).size.height * .065, //60,
               boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cEEFFF2,
               boxTitle: Strings.sentTtl,
@@ -354,7 +414,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               iconPath: ImageAssets.exportIcnPng,
             ), 
             DashboardBoxWidget(
-              boxHeight: 60,
+              boxHeight: MediaQuery.of(context).size.height * .065, //60,
               boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cFFF7EF,
               boxTitle: Strings.delvrdTtl,
@@ -370,7 +430,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             DashboardBoxWidget(
-              boxHeight: 60,
+              boxHeight: MediaQuery.of(context).size.height * .065, //60,
               boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cFFF1F1,
               boxTitle: Strings.failedTtl,
@@ -380,7 +440,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               iconPath: ImageAssets.failedIcnPng,
             ), 
             DashboardBoxWidget(
-              boxHeight: 60,
+              boxHeight: MediaQuery.of(context).size.height * .065, //60,
               boxWidth: MediaQuery.of(context).size.width * .42,
               boxColor: cECF7FF,
               boxTitle: Strings.seenTtl,
@@ -411,8 +471,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DashboardBoxWidget(
-              boxHeight: 104,
-              boxWidth: 120,
+              boxHeight: MediaQuery.of(context).size.height * .13, //60,
+              boxWidth: MediaQuery.of(context).size.width * .3, //120,
               boxColor: cF1F5F8,
               boxTitle: Strings.totalcnvrstnTtl,
               boxSubtitle: dashboardCountData != null 
@@ -422,8 +482,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 DashboardBoxWidget(
-                  boxHeight: 46,
-                  boxWidth: 220,
+                  boxHeight: MediaQuery.of(context).size.height * .06, //46,
+                  boxWidth: MediaQuery.of(context).size.width * .56, //220,
                   boxColor: cEEFFF2,
                   boxTitle: Strings.openTtl,
                   boxSubtitle: dashboardCountData != null 
@@ -433,8 +493,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ), 
                 SizedBox(height: 10),
                 DashboardBoxWidget(
-                  boxHeight: 46,
-                  boxWidth: 220,
+                  boxHeight: MediaQuery.of(context).size.height * .06, //46,
+                  boxWidth: MediaQuery.of(context).size.width * .56, //220,
                   boxColor: cFFF1F1,
                   boxTitle: Strings.closedTtl,
                   boxSubtitle: dashboardCountData != null 
@@ -451,8 +511,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             DashboardBoxWidget(
-              boxHeight: 60,
-              boxWidth: 120,
+              boxHeight: MediaQuery.of(context).size.height * .065, //60,
+              boxWidth: MediaQuery.of(context).size.width * .3, //120,
               boxColor: cFFF7EF,
               boxTitle: Strings.pendingTtl,
               boxSubtitle: dashboardCountData != null 
@@ -461,8 +521,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               iconPath: ImageAssets.pendingIcnPng,
             ), 
             DashboardBoxWidget(
-              boxHeight: 60,
-              boxWidth: 220,
+              boxHeight: MediaQuery.of(context).size.height * .065, //60,
+              boxWidth: MediaQuery.of(context).size.width * .56, //220,
               boxColor: cECF7FF,
               boxTitle: Strings.avgRespTtl,
               boxSubtitle: dashboardCountData != null 

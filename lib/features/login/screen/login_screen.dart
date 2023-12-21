@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/login/bloc/bloc.dart';
@@ -10,6 +12,7 @@ import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/solid_button.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -24,6 +27,19 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   LoginSuccessModel loginSuccessModel = LoginSuccessModel();
+
+  Future<void>? _launched;
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+    final Uri toLaunch =  Uri(scheme: 'https', path: '//privacypolicy.myinboxmedia.in/privacy-policy.html');
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             child: BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) {
-                debugPrint('Login builder states ==> $state');
-                if(state is LoginLoadingState) {
-                  return const Center(child: CircularProgressIndicator());
-                }
                 return _getBodyContent();
               },
             ),
@@ -201,14 +213,21 @@ class _LoginScreenState extends State<LoginScreen> {
   _getAppIcon() {
     return Align(
       alignment: Alignment.center,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-        width: 160,
-        height: 160,
-        child: Image.asset(
-          ImageAssets.appLogoPng,
-          fit: BoxFit.fill,
-        ),
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            height: MediaQuery.of(context).size.height * 0.2,
+            child: Image.asset(
+              ImageAssets.appLogoPng,
+              fit: BoxFit.fill,
+            ),
+          ),
+          Text(
+            Strings.appLbl,
+            style: TextStyles.s25_w900_c2488B4_inter,
+          ),
+        ],
       ),
     );
   }
@@ -220,7 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
         const SizedBox(height: 150),
         Text(
           Strings.login,
-          style: TextStyles.s22_w700_c000000,
+          style: TextStyles.s22_w500_cFFFFFF_inter,
         ),
       ],
     );
@@ -229,28 +248,47 @@ class _LoginScreenState extends State<LoginScreen> {
   _getLoginButton() {
     return Container(
       margin: const EdgeInsets.only(top: 50),
-      child: SoliButton(
-        text: Strings.loginBtn,
-        backgroundColor: cAAD4E7,
-        textColor: c000000,
-        textStyle: TextStyles.s16_w800,
-        verticalSpacing: 15,
-        onPressed: () {
-          // if(_userNameController.text.isEmpty) {
-          //   _getAlertSnackbar(Strings.emptyUsrNmTxt);
-          // } else if(_passwordController.text.isEmpty) {
-          //   _getAlertSnackbar(Strings.emptyPsswrdTxt);
-          // } else {
-            BlocProvider.of<LoginBloc>(context).add(
-              GetAuthTokenEvent(
-                userName: 'MIM2200038',
-                passWord: 'FE1F\$FD9_738' 
-                // userName: _userNameController.text,
-                // passWord: _passwordController.text,
-              )
-            );
-          // }
-        },
+      child: Column(
+        children: [
+          SoliButton(
+            text: Strings.loginBtn,
+            backgroundColor: cAAD4E7,
+            textColor: c000000,
+            textStyle: TextStyles.s16_w800,
+            verticalSpacing: 15,
+            onPressed: () {
+              if(_userNameController.text.isEmpty) {
+                _getAlertSnackbar(Strings.emptyUsrNmTxt);
+              } else if(_passwordController.text.isEmpty) {
+                _getAlertSnackbar(Strings.emptyPsswrdTxt);
+              } else {
+                BlocProvider.of<LoginBloc>(context).add(
+                  GetAuthTokenEvent(
+                    // userName: 'MIM2200038',
+                    // passWord: 'FE1F\$FD9_738' 
+                    userName: _userNameController.text,
+                    passWord: _passwordController.text,
+                  )
+                );
+              }
+            },
+          ),
+          const SizedBox(height: 10),
+          InkWell(
+            onTap: () async {
+              _launched = _launchInBrowser(toLaunch);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Privacy Policy', 
+                  style: TextStyles.s12_w500_c000000_lato,
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

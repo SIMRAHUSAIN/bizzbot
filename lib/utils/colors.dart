@@ -29,3 +29,4 @@ const cECF7FF = Color(0xffECF7FF);
 const c9EA2AD = Color(0xff9EA2AD);
 const cDEE2E6 = Color(0xffDEE2E6);
 const c374A5E = Color(0xff374A5E);
+const c2488B4 = Color(0xff2488B4);

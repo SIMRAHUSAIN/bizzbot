@@ -11,7 +11,7 @@ import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/chip_widget.dart';
 import 'package:mim_whatsup/widgets/image_avatar.dart';
-import 'package:mim_whatsup/widgets/labellist_dialogbox.dart';
+import 'package:mim_whatsup/features/user_chat_filter/screen/labelfilter_dialogbox.dart';
 
 class ListingCard extends StatefulWidget {
   final String userName;

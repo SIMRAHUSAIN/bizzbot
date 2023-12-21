@@ -1,8 +1,7 @@
 class ImageAssets {
-  static const String appLogoSvg = 'assets/app_logo.svg';
   static const String appLogoPng = 'assets/app_logo.png';
   static const String labelPng = 'assets/label.png';
-  static const String splashScreenPng = 'assets/splash_screen.png';
+  static const String splashScreenPng = 'assets/app_logo.png';
   static const String labelCheckboxPng = 'assets/label_checkbox.png';
   static const String closedIcnPng = 'assets/closed.png';
   static const String openIcnPng = 'assets/open.png';
@@ -19,4 +18,5 @@ class ImageAssets {
   static const String appBarLogo = 'assets/appbar_logo.png';
   static const String sortIcon = 'assets/sort.png';
   static const String logOutIcon = 'assets/logout.png';
+  static const String mimLogo = 'assets/mim_logo.png';
 }

@@ -13,7 +13,7 @@ import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/app_bar.dart';
-import 'package:mim_whatsup/widgets/labellist_dialogbox.dart';
+import 'package:mim_whatsup/features/user_chat_filter/screen/labelfilter_dialogbox.dart';
 import 'package:mim_whatsup/widgets/search_bar.dart';
 
 class UserChatMainScreen extends StatefulWidget {
@@ -39,10 +39,10 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
     super.initState();
     _loadData(context, ChatType.ACTIVE);
     tabController = TabController(length: 2, vsync: this);
-    // Timer.periodic(const Duration(seconds: 5), (timer) {
-    //   GlobalVar.activeTab == 0?
-    //   _loadData(context, GlobalVar.unreadBox?ChatType.UNREAD:ChatType.ACTIVE):null;
-    // });
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      GlobalVar.activeTab == 0?
+      _loadData(context, GlobalVar.unreadBox?ChatType.UNREAD:ChatType.ACTIVE):null;
+    });
   }
 
   @override

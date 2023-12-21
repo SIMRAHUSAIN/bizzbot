@@ -24,7 +24,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: [0.2, 0.9],
+            stops: [0.1, 0.5],
             colors: [
               c577D91,
               cFFFFFF,
@@ -39,25 +39,34 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
 
   _getBodyContent() {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         _getAppIcon(),
         _getBodyTxt(),
         _getStartedBtn(),
+        _designedBy()
       ],
     );
   }
 
   _getAppIcon() {
     return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.only(top: 120, bottom: 20),
-        width: MediaQuery.of(context).size.width * 0.7,
-        height: MediaQuery.of(context).size.height * 0.5,
-        child: Image.asset(
-          ImageAssets.splashScreenPng,
-          fit: BoxFit.fill,
-        ),
+      alignment: Alignment.center,
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 80, bottom: 10),
+            height: MediaQuery.of(context).size.height * 0.25,
+            child: Image.asset(
+              ImageAssets.splashScreenPng,
+              fit: BoxFit.fill,
+            ),
+          ),
+          Text(
+            Strings.appLbl,
+            style: TextStyles.s35_w900_c2488B4_inter,
+          ),
+        ],
       ),
     );
   }
@@ -87,12 +96,33 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
         text: Strings.getStartedBtn,
         backgroundColor: cAAD4E7,
         textColor: c000000,
+        borderRadius: 12,
         textStyle: TextStyles.s16_w800,
         verticalSpacing: 15,
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
         },
       ),
+    );
+  }
+
+  _designedBy() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+            height: MediaQuery.of(context).size.height * 0.04,
+            child: Image.asset(
+              ImageAssets.mimLogo,
+              fit: BoxFit.fill,
+            ),
+          ),
+          const SizedBox(width: 5),
+          Text(
+            Strings.poweredByMim,
+            style: TextStyles.s10_w900_c2488B4_inter,
+          ),
+      ],
     );
   }
 }
