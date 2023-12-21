@@ -3,6 +3,7 @@ class Strings {
   static const login = 'Login';
   static const usrnmeTxtFldLbl = 'Username';
   static const psswrdTxtFldLbl = 'Password';
+  static const appLbl = 'BIZBOT';
 
   //validation txt
   static const emptyUsrNmTxt = 'Please enter the username';
@@ -16,8 +17,9 @@ class Strings {
   static const msgSntHome = 'Messages Sent (Campaign)';
 
   //splash screen
-  static const splshscrnTxt1 = 'Enjoy the new experience of chatting with global friends';
-  static const splshscrnTxt2 = 'Connecting all around the world';
+  static const splshscrnTxt1 = 'Enjoy the New Experience of chatting with Global Customers';
+  static const splshscrnTxt2 = 'Connecting all around the World';
+  static const poweredByMim = 'Designed & Developed By: My Inbox Media';
 
   //user chat listing screen
   static const actveChtTabTxt = 'Active Chats';

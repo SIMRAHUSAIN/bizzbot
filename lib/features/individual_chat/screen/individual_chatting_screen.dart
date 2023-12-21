@@ -1,8 +1,7 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 import 'dart:async';
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +10,6 @@ import 'package:mim_whatsup/features/individual_chat/bloc/event.dart';
 import 'package:mim_whatsup/features/individual_chat/bloc/state.dart';
 import 'package:mim_whatsup/features/individual_chat/model/individual_chat_model.dart';
 import 'package:mim_whatsup/utils/colors.dart';
-import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/message_widget.dart';
 import 'package:file_picker/file_picker.dart';
@@ -45,10 +43,14 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
   void initState() {
     super.initState();
     cameraCheck();
+    showPlayer = false;
     periodicTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: widget.userMobileNumber, checkOld: '1'));
     });
   }
+
+  bool showPlayer = false;
+  String? audioPath;
 
   cameraCheck() async {
     _cameras = await availableCameras();
@@ -74,7 +76,6 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     periodicTimer.cancel();
     super.dispose();
   }
@@ -163,7 +164,7 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
             Expanded(
               child: BlocConsumer<IndividualChatBloc, IndividualChatState>(
                 listener: (context, state){
-                  print("RAHUL " + state.toString());
+                  print("RAHUL $state");
                   if(state is SendFileSuccessState){
                     BlocProvider.of<IndividualChatBloc>(context).add(
                       SendMessageEvent(
@@ -181,8 +182,8 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                     setState((){
                       message = state.individualChatModel.data?.conversation;
                     });
-                    Future.delayed(Duration(milliseconds: 500), () {
-                      WidgetsBinding.instance?.addPostFrameCallback((_) {
+                    Future.delayed(const Duration(milliseconds: 500), () {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
                         _scrollController.jumpTo(
                           _scrollController.position.maxScrollExtent,
                           // duration: Duration(milliseconds: 500),
@@ -317,7 +318,7 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                                 hintText: "Type a message",
                                 hintStyle: const TextStyle(color: Colors.grey),
                                 prefixIcon: IconButton(
-                                  icon: Icon(
+                                  icon: const Icon(
                                     //show ?
                                     Icons.keyboard
                                         //: Icons.emoji_emotions_outlined,
@@ -372,7 +373,7 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                             radius: 25,
                             backgroundColor: const Color(0xFF128C7E),
                             child: IconButton(
-                              icon: Icon(
+                              icon: const Icon(
                                 // sendButton ?
                                 Icons.send ,
                                     // : Icons.mic,

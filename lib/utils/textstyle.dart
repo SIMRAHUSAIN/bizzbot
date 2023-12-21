@@ -18,6 +18,13 @@ class TextStyles {
     fontFamily: 'Lato',
   );
 
+  static var s22_w500_cFFFFFF_inter = const TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.w500,
+    color: cFFFFFF,
+    fontFamily: 'Inter',
+  );
+
   static var s14_w400_cFFE3E1 = const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w400,
@@ -191,5 +198,26 @@ class TextStyles {
     fontSize: 16,
     color: c374A5E,
     fontFamily: 'Lato',
+  );
+
+  static var s35_w900_c2488B4_inter = const TextStyle(
+    fontWeight: FontWeight.w900,
+    fontSize: 35,
+    color: c2488B4,
+    fontFamily: 'Inter',
+  );
+
+  static var s25_w900_c2488B4_inter = const TextStyle(
+    fontWeight: FontWeight.w900,
+    fontSize: 25,
+    color: c2488B4,
+    fontFamily: 'Inter',
+  );
+
+    static var s10_w900_c2488B4_inter = const TextStyle(
+    fontWeight: FontWeight.w900,
+    fontSize: 10,
+    color: c000000,
+    fontFamily: 'Inter',
   );
 }

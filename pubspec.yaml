@@ -27,6 +27,7 @@ dependencies:
   platform_device_id:
   camera:
   url_launcher:
+  record:
 
 dev_dependencies:
   flutter_test:
@@ -55,3 +56,6 @@ flutter:
       - family: Lato
         fonts: 
           - asset: assets/fonts/Lato2OFL/Lato-Regular.ttf
+      - family: Inter
+        fonts: 
+          - asset: assets/fonts/static/Inter-ExtraBold.ttf
