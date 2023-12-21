@@ -74,7 +74,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   _getAlertSnackbar(state.message.toString());
                 } else if(state is LoginSuccessState) {
                   loginSuccessModel = state.loginModel.data!;
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(loginSuccessModel: loginSuccessModel)));
+                  // Navigator.pop(context);
+                  // Navigator.pop(context);
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(loginSuccessModel: loginSuccessModel)));
                 } else if(state is LoginFailedState) {
                   _getAlertSnackbar(state.message.toString());
                 }
@@ -126,12 +128,6 @@ class _LoginScreenState extends State<LoginScreen> {
         onSaved: (String? val) {
           _userNameController.text = val!;
         },
-        // validator: (value) {
-        //   if (value == null || value.isEmpty) {
-        //     return Strings.emptyUsrNmTxt;
-        //   }
-        //   return null;
-        // },
         controller: _userNameController,
         enabled: true,
         style: TextStyles.s14_w400_cB3AEAE,
@@ -173,12 +169,6 @@ class _LoginScreenState extends State<LoginScreen> {
         onSaved: (String? val) {
           _passwordController.text = val!;
         },
-        // validator: (value) {
-        //   if (value == null || value.isEmpty) {
-        //     return Strings.emptyPsswrdTxt;
-        //   }
-        //   return null;
-        // },
         controller: _passwordController,
         enabled: true,
         style: TextStyles.s14_w400_cB3AEAE,
@@ -257,20 +247,20 @@ class _LoginScreenState extends State<LoginScreen> {
             textStyle: TextStyles.s16_w800,
             verticalSpacing: 15,
             onPressed: () {
-              if(_userNameController.text.isEmpty) {
-                _getAlertSnackbar(Strings.emptyUsrNmTxt);
-              } else if(_passwordController.text.isEmpty) {
-                _getAlertSnackbar(Strings.emptyPsswrdTxt);
-              } else {
+              // if(_userNameController.text.isEmpty) {
+              //   _getAlertSnackbar(Strings.emptyUsrNmTxt);
+              // } else if(_passwordController.text.isEmpty) {
+              //   _getAlertSnackbar(Strings.emptyPsswrdTxt);
+              // } else {
                 BlocProvider.of<LoginBloc>(context).add(
                   GetAuthTokenEvent(
-                    // userName: 'MIM2200038',
-                    // passWord: 'FE1F\$FD9_738' 
-                    userName: _userNameController.text,
-                    passWord: _passwordController.text,
+                    userName: 'MIM2200038',
+                    passWord: 'FE1F\$FD9_738' 
+                    // userName: _userNameController.text,
+                    // passWord: _passwordController.text,
                   )
                 );
-              }
+              // }
             },
           ),
           const SizedBox(height: 10),

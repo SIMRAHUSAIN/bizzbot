@@ -100,7 +100,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
         textStyle: TextStyles.s16_w800,
         verticalSpacing: 15,
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
         },
       ),
     );

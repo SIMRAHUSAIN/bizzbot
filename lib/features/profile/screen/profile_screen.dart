@@ -119,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   _getLogOutBtn() {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(
+        Navigator.pushReplacement(context, MaterialPageRoute(
           builder: (context) => const LoginScreen()
         ));
       },
