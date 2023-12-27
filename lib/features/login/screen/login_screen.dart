@@ -171,6 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         controller: _passwordController,
         enabled: true,
+        obscureText: true,
         style: TextStyles.s14_w400_cB3AEAE,
         decoration: InputDecoration(
           hintText: Strings.psswrdTxtFldLbl,

@@ -20,7 +20,7 @@ class _UserChatListState extends State<UserChatList> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      child: widget.userChatModel!.data!.isEmpty?const Center(
+      child: widget.userChatModel.data!.isEmpty?const Center(
         child: Text(
           Strings.noDataAvailable,
         ),

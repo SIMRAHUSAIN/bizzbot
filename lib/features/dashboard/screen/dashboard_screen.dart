@@ -67,19 +67,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
               },
               child: Padding(
                 padding: EdgeInsets.only(right: 10),
-                child: Container(
-                  height: 35,
-                  width: 35,
-                  margin: EdgeInsets.symmetric(vertical: 2),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey
-                  ),
-                  child: widget.loginSuccessModel.profileImagePath != null 
-                  ? Image.network(
-                    widget.loginSuccessModel.profileImagePath!,
-                  ): const SizedBox.shrink(),
-                )
+                child: Icon(Icons.menu_rounded, color: Colors.grey, size: 30,)
+                // Container(
+                //   height: 35,
+                //   width: 35,
+                //   margin: EdgeInsets.symmetric(vertical: 2),
+                //   decoration: const BoxDecoration(
+                //     shape: BoxShape.circle,
+                //     color: Colors.grey
+                //   ),
+                //   child: widget.loginSuccessModel.profileImagePath != null 
+                //   ? Image.network(
+                //     widget.loginSuccessModel.profileImagePath!,
+                //   ): const SizedBox.shrink(),
+                // )
               ),
             )
           ],
@@ -109,16 +110,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             }),
             child: BlocBuilder<DashboardBloc, DashboardState>(
               builder: ((context, state) {
-                //if loader is required
-                // if(state is DashboardLoadingState) {
-                //   return SizedBox(
-                //     width: MediaQuery.of(context).size.width,
-                //     height: MediaQuery.of(context).size.height * 0.75,
-                //     child: Center(
-                //       child: CircularProgressIndicator()
-                //     ),
-                //   );
-                // } else 
                 if(state is DashboardSuccessState) {
                   return Column(
                     children: [
