@@ -7,4 +7,6 @@ class GlobalVar {
   static int activeTab = 0;
   static String mobileNo = "";
   static bool unreadBox = false;
+
+  static String keyLogin = 'Login';
 }

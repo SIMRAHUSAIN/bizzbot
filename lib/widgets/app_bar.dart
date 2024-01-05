@@ -69,7 +69,7 @@ class AppBarWithBackButton extends StatelessWidget{
             }
             if (Navigator.canPop(context)) {
               Navigator.push(context, MaterialPageRoute(
-                builder: (context) => HomeScreen(loginSuccessModel: loginSuccessModel)));
+                builder: (context) => HomeScreen()));
             }
           },
           child: Container(

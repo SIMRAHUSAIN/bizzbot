@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field
+// ignore_for_file: unused_field, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,9 +9,11 @@ import 'package:mim_whatsup/features/login/model/login_model.dart';
 import 'package:mim_whatsup/home_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
+import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/solid_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -39,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-    final Uri toLaunch =  Uri(scheme: 'https', path: '//privacypolicy.myinboxmedia.in/privacy-policy.html');
+  final Uri toLaunch =  Uri(scheme: 'https', path: '//privacypolicy.myinboxmedia.in/privacy-policy.html');
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   _getAlertSnackbar(state.message.toString());
                 } else if(state is LoginSuccessState) {
                   loginSuccessModel = state.loginModel.data!;
-                  // Navigator.pop(context);
-                  // Navigator.pop(context);
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen(loginSuccessModel: loginSuccessModel)));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                 } else if(state is LoginFailedState) {
                   _getAlertSnackbar(state.message.toString());
                 }
@@ -124,6 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
       height: 70,
       margin: const EdgeInsets.only(top: 40),
       child: TextFormField(
+        autofillHints: const [AutofillHints.username],
         textAlign: TextAlign.start,
         onSaved: (String? val) {
           _userNameController.text = val!;
@@ -165,6 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
       height: 70,
       margin: const EdgeInsets.only(top: 10),
       child: TextFormField(
+        autofillHints: const [AutofillHints.password],
         textAlign: TextAlign.start,
         onSaved: (String? val) {
           _passwordController.text = val!;
@@ -247,21 +249,24 @@ class _LoginScreenState extends State<LoginScreen> {
             textColor: c000000,
             textStyle: TextStyles.s16_w800,
             verticalSpacing: 15,
-            onPressed: () {
-              // if(_userNameController.text.isEmpty) {
-              //   _getAlertSnackbar(Strings.emptyUsrNmTxt);
-              // } else if(_passwordController.text.isEmpty) {
-              //   _getAlertSnackbar(Strings.emptyPsswrdTxt);
-              // } else {
+            onPressed: () async {
+              if(_userNameController.text.isEmpty) {
+                _getAlertSnackbar(Strings.emptyUsrNmTxt);
+              } else if(_passwordController.text.isEmpty) {
+                _getAlertSnackbar(Strings.emptyPsswrdTxt);
+              } else {
+                // if successfully logged in
+                var prefs = await SharedPreferences.getInstance();
+                prefs.setBool(GlobalVar.keyLogin, true);
                 BlocProvider.of<LoginBloc>(context).add(
                   GetAuthTokenEvent(
-                    userName: 'MIM2200038',
-                    passWord: 'FE1F\$FD9_738' 
-                    // userName: _userNameController.text,
-                    // passWord: _passwordController.text,
+                    // userName: 'MIM2200038',
+                    // passWord: 'FE1F\$FD9_738' 
+                    userName: _userNameController.text,
+                    passWord: _passwordController.text,
                   )
                 );
-              // }
+              }
             },
           ),
           const SizedBox(height: 10),

@@ -23,9 +23,9 @@
     </queries>
 
     <application
-        android:label="mim_whatsup"
+        android:label="BIZBOT"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/app_logo">
         <activity
             android:name=".MainActivity"
             android:exported="true"
