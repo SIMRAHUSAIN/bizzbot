@@ -26,15 +26,24 @@ class IndividualChatRepoImpl extends IndividualChatRepo {
       http.Response response = await http.post(
         Uri.parse(Apis.getIndividualChatMessage),
         body: json.encode(map),
-        headers: GlobalVar.header
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${GlobalVar.globalToken}"
+        }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
+      var data = json.decode(response.body);
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
         IndividualChatModel individualChatModel = IndividualChatModel.fromJson(data);
         return individualChatModel;
       } else {
-        throw Exception();
+        var jsonData = {
+          "statusCode": data["statusCode"],
+          "error": data["error"],
+          "data": null
+        };
+        IndividualChatModel individualChatModel = IndividualChatModel.fromJson(jsonData);
+        return individualChatModel;
       }
     } catch(e) {
       throw Exception();
@@ -50,7 +59,10 @@ class IndividualChatRepoImpl extends IndividualChatRepo {
       http.Response response = await http.post(
         Uri.parse(Apis.sendMessage),
         body: json.encode(map),
-        headers: GlobalVar.header
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${GlobalVar.globalToken}"
+        }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
       if (response.statusCode == 200) {

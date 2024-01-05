@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/dashboard/bloc/event.dart';
 import 'package:mim_whatsup/features/dashboard/bloc/state.dart';
 import 'package:mim_whatsup/features/dashboard/model/dashboard_model.dart';
+import 'package:mim_whatsup/utils/global_variables.dart';
 
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   
@@ -15,13 +16,14 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       emit(DashboardLoadingState());
       try{
         debugPrint('Dash 0');
+        print("POP " + GlobalVar.globalToken);
         DashboardModel dashboardModel = await repo.getDashboard();
         if(dashboardModel.statusCode == 200) {
           debugPrint('Dash 1');
           emit(DashboardSuccessState(dashboardModel));
         } else {
           debugPrint('Dash 2');
-          emit(DashboardFailedState(dashboardModel.data.toString()));
+          emit(DashboardFailedState(dashboardModel.error.toString()));
         }
       } catch(e) {
         debugPrint('Dash 4');

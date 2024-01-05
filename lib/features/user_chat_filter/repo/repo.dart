@@ -22,15 +22,25 @@ class ChatFilterRepoImpl extends ChatFilterRepo {
     try {
       http.Response response = await http.get(
         Uri.parse(Apis.getChatLabel+mobileNo),
-        headers: GlobalVar.header
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${GlobalVar.globalToken}"
+          }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
+      var data = json.decode(response.body);
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
         ChatLabelListModel chatLabelListModel = ChatLabelListModel.fromJson(data);
         return chatLabelListModel;
       } else {
-        throw Exception();
+        var jsonData = {
+          "statusCode": data["statusCode"],
+          "error": data["error"],
+          "data": null
+        };
+        ChatLabelListModel chatLabelListModel = ChatLabelListModel.fromJson(jsonData);
+        return chatLabelListModel;
+        //throw Exception();
       }
     } catch(e) {
       throw Exception();
@@ -46,7 +56,10 @@ class ChatFilterRepoImpl extends ChatFilterRepo {
       http.Response response = await http.post(
           Uri.parse(Apis.addChatLabel),
           body: json.encode(map),
-          headers: GlobalVar.header
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${GlobalVar.globalToken}"
+          }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
       if (response.statusCode == 200) {
@@ -70,7 +83,10 @@ class ChatFilterRepoImpl extends ChatFilterRepo {
       http.Response response = await http.post(
           Uri.parse(Apis.editChatLabel),
           body: json.encode(map),
-          headers: GlobalVar.header
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${GlobalVar.globalToken}"
+          }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
       if (response.statusCode == 200) {
@@ -94,7 +110,10 @@ class ChatFilterRepoImpl extends ChatFilterRepo {
       http.Response response = await http.post(
           Uri.parse(Apis.deleteChatLabel),
           body: json.encode(map),
-          headers: GlobalVar.header
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${GlobalVar.globalToken}"
+          }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
       if (response.statusCode == 200) {
@@ -118,7 +137,10 @@ class ChatFilterRepoImpl extends ChatFilterRepo {
       http.Response response = await http.post(
           Uri.parse(Apis.saveFlag),
           body: json.encode(map),
-          headers: GlobalVar.header
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${GlobalVar.globalToken}"
+          }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
       if (response.statusCode == 200) {
@@ -140,12 +162,21 @@ class ChatFilterRepoImpl extends ChatFilterRepo {
       http.Response response = await http.post(
           Uri.parse(Apis.unreadMessage),
           body: json.encode(map),
-          headers: GlobalVar.header
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${GlobalVar.globalToken}"
+          }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
+      var data = json.decode(response.body);
       if (response.statusCode == 200) {
         return {"statusCode": "200"};
       } else {
+        return {
+          "statusCode": data["statusCode"],
+          "error": data["error"],
+          "data": null
+        };
         throw Exception();
       }
     } catch(e) {

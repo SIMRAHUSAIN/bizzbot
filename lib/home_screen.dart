@@ -104,10 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedFontSize: 20,
         unselectedFontSize: 18,
       ),
-      body: IndexedStack(
-        index: currentTabIndex,
-        children: tabs,
-      ),
+      body: tabs[currentTabIndex],
     );
   }
 }

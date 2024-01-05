@@ -1,16 +1,19 @@
 class IndividualChatModel {
   String? statusCode;
+  String? error;
   Data? data;
 
   IndividualChatModel({this.statusCode, this.data});
 
   IndividualChatModel.fromJson(Map<String, dynamic> json) {
+    error = json['error'];
     statusCode = json['statusCode'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['error'] = error;
     data['statusCode'] = statusCode;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
