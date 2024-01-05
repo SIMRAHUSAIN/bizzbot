@@ -29,7 +29,7 @@ dependencies:
   video_player:
   audio_waveforms:
   url_launcher:
-  record:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:
