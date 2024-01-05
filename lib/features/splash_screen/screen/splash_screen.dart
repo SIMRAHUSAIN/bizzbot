@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:mim_whatsup/features/login/screen/login_screen.dart';
 import 'package:mim_whatsup/home_screen.dart';
@@ -43,7 +42,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
       GlobalVar.userPassword = userPassword;
     }
     debugPrint('SIM bool $isLoggedIn');
-     //Timer(const Duration(seconds: 2), () {
+     Timer(const Duration(seconds: 3), () {
       if(isLoggedIn != null) {
         if(isLoggedIn) {
           Navigator.pushReplacement(
@@ -62,8 +61,9 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
             context,
             MaterialPageRoute(builder: (context) => const LoginScreen())
           );
-        }`
-   // });
+        }
+      }
+    );
   }
 
   @override
