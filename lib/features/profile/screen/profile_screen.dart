@@ -127,10 +127,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onTap: () async {
         // if successfully logged out
         var prefs = await SharedPreferences.getInstance();
-        // prefs.remove("LoggedIn");
-        // prefs.remove("Token");
-        // prefs.remove("Id");
-        // prefs.remove("Password");
+        prefs.remove("LoggedIn");
+        prefs.remove("Token");
+        prefs.remove("Id");
+        prefs.remove("Password");
         prefs.setBool("LoggedIn", false);
         Navigator.pushReplacement(context, MaterialPageRoute(
           builder: (context) => const AppSplashScreen()
