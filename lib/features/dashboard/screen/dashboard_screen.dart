@@ -14,14 +14,16 @@ import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
-import 'package:mim_whatsup/widgets/dashboard_box_widget.dart';
+import 'package:mim_whatsup/widgets/box_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:mim_whatsup/widgets/dashline_separator.dart';
 
 class DashboardScreen extends StatefulWidget {
-  final LoginSuccessModel loginSuccessModel;
+  // final LoginSuccessModel loginSuccessModel;
 
-  const DashboardScreen({Key? key, required this.loginSuccessModel}) : super(key: key);
+  const DashboardScreen({Key? key, 
+    // required this.loginSuccessModel
+  }) : super(key: key);
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -58,28 +60,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
           actions: [
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(
-                    builder: (context) => ProfileScreen(loginSuccessModel: widget.loginSuccessModel)
-                  )
-                );
+                // Navigator.push(
+                //   context, 
+                //   MaterialPageRoute(
+                //     builder: (context) => ProfileScreen(loginSuccessModel: widget.loginSuccessModel)
+                //   )
+                // );
               },
               child: Padding(
                 padding: EdgeInsets.only(right: 10),
-                child: Container(
-                  height: 35,
-                  width: 35,
-                  margin: EdgeInsets.symmetric(vertical: 2),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey
-                  ),
-                  child: widget.loginSuccessModel.profileImagePath != null 
-                  ? Image.network(
-                    widget.loginSuccessModel.profileImagePath!,
-                  ): const SizedBox.shrink(),
-                )
+                child: Icon(Icons.menu_rounded, color: Colors.grey, size: 30,)
+                // Container(
+                //   height: 35,
+                //   width: 35,
+                //   margin: EdgeInsets.symmetric(vertical: 2),
+                //   decoration: const BoxDecoration(
+                //     shape: BoxShape.circle,
+                //     color: Colors.grey
+                //   ),
+                //   child: widget.loginSuccessModel.profileImagePath != null 
+                //   ? Image.network(
+                //     widget.loginSuccessModel.profileImagePath!,
+                //   ): const SizedBox.shrink(),
+                // )
               ),
             )
           ],
@@ -97,7 +100,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         child: SingleChildScrollView(
           child: BlocListener<DashboardBloc, DashboardState>(
             listener: ((context, state) {
@@ -109,16 +112,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             }),
             child: BlocBuilder<DashboardBloc, DashboardState>(
               builder: ((context, state) {
-                //if loader is required
-                // if(state is DashboardLoadingState) {
-                //   return SizedBox(
-                //     width: MediaQuery.of(context).size.width,
-                //     height: MediaQuery.of(context).size.height * 0.75,
-                //     child: Center(
-                //       child: CircularProgressIndicator()
-                //     ),
-                //   );
-                // } else 
                 if(state is DashboardSuccessState) {
                   return Column(
                     children: [
@@ -130,7 +123,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         endIndent: 0,
                         color: c000000,
                       ),
-                      // SizedBox(height: 10),
                       _getChartWidget(),
                       Divider(
                         height: 20,
@@ -139,7 +131,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         endIndent: 0,
                         color: c000000,
                       ),
-                      // SizedBox(height: 10),
                       _getMsgSntWidgets()
                     ],
                   );
@@ -154,7 +145,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         endIndent: 0,
                         color: c000000,
                       ),
-                      // SizedBox(height: 10),
                       _getChartWidget(),
                       Divider(
                         height: 20,
@@ -163,7 +153,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         endIndent: 0,
                         color: c000000,
                       ),
-                      // SizedBox(height: 10),
                       _getMsgSntWidgets()
                     ],
                   );
@@ -399,7 +388,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Strings.msgSntHome,
           style: TextStyles.s18_w500_c000000_lato,
         ),
-        SizedBox(height: 5),
+        SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -465,7 +454,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Strings.cnvrstnChtHome,
           style: TextStyles.s18_w500_c000000_lato,
         ),
-        SizedBox(height: 5),
+        SizedBox(height: 10),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,

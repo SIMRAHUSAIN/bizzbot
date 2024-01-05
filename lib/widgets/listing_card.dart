@@ -55,18 +55,30 @@ class _ListingCardState extends State<ListingCard> {
     return InkWell(
       onTap: widget.onTap,
       child: Container(
-        //margin: const EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
           color: cFFFFFF,
-          //borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10),
           border: Border(
+            top: BorderSide(
+              color: Colors.grey.withOpacity(0.7), // You can change the color to your desired color
+              width: 0.75,         // You can adjust the border width as needed
+            ),
+            left: BorderSide(
+              color: Colors.grey.withOpacity(0.7), // You can change the color to your desired color
+              width: 0.75,         // You can adjust the border width as needed
+            ),
+            right: BorderSide(
+              color: Colors.grey.withOpacity(0.7), // You can change the color to your desired color
+              width: 0.75,         // You can adjust the border width as needed
+            ),
             bottom: BorderSide(
-              color: Colors.grey.withOpacity(0.5), // You can change the color to your desired color
-              width: 0.5,         // You can adjust the border width as needed
+              color: Colors.grey.withOpacity(0.7), // You can change the color to your desired color
+              width: 0.75,         // You can adjust the border width as needed
             ),
           ),
         ),
-        padding: const EdgeInsets.only(top: 15, bottom: 15),
+        padding: const EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 15),
         child: Column(
           children: [
             Row(
@@ -83,14 +95,6 @@ class _ListingCardState extends State<ListingCard> {
                         IconAvatar(
                           userNameString: widget.userName,
                         ),
-                        InkWell(
-                          onTap: (){
-                            setState((){
-                              enableExpandedOption = enableExpandedOption?false:true;
-                            });
-                          },
-                          child: Icon(Icons.more_horiz),
-                        )
                         // Row(
                         //   mainAxisAlignment: MainAxisAlignment.center,
                         //   children: [
@@ -154,10 +158,18 @@ class _ListingCardState extends State<ListingCard> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                      widget.date.split(" ").first,
-                      style: TextStyles.s14_w400_cB3AEAE,
-                    ),
+                    InkWell(
+                          onTap: (){
+                            setState((){
+                              enableExpandedOption = enableExpandedOption?false:true;
+                            });
+                          },
+                          child: const Icon(Icons.more_horiz),
+                        ),
+                    // Text(
+                    //   widget.date.split(" ").first,
+                    //   style: TextStyles.s14_w400_cB3AEAE,
+                    // ),
                     Text(
                       widget.date.split(" ").last,
                       style: TextStyles.s14_w400_cB3AEAE,
@@ -183,7 +195,7 @@ class _ListingCardState extends State<ListingCard> {
                 )
               ],
             ),
-            enableExpandedOption?SizedBox(height: 10):Container(),
+            enableExpandedOption?const SizedBox(height: 10):Container(),
             enableExpandedOption?Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -201,7 +213,7 @@ class _ListingCardState extends State<ListingCard> {
                             }
                         });
                       },
-                      child: Icon(Icons.flag, size: 20, color: Colors.grey),
+                      child: const Icon(Icons.flag, size: 20, color: Colors.grey),
                     )
                   )
                 ),
@@ -229,7 +241,7 @@ class _ListingCardState extends State<ListingCard> {
                                 )
                               );
                             },
-                            child: Icon(Icons.mark_email_unread, size: 20, color: Colors.grey),
+                            child: const Icon(Icons.mark_email_unread, size: 20, color: Colors.grey),
                           )
                         )
                       );

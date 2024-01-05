@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_img/flutter_img.dart';
@@ -9,6 +9,9 @@ import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/app_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../utils/global_variables.dart';
 
 class ProfileScreen extends StatefulWidget {
   final LoginSuccessModel loginSuccessModel;
@@ -118,8 +121,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   _getLogOutBtn() {
     return InkWell(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(
+      onTap: () async {
+        // if successfully logged out
+        var prefs = await SharedPreferences.getInstance();
+        prefs.setBool(GlobalVar.keyLogin, true);
+        Navigator.pushReplacement(context, MaterialPageRoute(
           builder: (context) => const LoginScreen()
         ));
       },

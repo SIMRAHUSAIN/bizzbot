@@ -17,9 +17,11 @@ import 'package:mim_whatsup/utils/textstyle.dart';
 import 'features/login/bloc/event.dart';
 
 class HomeScreen extends StatefulWidget {
-  final LoginSuccessModel loginSuccessModel;
+  // final LoginSuccessModel loginSuccessModel;
 
-  const HomeScreen({Key? key, required this.loginSuccessModel}) : super(key: key);
+  const HomeScreen({Key? key,
+    // required this.loginSuccessModel
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -34,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     tabs = [
-      DashboardScreen(loginSuccessModel: widget.loginSuccessModel),
+      const DashboardScreen(),
       const UserChatMainScreen(),
       const SendMsgMainScreen(),
       const ReportMainScreen(),

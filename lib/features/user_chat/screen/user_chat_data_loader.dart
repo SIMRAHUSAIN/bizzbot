@@ -108,12 +108,12 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
         builder: (context, state) {
           if(counter == 0){
             counter++;
-            return Center(
+            return const Center(
               child: CircularProgressIndicator()
             );
           }
           else if (data == null){
-            return Center(
+            return const Center(
               child: Text("No Data Found"),
             );
           }

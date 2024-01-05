@@ -3,8 +3,8 @@ import 'package:mim_whatsup/utils/textstyle.dart';
 
 class DashboardBoxWidget extends StatelessWidget {
   Color? boxColor;
-  double boxHeight;
-  double boxWidth;
+  double? boxHeight;
+  double? boxWidth;
   String boxTitle;
   String boxSubtitle;
   bool hasIcon;
@@ -13,8 +13,8 @@ class DashboardBoxWidget extends StatelessWidget {
   DashboardBoxWidget({
     Key? key,
     this.boxColor,
-    this.boxHeight = 100,
-    this.boxWidth = 100,
+    this.boxHeight,
+    this.boxWidth,
     this.boxTitle = '',
     this.boxSubtitle = '',
     this.hasIcon = false,

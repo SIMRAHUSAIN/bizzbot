@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mim_whatsup/features/login/screen/login_screen.dart';
+import 'package:mim_whatsup/home_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
+import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/solid_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppSplashScreen extends StatefulWidget {
   const AppSplashScreen({Key? key}) : super(key: key);
@@ -14,6 +19,53 @@ class AppSplashScreen extends StatefulWidget {
 }
 
 class _AppSplashScreenState extends State<AppSplashScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    navigateTo(context);
+  }
+
+  void navigateTo(context) async {
+    var prefs = await SharedPreferences.getInstance();
+    
+    var isLoggedIn = prefs.getBool("LoggedIn");
+    final tokenData = prefs.getString("Token");
+    final userId = prefs.getString("Id");
+    final userPassword = prefs.getString("Password");
+    if(tokenData != null){
+      GlobalVar.globalToken = tokenData;
+    }
+    if(userId != null){
+      GlobalVar.userId = userId;
+    }
+    if(userPassword != null){
+      GlobalVar.userPassword = userPassword;
+    }
+    debugPrint('SIM bool $isLoggedIn');
+     //Timer(const Duration(seconds: 2), () {
+      if(isLoggedIn != null) {
+        if(isLoggedIn) {
+          Navigator.pushReplacement(
+            context, 
+            MaterialPageRoute(builder: (context) => const HomeScreen())
+          );
+        } else {
+          Navigator.pushReplacement(
+            context, 
+            MaterialPageRoute(builder: (context) => const LoginScreen())
+          );
+        }
+      }
+      else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen())
+          );
+        }`
+   // });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +152,7 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
         textStyle: TextStyles.s16_w800,
         verticalSpacing: 15,
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
         },
       ),
     );

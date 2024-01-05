@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field
+// ignore_for_file: unused_field, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,9 +9,11 @@ import 'package:mim_whatsup/features/login/model/login_model.dart';
 import 'package:mim_whatsup/home_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
+import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/solid_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -39,7 +41,19 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-    final Uri toLaunch =  Uri(scheme: 'https', path: '//privacypolicy.myinboxmedia.in/privacy-policy.html');
+  final Uri toLaunch =  Uri(scheme: 'https', path: '//privacypolicy.myinboxmedia.in/privacy-policy.html');
+
+  void sharedPrefIdPassword() async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString("Id", _userNameController.text);
+    prefs.setString("Password", _passwordController.text);
+    prefs.setBool("LoggedIn", true);
+  }
+
+  void sharedPrefToken(String token) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString("Token", token);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
             listener: (context, state) {
               debugPrint('Login listener states ==> $state');
                 if(state is AuthTokenSuccessState) {
+                  sharedPrefToken(state.tokenModel.data!.token.toString());
                   BlocProvider.of<LoginBloc>(context).add(
                     GetLoginEvent(
                       userName: 'MIM2200038',
@@ -74,7 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   _getAlertSnackbar(state.message.toString());
                 } else if(state is LoginSuccessState) {
                   loginSuccessModel = state.loginModel.data!;
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(loginSuccessModel: loginSuccessModel)));
+                  sharedPrefIdPassword();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                 } else if(state is LoginFailedState) {
                   _getAlertSnackbar(state.message.toString());
                 }
@@ -122,16 +138,11 @@ class _LoginScreenState extends State<LoginScreen> {
       height: 70,
       margin: const EdgeInsets.only(top: 40),
       child: TextFormField(
+        autofillHints: const [AutofillHints.username],
         textAlign: TextAlign.start,
         onSaved: (String? val) {
           _userNameController.text = val!;
         },
-        // validator: (value) {
-        //   if (value == null || value.isEmpty) {
-        //     return Strings.emptyUsrNmTxt;
-        //   }
-        //   return null;
-        // },
         controller: _userNameController,
         enabled: true,
         style: TextStyles.s14_w400_cB3AEAE,
@@ -169,18 +180,14 @@ class _LoginScreenState extends State<LoginScreen> {
       height: 70,
       margin: const EdgeInsets.only(top: 10),
       child: TextFormField(
+        autofillHints: const [AutofillHints.password],
         textAlign: TextAlign.start,
         onSaved: (String? val) {
           _passwordController.text = val!;
         },
-        // validator: (value) {
-        //   if (value == null || value.isEmpty) {
-        //     return Strings.emptyPsswrdTxt;
-        //   }
-        //   return null;
-        // },
         controller: _passwordController,
         enabled: true,
+        obscureText: true,
         style: TextStyles.s14_w400_cB3AEAE,
         decoration: InputDecoration(
           hintText: Strings.psswrdTxtFldLbl,
@@ -256,12 +263,13 @@ class _LoginScreenState extends State<LoginScreen> {
             textColor: c000000,
             textStyle: TextStyles.s16_w800,
             verticalSpacing: 15,
-            onPressed: () {
+            onPressed: () async {
               if(_userNameController.text.isEmpty) {
                 _getAlertSnackbar(Strings.emptyUsrNmTxt);
               } else if(_passwordController.text.isEmpty) {
                 _getAlertSnackbar(Strings.emptyPsswrdTxt);
               } else {
+                // if successfully logged in
                 BlocProvider.of<LoginBloc>(context).add(
                   GetAuthTokenEvent(
                     // userName: 'MIM2200038',

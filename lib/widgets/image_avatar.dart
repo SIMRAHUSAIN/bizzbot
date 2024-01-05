@@ -14,8 +14,8 @@ class IconAvatar extends StatelessWidget {
       padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: c606CC4,
-        border: Border.all(width: 1.5, color: c606CC4),
+        color: c137700,
+        border: Border.all(width: 1.5, color: c137700),
       ),
       child: Center(
         child: Text(
