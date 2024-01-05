@@ -2,10 +2,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/event.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/state.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/bloc.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/event.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/state.dart';
 import 'package:mim_whatsup/features/login/bloc/bloc.dart';
 import 'package:mim_whatsup/features/login/bloc/event.dart';
 import 'package:mim_whatsup/features/login/bloc/state.dart';
 import 'package:mim_whatsup/features/login/model/login_model.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/state.dart';
+import 'package:mim_whatsup/features/user_chat_filter/bloc/bloc.dart';
+import 'package:mim_whatsup/features/user_chat_filter/bloc/event.dart';
+import 'package:mim_whatsup/features/user_chat_filter/bloc/state.dart';
 import 'package:mim_whatsup/home_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
@@ -43,6 +55,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final Uri toLaunch =  Uri(scheme: 'https', path: '//privacypolicy.myinboxmedia.in/privacy-policy.html');
 
+  void sharedPrefIdPassword() async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString("Id", _userNameController.text);
+    prefs.setString("Password", _passwordController.text);
+    prefs.setBool("LoggedIn", true);
+  }
+
+  void sharedPrefToken(String token) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString("Token", token);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,16 +90,68 @@ class _LoginScreenState extends State<LoginScreen> {
             listener: (context, state) {
               debugPrint('Login listener states ==> $state');
                 if(state is AuthTokenSuccessState) {
+                  sharedPrefToken(state.tokenModel.data!.token.toString());
                   BlocProvider.of<LoginBloc>(context).add(
                     GetLoginEvent(
                       userName: 'MIM2200038',
                       passWord: 'FE1F\$FD9_738'
                     )
                   );
+                  if(GlobalVar.visitedCount == 0){
+                    BlocProvider.of<LoginBloc>(context).add(
+                        GetLoginEvent(
+                            userName: 'MIM2200038',
+                            passWord: 'FE1F\$FD9_738'
+                        )
+                    );
+                    GlobalVar.visitedCount++;
+                  } else {
+                    print("KELA " + GlobalVar.globalToken);
+                    if(GlobalVar.recentEvent[0] is DashboardFailedState){
+                      BlocProvider.of<DashboardBloc>(context).add(
+                          GetDashboardEvent()
+                      );
+                    } else if(GlobalVar.recentEvent[0] is ActiveChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetActiveChatEvent()
+                      );
+                    } else if(GlobalVar.recentEvent[0] is OldChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetOldChatEvent()
+                      );
+                    } else if(GlobalVar.recentEvent[0] is SortChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetSortChatEvent(chatType: GlobalVar.activeTab == 0?"0":"1")
+                      );
+                    } else if(GlobalVar.recentEvent[0] is UnreadChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetUnreadChatEvent(chatType: GlobalVar.activeTab == 0?"0":"1")
+                      );
+                    } else if(GlobalVar.recentEvent[0] is FilteredChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetFilteredChatEvent(
+                            chatType: GlobalVar.activeTab == 0?"0":"1",
+                            flagName: GlobalVar.filterFlagName,
+                            flagId: GlobalVar.filterFlagId
+                          )
+                      );
+                    } else if(GlobalVar.recentEvent[0] is FetchChatLabelFailedState){
+                      BlocProvider.of<ChatFilterBloc>(context).add(GetChatLabelEvent(mobileNo: GlobalVar.filterMobile));
+                    } else if(GlobalVar.recentEvent[0] is UnreadMessageFailedState){
+                      BlocProvider.of<ChatFilterBloc>(context).add(
+                          UnreadMessageEvent(
+                            customerMobile: GlobalVar.filterMobile,
+                          )
+                      );
+                    } else if(GlobalVar.recentEvent[0] is IndividualChatFailedState){
+                       BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: GlobalVar.filterMobile, checkOld: '1'));
+                    }
+                  }
                 } else if(state is AuthTokenFailedState) {
                   _getAlertSnackbar(state.message.toString());
                 } else if(state is LoginSuccessState) {
                   loginSuccessModel = state.loginModel.data!;
+                  sharedPrefIdPassword();
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                 } else if(state is LoginFailedState) {
                   _getAlertSnackbar(state.message.toString());
@@ -256,14 +332,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 _getAlertSnackbar(Strings.emptyPsswrdTxt);
               } else {
                 // if successfully logged in
-                var prefs = await SharedPreferences.getInstance();
-                prefs.setBool(GlobalVar.keyLogin, true);
                 BlocProvider.of<LoginBloc>(context).add(
                   GetAuthTokenEvent(
-                    // userName: 'MIM2200038',
-                    // passWord: 'FE1F\$FD9_738' 
-                    userName: _userNameController.text,
-                    passWord: _passwordController.text,
+                    userName: 'MIM2200038',
+                    passWord: 'FE1F\$FD9_738'
+                    // userName: _userNameController.text,
+                    // passWord: _passwordController.text,
                   )
                 );
               }

@@ -23,14 +23,27 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
   @override
   void initState() {
     super.initState();
+    navigateTo(context);
   }
 
-  void navigateTo() async {
+  void navigateTo(context) async {
     var prefs = await SharedPreferences.getInstance();
     
-    var isLoggedIn = prefs.getBool(GlobalVar.keyLogin);
+    var isLoggedIn = prefs.getBool("LoggedIn");
+    final tokenData = prefs.getString("Token");
+    final userId = prefs.getString("Id");
+    final userPassword = prefs.getString("Password");
+    if(tokenData != null){
+      GlobalVar.globalToken = tokenData;
+    }
+    if(userId != null){
+      GlobalVar.userId = userId;
+    }
+    if(userPassword != null){
+      GlobalVar.userPassword = userPassword;
+    }
     debugPrint('SIM bool $isLoggedIn');
-    Timer(const Duration(seconds: 2), () {
+     Timer(const Duration(seconds: 3), () {
       if(isLoggedIn != null) {
         if(isLoggedIn) {
           Navigator.pushReplacement(
@@ -43,13 +56,14 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
             MaterialPageRoute(builder: (context) => const LoginScreen())
           );
         }
-      } else {
+      }
+      else {
           Navigator.pushReplacement(
-            context, 
+            context,
             MaterialPageRoute(builder: (context) => const LoginScreen())
           );
         }
-    });
+   });
   }
 
   @override
@@ -138,7 +152,6 @@ class _AppSplashScreenState extends State<AppSplashScreen> {
         textStyle: TextStyles.s16_w800,
         verticalSpacing: 15,
         onPressed: () {
-          navigateTo();
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
         },
       ),

@@ -39,10 +39,10 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
     super.initState();
     _loadData(context, ChatType.ACTIVE);
     tabController = TabController(length: 2, vsync: this);
-    Timer.periodic(const Duration(seconds: 5), (timer) {
-      GlobalVar.activeTab == 0?
-      _loadData(context, GlobalVar.unreadBox?ChatType.UNREAD:ChatType.ACTIVE):null;
-    });
+    // Timer.periodic(const Duration(seconds: 5), (timer) {
+    //   GlobalVar.activeTab == 0?
+    //   _loadData(context, GlobalVar.unreadBox?ChatType.UNREAD:ChatType.ACTIVE):null;
+    // });
   }
 
   @override
@@ -139,6 +139,7 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
   }
 
   void _filterChatList(String searchText) {
+    // print("LAMA " + userFilterChatModel!.data![0].toString());
     setState(() {
       tempDataModel = userFilterChatModel!.data!.isEmpty?unfilteredChatModel:userFilterChatModel;
       if(searchText.isNotEmpty){
@@ -147,6 +148,7 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
           data: tempDataModel!.data!.where((data) =>
               data.contact!.toLowerCase().contains(searchText.toLowerCase())).toList(),
         );
+        print("KAMA " + userChatModel!.data![0].contact.toString());
       } else {
         userChatModel = unfilteredChatModel;
       }
@@ -166,6 +168,7 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
               searchController: _searchController,
               barWidth: MediaQuery.of(context).size.width * 0.5,
               onChanged: (text) {
+                print("RAHUL " + text);
                 _filterChatList(text);
               },
             ),
