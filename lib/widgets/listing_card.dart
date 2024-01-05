@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mim_whatsup/features/login/bloc/bloc.dart';
+import 'package:mim_whatsup/features/login/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat_filter/bloc/bloc.dart';
@@ -205,36 +207,42 @@ class _ListingCardState extends State<ListingCard> {
                     )
                   )
                 ),
-                BlocProvider<ChatFilterBloc>(
-                  create: (BuildContext context) => ChatFilterBloc(
-                      repo: ChatFilterRepoImpl()
-                  ),
-                  child: BlocConsumer<ChatFilterBloc, ChatFilterState>(
-                    listener: (context, state){
-                      if(state is UnreadMessageSuccessState){
-                        BlocProvider.of<ChatBloc>(context).add(GlobalVar.activeTab == 0?GetActiveChatEvent():GetOldChatEvent());
+                BlocConsumer<ChatFilterBloc, ChatFilterState>(
+                  listener: (context, state){
+                    if(state is UnreadMessageSuccessState){
+                      BlocProvider.of<ChatBloc>(context).add(GlobalVar.activeTab == 0?GetActiveChatEvent():GetOldChatEvent());
+                    }
+                    else if(state is UnreadMessageFailedState){
+                      if(state.message!.contains("Token Expire")){
+                        GlobalVar.recentEvent.add(state);
+                        BlocProvider.of<LoginBloc>(context).add(
+                            GetAuthTokenEvent(
+                                userName: 'MIM2200038',
+                                passWord: 'FE1F\$FD9_738'
+                              // userName: _userNameController.text,
+                              // passWord: _passwordController.text,
+                            )
+                        );
                       }
-                      // else if(state is UnreadMessageFailedState){
-                      //   Navigator.pop(context);
-                      // }
-                    },
-                    builder: (context, state){
-                      return  Flexible(
-                        child: Center(
-                          child: InkWell(
-                            onTap: (){
-                              BlocProvider.of<ChatFilterBloc>(context).add(
-                                UnreadMessageEvent(
-                                  customerMobile: widget.mobNum,
-                                )
-                              );
-                            },
-                            child: Icon(Icons.mark_email_unread, size: 20, color: Colors.grey),
-                          )
+                    }
+                  },
+                  builder: (context, state){
+                    return  Flexible(
+                      child: Center(
+                        child: InkWell(
+                          onTap: (){
+                            GlobalVar.filterMobile = widget.mobNum;
+                            BlocProvider.of<ChatFilterBloc>(context).add(
+                              UnreadMessageEvent(
+                                customerMobile: widget.mobNum,
+                              )
+                            );
+                          },
+                          child: Icon(Icons.mark_email_unread, size: 20, color: Colors.grey),
                         )
-                      );
-                    },
-                  ),
+                      )
+                    );
+                  },
                 ),
               ],
             ):Container()

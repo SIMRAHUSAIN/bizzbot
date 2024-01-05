@@ -18,6 +18,7 @@ class UserChatList extends StatefulWidget {
 class _UserChatListState extends State<UserChatList> {
   @override
   Widget build(BuildContext context) {
+    print("YOY " + (widget.userChatModel.data?[0].contact??""));
     return Container(
       color: Colors.white,
       child: widget.userChatModel!.data!.isEmpty?const Center(
@@ -43,14 +44,9 @@ class _UserChatListState extends State<UserChatList> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => BlocProvider<IndividualChatBloc>(
-                    create: (BuildContext context) => IndividualChatBloc(
-                        repo: IndividualChatRepoImpl()
-                    ),
-                    child: IndividualChattingScreen(
-                      userName: widget.userChatModel.data?[index].contact??"",
-                      userMobileNumber: widget.userChatModel.data?[index].fromMob??"",
-                    ),
+                  builder: (context) => IndividualChattingScreen(
+                    userName: widget.userChatModel.data?[index].contact??"",
+                    userMobileNumber: widget.userChatModel.data?[index].fromMob??"",
                   )
                 )
               );

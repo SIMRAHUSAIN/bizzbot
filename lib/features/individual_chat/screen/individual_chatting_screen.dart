@@ -10,7 +10,10 @@ import 'package:mim_whatsup/features/individual_chat/bloc/event.dart';
 import 'package:mim_whatsup/features/individual_chat/bloc/state.dart';
 import 'package:mim_whatsup/features/individual_chat/model/individual_chat_model.dart';
 import 'package:mim_whatsup/features/individual_chat/screen/camera_screen.dart';
+import 'package:mim_whatsup/features/login/bloc/bloc.dart';
+import 'package:mim_whatsup/features/login/bloc/event.dart';
 import 'package:mim_whatsup/utils/colors.dart';
+import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/message_widget.dart';
 import 'package:file_picker/file_picker.dart';
@@ -47,9 +50,10 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
     super.initState();
     cameraCheck();
     showPlayer = false;
-    periodicTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: widget.userMobileNumber, checkOld: '1'));
-    });
+    BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: widget.userMobileNumber, checkOld: '1'));
+    // periodicTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
+    //   BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: widget.userMobileNumber, checkOld: '1'));
+    // });
   }
 
   bool showPlayer = false;
@@ -194,11 +198,24 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                         );
                       });
                     });
+                  } else if(state is IndividualChatFailedState){
+                    if(state.message!.contains("Token Expire")){
+                      GlobalVar.filterMobile = widget.userMobileNumber;
+                      GlobalVar.recentEvent.add(state);
+                      BlocProvider.of<LoginBloc>(context).add(
+                          GetAuthTokenEvent(
+                              userName: 'MIM2200038',
+                              passWord: 'FE1F\$FD9_738'
+                            // userName: _userNameController.text,
+                            // passWord: _passwordController.text,
+                          )
+                      );
+                    }
                   }
                 },
                 builder: (context, state){
                   if(state is IndividualChatInitialState){
-                    BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: widget.userMobileNumber, checkOld: '1'));
+//                    BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: widget.userMobileNumber, checkOld: '1'));
                     // displayWidget = const Center(
                     //   child: SizedBox(
                     //     height: 50,

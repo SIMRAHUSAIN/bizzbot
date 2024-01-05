@@ -2,13 +2,26 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/event.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/state.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/bloc.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/event.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/state.dart';
 import 'package:mim_whatsup/features/login/bloc/bloc.dart';
 import 'package:mim_whatsup/features/login/bloc/event.dart';
 import 'package:mim_whatsup/features/login/bloc/state.dart';
 import 'package:mim_whatsup/features/login/model/login_model.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/state.dart';
+import 'package:mim_whatsup/features/user_chat_filter/bloc/bloc.dart';
+import 'package:mim_whatsup/features/user_chat_filter/bloc/event.dart';
+import 'package:mim_whatsup/features/user_chat_filter/bloc/state.dart';
 import 'package:mim_whatsup/home_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
+import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/solid_button.dart';
@@ -64,12 +77,56 @@ class _LoginScreenState extends State<LoginScreen> {
             listener: (context, state) {
               debugPrint('Login listener states ==> $state');
                 if(state is AuthTokenSuccessState) {
-                  BlocProvider.of<LoginBloc>(context).add(
-                    GetLoginEvent(
-                      userName: 'MIM2200038',
-                      passWord: 'FE1F\$FD9_738'
-                    )
-                  );
+                  if(GlobalVar.visitedCount == 0){
+                    BlocProvider.of<LoginBloc>(context).add(
+                        GetLoginEvent(
+                            userName: 'MIM2200038',
+                            passWord: 'FE1F\$FD9_738'
+                        )
+                    );
+                    GlobalVar.visitedCount++;
+                  } else {
+                    print("KELA " + GlobalVar.globalToken);
+                    if(GlobalVar.recentEvent[0] is DashboardFailedState){
+                      BlocProvider.of<DashboardBloc>(context).add(
+                          GetDashboardEvent()
+                      );
+                    } else if(GlobalVar.recentEvent[0] is ActiveChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetActiveChatEvent()
+                      );
+                    } else if(GlobalVar.recentEvent[0] is OldChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetOldChatEvent()
+                      );
+                    } else if(GlobalVar.recentEvent[0] is SortChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetSortChatEvent(chatType: GlobalVar.activeTab == 0?"0":"1")
+                      );
+                    } else if(GlobalVar.recentEvent[0] is UnreadChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetUnreadChatEvent(chatType: GlobalVar.activeTab == 0?"0":"1")
+                      );
+                    } else if(GlobalVar.recentEvent[0] is FilteredChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetFilteredChatEvent(
+                            chatType: GlobalVar.activeTab == 0?"0":"1",
+                            flagName: GlobalVar.filterFlagName,
+                            flagId: GlobalVar.filterFlagId
+                          )
+                      );
+                    } else if(GlobalVar.recentEvent[0] is FetchChatLabelFailedState){
+                      BlocProvider.of<ChatFilterBloc>(context).add(GetChatLabelEvent(mobileNo: GlobalVar.filterMobile));
+                    } else if(GlobalVar.recentEvent[0] is UnreadMessageFailedState){
+                      BlocProvider.of<ChatFilterBloc>(context).add(
+                          UnreadMessageEvent(
+                            customerMobile: GlobalVar.filterMobile,
+                          )
+                      );
+                    } else if(GlobalVar.recentEvent[0] is IndividualChatFailedState){
+                       BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: GlobalVar.filterMobile, checkOld: '1'));
+                    }
+                  }
                 } else if(state is AuthTokenFailedState) {
                   _getAlertSnackbar(state.message.toString());
                 } else if(state is LoginSuccessState) {
@@ -257,20 +314,20 @@ class _LoginScreenState extends State<LoginScreen> {
             textStyle: TextStyles.s16_w800,
             verticalSpacing: 15,
             onPressed: () {
-              if(_userNameController.text.isEmpty) {
-                _getAlertSnackbar(Strings.emptyUsrNmTxt);
-              } else if(_passwordController.text.isEmpty) {
-                _getAlertSnackbar(Strings.emptyPsswrdTxt);
-              } else {
+              // if(_userNameController.text.isEmpty) {
+              //   _getAlertSnackbar(Strings.emptyUsrNmTxt);
+              // } else if(_passwordController.text.isEmpty) {
+              //   _getAlertSnackbar(Strings.emptyPsswrdTxt);
+              // } else {
                 BlocProvider.of<LoginBloc>(context).add(
                   GetAuthTokenEvent(
-                    // userName: 'MIM2200038',
-                    // passWord: 'FE1F\$FD9_738' 
-                    userName: _userNameController.text,
-                    passWord: _passwordController.text,
+                    userName: 'MIM2200038',
+                    passWord: 'FE1F\$FD9_738'
+                    // userName: _userNameController.text,
+                    // passWord: _passwordController.text,
                   )
                 );
-              }
+              //}
             },
           ),
           const SizedBox(height: 10),

@@ -20,15 +20,24 @@ class ChatRepoImpl extends ChatRepo {
     try {
       http.Response response = await http.get(
         Uri.parse(Apis.getActiveChat),
-        headers: GlobalVar.header
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${GlobalVar.globalToken}"
+        }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
+      var data = json.decode(response.body);
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
         UserChatModel userChatModel = UserChatModel.fromJson(data);
         return userChatModel;
       } else {
-        throw Exception();
+        var jsonData = {
+          "statusCode": data["statusCode"],
+          "error": data["error"],
+          "data": null
+        };
+        UserChatModel userChatModel = UserChatModel.fromJson(jsonData);
+        return userChatModel;
       }
     } catch(e) {
       throw Exception();
@@ -40,15 +49,24 @@ class ChatRepoImpl extends ChatRepo {
     try {
       http.Response response = await http.get(
         Uri.parse(Apis.getOldChat),
-        headers: GlobalVar.header
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${GlobalVar.globalToken}"
+        }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
+      var data = json.decode(response.body);
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
         UserChatModel userChatModel = UserChatModel.fromJson(data);
         return userChatModel;
       } else {
-        throw Exception();
+        var jsonData = {
+          "statusCode": data["statusCode"],
+          "error": data["error"],
+          "data": null
+        };
+        UserChatModel userChatModel = UserChatModel.fromJson(jsonData);
+        return userChatModel;
       }
     } catch(e) {
       throw Exception();
@@ -60,15 +78,24 @@ class ChatRepoImpl extends ChatRepo {
     try {
       http.Response response = await http.get(
           Uri.parse(Apis.getChatSort+chatType),
-          headers: GlobalVar.header
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${GlobalVar.globalToken}"
+          }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
+      var data = json.decode(response.body);
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
         UserChatModel userChatModel = UserChatModel.fromJson(data);
         return userChatModel;
       } else {
-        throw Exception();
+        var jsonData = {
+          "statusCode": data["statusCode"],
+          "error": data["error"],
+          "data": null
+        };
+        UserChatModel userChatModel = UserChatModel.fromJson(jsonData);
+        return userChatModel;
       }
     } catch(e) {
       throw Exception();
@@ -80,15 +107,24 @@ class ChatRepoImpl extends ChatRepo {
     try {
       http.Response response = await http.get(
         Uri.parse(Apis.getUnreadChat+chatType),
-        headers: GlobalVar.header
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${GlobalVar.globalToken}"
+          }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
+      var data = json.decode(response.body);
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
         UserChatModel userChatModel = UserChatModel.fromJson(data);
         return userChatModel;
       } else {
-        throw Exception();
+        var jsonData = {
+          "statusCode": data["statusCode"],
+          "error": data["error"],
+          "data": null
+        };
+        UserChatModel userChatModel = UserChatModel.fromJson(jsonData);
+        return userChatModel;
       }
     } catch(e) {
       throw Exception();
@@ -100,14 +136,24 @@ class ChatRepoImpl extends ChatRepo {
     try {
       http.Response response = await http.get(
           Uri.parse("${Apis.getFilteredChat}FlagName=$flagName&FlagID=$flagId&CheckOld=$chatType"),
-          headers: GlobalVar.header
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer ${GlobalVar.globalToken}"
+          }
       );
       LogPrinter().logPrinter(response, {}, jsonPretty: true);
+      var data = json.decode(response.body);
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
         UserChatModel userChatModel = UserChatModel.fromJson(data);
         return userChatModel;
       } else {
+        var jsonData = {
+          "statusCode": data["statusCode"],
+          "error": data["error"],
+          "data": null
+        };
+        UserChatModel userChatModel = UserChatModel.fromJson(jsonData);
+        return userChatModel;
         throw Exception();
       }
     } catch(e) {

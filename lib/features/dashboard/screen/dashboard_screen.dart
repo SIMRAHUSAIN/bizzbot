@@ -8,10 +8,14 @@ import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
 import 'package:mim_whatsup/features/dashboard/bloc/event.dart';
 import 'package:mim_whatsup/features/dashboard/bloc/state.dart';
 import 'package:mim_whatsup/features/dashboard/model/dashboard_model.dart';
+import 'package:mim_whatsup/features/login/bloc/bloc.dart';
+import 'package:mim_whatsup/features/login/bloc/event.dart';
+import 'package:mim_whatsup/features/login/bloc/state.dart';
 import 'package:mim_whatsup/features/login/model/login_model.dart';
 import 'package:mim_whatsup/features/profile/screen/profile_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
+import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/dashboard_box_widget.dart';
@@ -37,11 +41,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       GetDashboardEvent()
     );
     //required for refresh
-    Timer.periodic(const Duration(seconds: 5), (timer) {
-      BlocProvider.of<DashboardBloc>(context).add(
-        GetDashboardEvent()
-      );
-    });
+    // Timer.periodic(const Duration(seconds: 5), (timer) {
+    //   BlocProvider.of<DashboardBloc>(context).add(
+    //     GetDashboardEvent()
+    //   );
+    // });
   }
 
   Count? dashboardCountData;
@@ -105,7 +109,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
               if(state is DashboardSuccessState) {
                 dashboardCountData = state.dashboardModel.data!.count;
                 dashboardChartData = state.dashboardModel.data!.chart;
-              } 
+              } else if(state is DashboardFailedState){
+                if(state.message.contains("Token Expire")){
+                  GlobalVar.recentEvent.add(state);
+                  BlocProvider.of<LoginBloc>(context).add(
+                      GetAuthTokenEvent(
+                          userName: 'MIM2200038',
+                          passWord: 'FE1F\$FD9_738'
+                        // userName: _userNameController.text,
+                        // passWord: _passwordController.text,
+                      )
+                  );
+                }
+              }
             }),
             child: BlocBuilder<DashboardBloc, DashboardState>(
               builder: ((context, state) {

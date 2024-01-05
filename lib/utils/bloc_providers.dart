@@ -34,9 +34,14 @@ class ParentBlocProviders extends StatelessWidget {
             repo: DashboardRepoImpl()
           )
         ),
-        // BlocProvider<ChatFilterBloc>(
-        //   create: (BuildContext context) => ChatFilterBloc(repo: ChatFilterRepoImpl())
-        // ),
+        BlocProvider<ChatFilterBloc>(
+          create: (BuildContext context) => ChatFilterBloc(repo: ChatFilterRepoImpl())
+        ),
+        BlocProvider<IndividualChatBloc>(
+          create: (BuildContext context) => IndividualChatBloc(
+            repo: IndividualChatRepoImpl()
+          )
+        ),
       ],
       child: child,
     );
