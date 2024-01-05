@@ -9,4 +9,6 @@ class GlobalVar {
   static bool unreadBox = false;
 
   static String keyLogin = 'Login';
+  static String userId = "";
+  static String userPassword = "";
 }

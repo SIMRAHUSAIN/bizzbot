@@ -43,6 +43,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final Uri toLaunch =  Uri(scheme: 'https', path: '//privacypolicy.myinboxmedia.in/privacy-policy.html');
 
+  void sharedPrefIdPassword() async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString("Id", _userNameController.text);
+    prefs.setString("Password", _passwordController.text);
+    prefs.setBool("LoggedIn", true);
+  }
+
+  void sharedPrefToken(String token) async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString("Token", token);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
             listener: (context, state) {
               debugPrint('Login listener states ==> $state');
                 if(state is AuthTokenSuccessState) {
+                  sharedPrefToken(state.tokenModel.data!.token.toString());
                   BlocProvider.of<LoginBloc>(context).add(
                     GetLoginEvent(
                       userName: 'MIM2200038',
@@ -76,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   _getAlertSnackbar(state.message.toString());
                 } else if(state is LoginSuccessState) {
                   loginSuccessModel = state.loginModel.data!;
+                  sharedPrefIdPassword();
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                 } else if(state is LoginFailedState) {
                   _getAlertSnackbar(state.message.toString());
@@ -256,8 +270,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 _getAlertSnackbar(Strings.emptyPsswrdTxt);
               } else {
                 // if successfully logged in
-                var prefs = await SharedPreferences.getInstance();
-                prefs.setBool(GlobalVar.keyLogin, true);
                 BlocProvider.of<LoginBloc>(context).add(
                   GetAuthTokenEvent(
                     // userName: 'MIM2200038',
