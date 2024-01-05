@@ -117,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ],
     );
-  }
+  } 
 
   _getLogOutBtn() {
     return InkWell(
