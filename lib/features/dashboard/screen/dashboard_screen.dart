@@ -60,12 +60,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           actions: [
             GestureDetector(
               onTap: () {
-                // Navigator.push(
-                //   context, 
-                //   MaterialPageRoute(
-                //     builder: (context) => ProfileScreen(loginSuccessModel: widget.loginSuccessModel)
-                //   )
-                // );
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen()
+                  )
+                );
               },
               child: Padding(
                 padding: EdgeInsets.only(right: 10),
