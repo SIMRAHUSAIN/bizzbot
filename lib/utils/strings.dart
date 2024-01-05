@@ -56,4 +56,21 @@ class Strings {
 
   //Error and No Data
   static const noDataAvailable = "No Data Available";
+
+  //send msg screen
+  static const countryCode = 'Country Code';
+  static const whatsappType = 'Whatsapp Type';
+  static const campaignNm = 'Campaign Name';
+  static const mobNum = 'Mobile Number';
+  static const uploadFileTypes = 'Upload Files(TXT/CSV)';
+  static const group = 'Group';
+  static const allowDuplicate = 'Allow Duplicate';
+  static const uploadFile = 'Upload File';
+  static const noFileChosen = 'No File Chosen';
+  static const templateId = 'Template ID';
+  static const select = 'Select';
+  static const whatsApptxt = 'Whatsapp Text';
+  static const compCd = 'INDIA 91';
+  static const whtsappTyp = 'Text';
+  static const cmpgnNm = 'xyz';
 }
