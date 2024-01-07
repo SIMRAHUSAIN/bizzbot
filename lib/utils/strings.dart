@@ -3,7 +3,7 @@ class Strings {
   static const login = 'Login';
   static const usrnmeTxtFldLbl = 'Username';
   static const psswrdTxtFldLbl = 'Password';
-  static const appLbl = 'BIZBOT';
+  static const appLbl = 'BIZZBOT';
 
   //validation txt
   static const emptyUsrNmTxt = 'Please enter the username';
