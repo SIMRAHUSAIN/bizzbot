@@ -129,12 +129,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         var prefs = await SharedPreferences.getInstance();
         prefs.remove("LoggedIn");
         prefs.remove("Token");
-        prefs.remove("Id");
-        prefs.remove("Password");
+        // prefs.remove("Id");
+        // prefs.remove("Password");
         prefs.setBool("LoggedIn", false);
-        Navigator.pushReplacement(context, MaterialPageRoute(
-          builder: (context) => const AppSplashScreen()
-        ));
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const AppSplashScreen()), (route) => false);
+        // Navigator.pushReplacement(context, MaterialPageRoute(
+        //   builder: (context) => const AppSplashScreen()
+        // ));
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

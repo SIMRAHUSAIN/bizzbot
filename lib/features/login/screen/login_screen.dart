@@ -53,6 +53,20 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPref();
+  }
+
+  void getSharedPref() async {
+    var prefs = await SharedPreferences.getInstance();
+    print("IOP " + prefs.getString("Id").toString());
+     _userNameController.text = prefs.getString("Id")??"";
+     _passwordController.text = prefs.getString("Password")??"";
+  }
+
   final Uri toLaunch =  Uri(scheme: 'https', path: '//privacypolicy.myinboxmedia.in/privacy-policy.html');
 
   void sharedPrefIdPassword() async {
