@@ -53,13 +53,23 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     );
   }
 
+  _getMobNumRow() {
+    return Row(
+      children: [
+        Text(
+          Strings.mobNum,
+          style: TextStyles.s12_w500_c939292_lato,
+        ),
+      ],
+    );
+  }
+
   _getCountryCodeTxtFld() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 70,
-      margin: const EdgeInsets.only(top: 40),
+      margin: const EdgeInsets.only(top: 10),
       child: TextFormField(
-        // autofillHints: const [AutofillHints.username],
         textAlign: TextAlign.start,
         onSaved: (String? val) {
           _cntrycodeController.text = val!;
@@ -71,7 +81,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           hintText: Strings.compCd,
           hintStyle: TextStyles.s14_w400_c939292,
           label: const Text(Strings.countryCode),
-          labelStyle: TextStyles.s16_w500_c137700,
+          labelStyle: TextStyles.s16_w700_c137700,
           filled: true,
           fillColor: cFFFFFF,
           counterText: '',
@@ -101,9 +111,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 70,
-      margin: const EdgeInsets.only(top: 40),
+      margin: const EdgeInsets.only(top: 10),
       child: TextFormField(
-        // autofillHints: const [AutofillHints.username],
         textAlign: TextAlign.start,
         onSaved: (String? val) {
           _whtsAppTypController.text = val!;
@@ -115,7 +124,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           hintText: Strings.compCd,
           hintStyle: TextStyles.s14_w400_c939292,
           label: const Text(Strings.whatsappType),
-          labelStyle: TextStyles.s16_w500_c137700,
+          labelStyle: TextStyles.s16_w700_c137700,
           filled: true,
           fillColor: cFFFFFF,
           counterText: '',
@@ -145,9 +154,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 70,
-      margin: const EdgeInsets.only(top: 40),
+      margin: const EdgeInsets.only(top: 10),
       child: TextFormField(
-        // autofillHints: const [AutofillHints.username],
         textAlign: TextAlign.start,
         onSaved: (String? val) {
           _cmpgnNmController.text = val!;
@@ -157,7 +165,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         style: TextStyles.s14_w400_cB3AEAE,
         decoration: InputDecoration(
           label: const Text(Strings.campaignNm),
-          labelStyle: TextStyles.s16_w500_c137700,
+          labelStyle: TextStyles.s16_w700_c137700,
           filled: true,
           fillColor: cFFFFFF,
           counterText: '',
