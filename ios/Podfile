@@ -1,0 +1,8 @@
+platform :ios, '14.0'
+
+target 'Runner' do
+  use_frameworks!
+
+  # Add your CocoaPods dependencies here
+  # Example: pod 'Firebase/Core'
+end
