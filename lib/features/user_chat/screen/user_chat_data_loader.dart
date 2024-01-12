@@ -54,6 +54,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
               data = state.userChatModel;
             }
             widget.callBackData(state.userChatModel);
+            counter = 1;
             // displayWidget =  UserChatList(
             //     userChatModel: data
             // );
@@ -70,6 +71,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
                   )
               );
             }
+            counter = 1;
           }
           else if(state is OldChatSuccessState){
             if(widget.modelData != null){
@@ -78,6 +80,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
               data = state.userChatModel;
             }
             widget.callBackData(state.userChatModel);
+            counter = 1;
             // displayWidget =  UserChatList(
             //     userChatModel: data
             // );
@@ -95,6 +98,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
                   )
               );
             }
+            counter = 1;
           }
           else if(state is SortChatSuccessState){
             if(widget.modelData != null){
@@ -104,6 +108,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
             }
             GlobalVar.recentEvent.add(state);
             widget.callBackData(state.userChatModel);
+            counter = 1;
             // displayWidget =  UserChatList(
             //     userChatModel: data
             // );
@@ -120,6 +125,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
                   )
               );
             }
+            counter = 1;
           }
           else if(state is UnreadChatSuccessState){
             if(widget.modelData != null){
@@ -128,6 +134,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
               data = state.userChatModel;
             }
             widget.callBackData(state.userChatModel);
+            counter = 1;
             // displayWidget =  UserChatList(
             //     userChatModel: data
             // );
@@ -144,6 +151,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
                   )
               );
             }
+            counter = 1;
           }
           else if(state is FilteredChatSuccessState){
             if(widget.modelData != null){
@@ -152,6 +160,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
               data = state.userChatModel;
             }
             widget.callBackData(state.userChatModel);
+            counter = 1;
             // displayWidget =  UserChatList(
             //     userChatModel: data
             // );
@@ -168,6 +177,7 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
                   )
               );
             }
+            counter = 1;
           }
           // else if(state is ActiveChatFailedState || state is OldChatFailedState || state is SortChatFailedState || state is UnreadChatFailedState || state is FilteredChatFailedState){
           //   displayWidget =  Container(
@@ -180,7 +190,6 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
         builder: (context, state) {
           print("ULO " + state.toString());
           if(counter == 0){
-            counter++;
             return const Center(
               child: CircularProgressIndicator()
             );

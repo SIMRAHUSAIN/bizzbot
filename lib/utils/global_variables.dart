@@ -15,4 +15,6 @@ class GlobalVar {
   static String filterFlagName = "";
   static String filterFlagId = "";
   static String filterMobile = "";
+  static String fromDate = "";
+  static String toDate = "";
 }

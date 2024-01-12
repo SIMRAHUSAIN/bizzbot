@@ -6,7 +6,7 @@ import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/widgets/log_printer.dart';
 
 abstract class ReportRepo {
-  Future<ReportModel> getReport({required String toDate, required String fomDate});
+  Future<ReportModel> getReport({required String toDate, required String fromDate});
 }
 
 class ReportRepoImpl extends ReportRepo {
@@ -15,7 +15,7 @@ class ReportRepoImpl extends ReportRepo {
   Future<ReportModel> getReport({required String toDate, required String fromDate}) async {
     try {
       http.Response response = await http.get(
-          Uri.parse("${Apis.getFilteredChat}FromDate=$fromDate&ToDate=$toDate"),
+          Uri.parse("${Apis.getReport}FromDate=$fromDate&ToDate=$toDate"),
           headers: {
             "Content-Type": "application/json",
             "Authorization": "Bearer ${GlobalVar.globalToken}"

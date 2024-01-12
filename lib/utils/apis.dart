@@ -52,4 +52,7 @@ class Apis {
 
   //Get Filtered Chat
   static const getFilteredChat = '$domain/GetLoadFilterChatBox?';
+
+  //Get Report
+  static const getReport = '$domain/GetSummaryReport?';
 }

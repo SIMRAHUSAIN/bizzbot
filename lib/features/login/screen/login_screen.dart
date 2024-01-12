@@ -12,6 +12,9 @@ import 'package:mim_whatsup/features/login/bloc/bloc.dart';
 import 'package:mim_whatsup/features/login/bloc/event.dart';
 import 'package:mim_whatsup/features/login/bloc/state.dart';
 import 'package:mim_whatsup/features/login/model/login_model.dart';
+import 'package:mim_whatsup/features/report/bloc/report_bloc.dart';
+import 'package:mim_whatsup/features/report/bloc/report_event.dart';
+import 'package:mim_whatsup/features/report/bloc/report_state.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/state.dart';
@@ -159,6 +162,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                     } else if(GlobalVar.recentEvent[0] is IndividualChatFailedState){
                        BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: GlobalVar.filterMobile, checkOld: '1'));
+                    } else if(GlobalVar.recentEvent[0] is ReportFailedState){
+                      BlocProvider.of<ReportBloc>(context).add(GetReportEvent(toDate: GlobalVar.toDate, fromDate: GlobalVar.fromDate));
                     }
                   }
                 } else if(state is AuthTokenFailedState) {

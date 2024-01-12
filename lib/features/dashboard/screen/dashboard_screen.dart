@@ -43,11 +43,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       GetDashboardEvent()
     );
     //required for refresh
-    // Timer.periodic(const Duration(seconds: 5), (timer) {
-    //   BlocProvider.of<DashboardBloc>(context).add(
-    //     GetDashboardEvent()
-    //   );
-    // });
+    // if (mounted) {
+    //   Timer.periodic(const Duration(seconds: 5), (timer) {
+    //     BlocProvider.of<DashboardBloc>(context).add(
+    //         GetDashboardEvent()
+    //     );
+    //   });
+    // }
   }
 
   Count? dashboardCountData;
@@ -114,6 +116,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 dashboardChartData = state.dashboardModel.data!.chart;
               } else if(state is DashboardFailedState){
                 if(state.message.contains("Token Expire")){
+                  GlobalVar.recentEvent = [];
                   GlobalVar.recentEvent.add(state);
                   BlocProvider.of<LoginBloc>(context).add(
                       GetAuthTokenEvent(
