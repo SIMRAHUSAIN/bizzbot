@@ -22,7 +22,7 @@ class IndividualChatBloc extends Bloc<IndividualChatEvent, IndividualChatState> 
         if(individualChatModel.statusCode == "200") {
           emit(IndividualChatSuccessState(individualChatModel));
         } else {
-          emit(IndividualChatFailedState(individualChatModel.data.toString()));
+          emit(IndividualChatFailedState(individualChatModel.error.toString()));
         }
       } catch(e) {
         emit(IndividualChatFailedState(e.toString()));

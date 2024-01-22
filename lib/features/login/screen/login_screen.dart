@@ -2,10 +2,25 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/event.dart';
+import 'package:mim_whatsup/features/dashboard/bloc/state.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/bloc.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/event.dart';
+import 'package:mim_whatsup/features/individual_chat/bloc/state.dart';
 import 'package:mim_whatsup/features/login/bloc/bloc.dart';
 import 'package:mim_whatsup/features/login/bloc/event.dart';
 import 'package:mim_whatsup/features/login/bloc/state.dart';
 import 'package:mim_whatsup/features/login/model/login_model.dart';
+import 'package:mim_whatsup/features/report/bloc/report_bloc.dart';
+import 'package:mim_whatsup/features/report/bloc/report_event.dart';
+import 'package:mim_whatsup/features/report/bloc/report_state.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
+import 'package:mim_whatsup/features/user_chat/bloc/state.dart';
+import 'package:mim_whatsup/features/user_chat_filter/bloc/bloc.dart';
+import 'package:mim_whatsup/features/user_chat_filter/bloc/event.dart';
+import 'package:mim_whatsup/features/user_chat_filter/bloc/state.dart';
 import 'package:mim_whatsup/home_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
@@ -39,6 +54,20 @@ class _LoginScreenState extends State<LoginScreen> {
     )) {
       throw Exception('Could not launch $url');
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getSharedPref();
+  }
+
+  void getSharedPref() async {
+    var prefs = await SharedPreferences.getInstance();
+    print("IOP " + prefs.getString("Id").toString());
+     _userNameController.text = prefs.getString("Id")??"";
+     _passwordController.text = prefs.getString("Password")??"";
   }
 
   final Uri toLaunch =  Uri(scheme: 'https', path: '//privacypolicy.myinboxmedia.in/privacy-policy.html');
@@ -85,6 +114,58 @@ class _LoginScreenState extends State<LoginScreen> {
                       passWord: 'FE1F\$FD9_738'
                     )
                   );
+                  if(GlobalVar.visitedCount == 0){
+                    BlocProvider.of<LoginBloc>(context).add(
+                        GetLoginEvent(
+                            userName: 'MIM2200038',
+                            passWord: 'FE1F\$FD9_738'
+                        )
+                    );
+                    GlobalVar.visitedCount++;
+                  } else {
+                    print("KELA " + GlobalVar.globalToken);
+                    if(GlobalVar.recentEvent[0] is DashboardFailedState){
+                      BlocProvider.of<DashboardBloc>(context).add(
+                          GetDashboardEvent()
+                      );
+                    } else if(GlobalVar.recentEvent[0] is ActiveChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetActiveChatEvent()
+                      );
+                    } else if(GlobalVar.recentEvent[0] is OldChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetOldChatEvent()
+                      );
+                    } else if(GlobalVar.recentEvent[0] is SortChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetSortChatEvent(chatType: GlobalVar.activeTab == 0?"0":"1")
+                      );
+                    } else if(GlobalVar.recentEvent[0] is UnreadChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetUnreadChatEvent(chatType: GlobalVar.activeTab == 0?"0":"1")
+                      );
+                    } else if(GlobalVar.recentEvent[0] is FilteredChatFailedState){
+                      BlocProvider.of<ChatBloc>(context).add(
+                          GetFilteredChatEvent(
+                            chatType: GlobalVar.activeTab == 0?"0":"1",
+                            flagName: GlobalVar.filterFlagName,
+                            flagId: GlobalVar.filterFlagId
+                          )
+                      );
+                    } else if(GlobalVar.recentEvent[0] is FetchChatLabelFailedState){
+                      BlocProvider.of<ChatFilterBloc>(context).add(GetChatLabelEvent(mobileNo: GlobalVar.filterMobile));
+                    } else if(GlobalVar.recentEvent[0] is UnreadMessageFailedState){
+                      BlocProvider.of<ChatFilterBloc>(context).add(
+                          UnreadMessageEvent(
+                            customerMobile: GlobalVar.filterMobile,
+                          )
+                      );
+                    } else if(GlobalVar.recentEvent[0] is IndividualChatFailedState){
+                       BlocProvider.of<IndividualChatBloc>(context).add(GetIndividualChatEvent(customerMobile: GlobalVar.filterMobile, checkOld: '1'));
+                    } else if(GlobalVar.recentEvent[0] is ReportFailedState){
+                      BlocProvider.of<ReportBloc>(context).add(GetReportEvent(toDate: GlobalVar.toDate, fromDate: GlobalVar.fromDate));
+                    }
+                  }
                 } else if(state is AuthTokenFailedState) {
                   _getAlertSnackbar(state.message.toString());
                 } else if(state is LoginSuccessState) {
@@ -273,7 +354,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 BlocProvider.of<LoginBloc>(context).add(
                   GetAuthTokenEvent(
                     userName: 'MIM2200038',
-                    passWord: 'FE1F\$FD9_738' 
+                    passWord: 'FE1F\$FD9_738'
                     // userName: _userNameController.text,
                     // passWord: _passwordController.text,
                   )

@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mim_whatsup/features/login/bloc/bloc.dart';
+import 'package:mim_whatsup/features/login/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/event.dart';
 import 'package:mim_whatsup/features/user_chat_filter/screen/addnewlabel_dialogbox.dart';
@@ -35,6 +37,19 @@ class _LabelListDialogBoxState extends State<LabelListDialogBox> {
   List<String> checkBoxId = [];
 
   @override
+  void initState() {
+    super.initState();
+    //required for initial data load
+    BlocProvider.of<ChatFilterBloc>(context).add(GetChatLabelEvent(mobileNo: widget.mobileNo));
+    //required for refresh
+    // Timer.periodic(const Duration(seconds: 5), (timer) {
+    //   BlocProvider.of<DashboardBloc>(context).add(
+    //     GetDashboardEvent()
+    //   );
+    // });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Dialog(
       child: SizedBox(
@@ -58,69 +73,81 @@ class _LabelListDialogBoxState extends State<LabelListDialogBox> {
               height: MediaQuery.of(context).size.height * 0.35,
               color: cFFFFFF,
               padding: const EdgeInsets.only(top: 20, bottom: 10, left: 10, right: 10),
-              child: BlocProvider<ChatFilterBloc>(
-                create: (BuildContext context) => ChatFilterBloc(repo: ChatFilterRepoImpl()),
-                child: BlocConsumer<ChatFilterBloc, ChatFilterState>(
-                  listener: (context, state){},
-                  builder: (context, state) {
-                    if(state is ChatFilterInitialState){
-                      BlocProvider.of<ChatFilterBloc>(context).add(GetChatLabelEvent(mobileNo: widget.mobileNo));
-                      displayWidget = const Center(
-                        child: SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: Center(
-                            child: CircularProgressIndicator()
+              child: BlocConsumer<ChatFilterBloc, ChatFilterState>(
+                listener: (context, state){
+                  if(state is FetchChatLabelFailedState){
+                    if(state.message!.contains("Token Expire")){
+                      GlobalVar.filterMobile = widget.mobileNo;
+                      GlobalVar.recentEvent = [];
+                      GlobalVar.recentEvent.add(state);
+                      BlocProvider.of<LoginBloc>(context).add(
+                          GetAuthTokenEvent(
+                              userName: 'MIM2200038',
+                              passWord: 'FE1F\$FD9_738'
+                            // userName: _userNameController.text,
+                            // passWord: _passwordController.text,
                           )
-                        ),
                       );
-                    } else if(state is FetchChatLabelLoadingState){
-                      displayWidget = const Center(
-                        child: SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: Center(
-                            child: CircularProgressIndicator()
-                          )
-                        ),
-                      );
-                    } else if(state is FetchChatLabelSuccessState){
-                      isCheckedList = [];
-                      checkBoxId = [];
-                      displayWidget = const Center(
-                        child: SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: Center(
-                            child: CircularProgressIndicator()
-                          )
-                        ),
-                      );
-                      isCheckedList = List.generate(state.chatLabelListModel.data?.length??0, (index) => false);
-                      displayWidget = ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: state.chatLabelListModel.data?.length??0,
-                        itemBuilder: (BuildContext context, int index){
-                          if(state.chatLabelListModel.data?[index].chkbox == "1"){
-                            isCheckedList[index] = true;
-                            checkBoxId.add(state.chatLabelListModel.data?[index].flagID??"");
-                          }
-                          //isCheckedList[index] = state.chatLabelListModel.data?[index].chkbox == "1"?true:false;
-                          return _getLabelWidget(
-                            state.chatLabelListModel.data?[index].flagName??"",
-                            index,
-                            state.chatLabelListModel.data?[index].flagID??"",
-                            state.chatLabelListModel.data?[index].flagColorCode??"",
-                            state.chatLabelListModel.data?[index].chkbox??"0"
-                          );
-                        },
-                      );
-                    } else if(state is FetchChatLabelFailedState){
-                      displayWidget = Container();
                     }
-                    return displayWidget;
                   }
-                ),
+                },
+                builder: (context, state) {
+                  if(state is ChatFilterInitialState){
+                    displayWidget = const Center(
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Center(
+                          child: CircularProgressIndicator()
+                        )
+                      ),
+                    );
+                  } else if(state is FetchChatLabelLoadingState){
+                    displayWidget = const Center(
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Center(
+                          child: CircularProgressIndicator()
+                        )
+                      ),
+                    );
+                  } else if(state is FetchChatLabelSuccessState){
+                    isCheckedList = [];
+                    checkBoxId = [];
+                    displayWidget = const Center(
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Center(
+                          child: CircularProgressIndicator()
+                        )
+                      ),
+                    );
+                    isCheckedList = List.generate(state.chatLabelListModel.data?.length??0, (index) => false);
+                    displayWidget = ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: state.chatLabelListModel.data?.length??0,
+                      itemBuilder: (BuildContext context, int index){
+                        if(state.chatLabelListModel.data?[index].chkbox == "1"){
+                          isCheckedList[index] = true;
+                          checkBoxId.add(state.chatLabelListModel.data?[index].flagID??"");
+                        }
+                        //isCheckedList[index] = state.chatLabelListModel.data?[index].chkbox == "1"?true:false;
+                        return _getLabelWidget(
+                          state.chatLabelListModel.data?[index].flagName??"",
+                          index,
+                          state.chatLabelListModel.data?[index].flagID??"",
+                          state.chatLabelListModel.data?[index].flagColorCode??"",
+                          state.chatLabelListModel.data?[index].chkbox??"0"
+                        );
+                      },
+                    );
+                  } else if(state is FetchChatLabelFailedState){
+                    displayWidget = Container();
+                  }
+                  return displayWidget;
+                }
               ),
             ),
             widget.filter == true?InkWell(
@@ -299,6 +326,8 @@ class _LabelListDialogBoxState extends State<LabelListDialogBox> {
         children: [
           InkWell(
             onTap: widget.filter == true?(){
+              GlobalVar.filterFlagName = label;
+              GlobalVar.filterFlagId = id;
               BlocProvider.of<ChatBloc>(context).add(GetFilteredChatEvent(
                 chatType: GlobalVar.activeTab == 0?"0":"1",
                 flagName: label,

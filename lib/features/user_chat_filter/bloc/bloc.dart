@@ -21,7 +21,7 @@ class ChatFilterBloc extends Bloc<ChatFilterEvent, ChatFilterState> {
           emit(FetchChatLabelSuccessState(chatLabelListModel));
         } else {
           print("KOK");
-          emit(FetchChatLabelFailedState(chatLabelListModel.data.toString()));
+          emit(FetchChatLabelFailedState(chatLabelListModel.error.toString()));
         }
       } catch(e) {
         print("LOL");
@@ -125,7 +125,7 @@ class ChatFilterBloc extends Bloc<ChatFilterEvent, ChatFilterState> {
           emit(UnreadMessageSuccessState());
         } else {
           print("KOK3");
-          emit(UnreadMessageFailedState("Error"));
+          emit(UnreadMessageFailedState(unreadMessageModel["error"]));
         }
       } catch(e) {
         print("LOL3");

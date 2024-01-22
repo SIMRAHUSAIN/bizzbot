@@ -1,17 +1,20 @@
 class DashboardModel {
   int? statusCode;
+  String? error;
   DashboardModelSuccess? data;
 
-  DashboardModel({this.statusCode, this.data});
+  DashboardModel({this.statusCode, this.data, this.error});
 
   DashboardModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
+    error = json['error'];
     data = json['data'] != null ? DashboardModelSuccess.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['statusCode'] = statusCode;
+    data['error'] = error;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }

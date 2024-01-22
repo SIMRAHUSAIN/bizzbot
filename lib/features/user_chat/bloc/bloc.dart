@@ -16,7 +16,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         if(userChatModel.statusCode == "200") {
           emit(ActiveChatSuccessState(userChatModel));
         } else {
-          emit(ActiveChatFailedState(userChatModel.data.toString()));
+          emit(ActiveChatFailedState(userChatModel.error.toString()));
         }
       } catch(e) {
         emit(ActiveChatFailedState(e.toString()));
@@ -30,7 +30,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         if(userChatModel.statusCode == "200") {
           emit(OldChatSuccessState(userChatModel));
         } else {
-          emit(OldChatFailedState(userChatModel.data.toString()));
+          emit(OldChatFailedState(userChatModel.error.toString()));
         }
       } catch(e) {
         emit(OldChatFailedState(e.toString()));
@@ -44,7 +44,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         if(userChatModel.statusCode == "200") {
           emit(SortChatSuccessState(userChatModel));
         } else {
-          emit(SortChatFailedState(userChatModel.data.toString()));
+          emit(SortChatFailedState(userChatModel.error.toString()));
         }
       } catch(e) {
         emit(SortChatFailedState(e.toString()));
@@ -58,7 +58,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         if(userChatModel.statusCode == "200") {
           emit(UnreadChatSuccessState(userChatModel));
         } else {
-          emit(UnreadChatFailedState(userChatModel.data.toString()));
+          emit(UnreadChatFailedState(userChatModel.error.toString()));
         }
       } catch(e) {
         emit(UnreadChatFailedState(e.toString()));
@@ -72,7 +72,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         if(userChatModel.statusCode == "200") {
           emit(FilteredChatSuccessState(userChatModel));
         } else {
-          emit(FilteredChatFailedState(userChatModel.data.toString()));
+          emit(FilteredChatFailedState(userChatModel.error.toString()));
         }
       } catch(e) {
         emit(FilteredChatFailedState(e.toString()));

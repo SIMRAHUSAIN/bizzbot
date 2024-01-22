@@ -1,11 +1,13 @@
 class ChatLabelListModel {
   String? statusCode;
+  String? error;
   List<Data>? data;
 
-  ChatLabelListModel({this.statusCode, this.data});
+  ChatLabelListModel({this.statusCode, this.data, this.error});
 
   ChatLabelListModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
+    error = json['error'];
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
@@ -17,6 +19,7 @@ class ChatLabelListModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['statusCode'] = statusCode;
+    data['error'] = error;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
