@@ -32,6 +32,7 @@ class DashboardBoxWidget extends StatelessWidget {
       height: boxHeight,
       width: boxWidth,
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           hasIcon
           ? SizedBox(
@@ -50,15 +51,15 @@ class DashboardBoxWidget extends StatelessWidget {
               children: [
                 Text(
                   boxTitle,
-                  maxLines: 2,
+                  maxLines: 1,
                   style: TextStyles.s12_w500_c000000_lato,
                   textAlign:TextAlign.center,
                 ),
-                const SizedBox(height: 5),
-                Text(
-                  boxSubtitle,
-                  style: TextStyles.s12_w700_c000000_lato,
-                ),
+                // const SizedBox(height: 5),
+                // Text(
+                //   boxSubtitle,
+                //   style: TextStyles.s12_w700_c000000_lato,
+                // ),
               ],
             ),
           ),

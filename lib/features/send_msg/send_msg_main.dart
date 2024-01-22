@@ -54,14 +54,109 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         _getDuplicate(),
         _getUploadFileRow(),
         _getLinkRow(),
-        _tempIdDrpdwn()
+        _tempIdDrpdwn(),
+        _getWhtAppTxt(),
+        _getActnBtnRow()
       ],
+    );
+  }
+  
+  _getWhtAppTxt() {
+    return Container(
+      margin: const EdgeInsets.only(top: 10, bottom: 10),
+      height: MediaQuery.of(context).size.height * 0.06,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        color: c137700.withOpacity(0.08),
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+      ),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          'Whatsapp Text',
+          style: TextStyles.s14_w500_c939292_lato,
+        ),
+      ),
+    );
+  }
+
+  _getActnBtnRow() {
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _actionBtn(
+            'Send', 
+            () {},
+            cECF7FF,
+          ),
+          _actionBtn(
+            'Cancel', 
+            () {},
+            cFFF1F1,
+          ),
+          _actionBtn(
+            'Schedule', 
+            () {},
+            cFFF7EF,
+          ),
+        ],
+      ),
+    );
+  }
+
+  _actionBtn(String title, void Function()? onTap, Color btnColor) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.05,
+        width: MediaQuery.of(context).size.width * 0.24,
+        decoration: BoxDecoration(
+          color: btnColor,
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          border: Border.all(width: 1, color: btnColor)
+        ),
+        margin: const EdgeInsets.only(left: 10, right: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+        child: Center(
+          child: Text(
+            title,
+            style: TextStyles.s14_w500_c939292_lato,
+          ),
+        ),
+      ),
+    );
+  }
+
+  _tempIdDrpdwn() {
+    return Container(
+      margin: const EdgeInsets.only(top: 10, bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Template ID',
+            style: TextStyles.s16_w700_c137700
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.05,
+            width: MediaQuery.of(context).size.width * 0.65,
+            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              border: Border.all(width: 1.5, color: c137700)
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   _getLinkRow() {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.06,
+      height: MediaQuery.of(context).size.height * 0.05,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
       decoration: BoxDecoration(
         color: cC2FFA0.withOpacity(0.5),
@@ -70,29 +165,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           color: cC2FFA0.withOpacity(0.5),
         ),
       ),
-      // child: Row(
-      //   children: [
-      //     // Container(
-      //     //   child: Text(
-      //     //     'https://'
-      //     //   ),
-      //     // ),
-      //   ],
-      // ),
-    );
-  }
-
-  _tempIdDrpdwn() {
-    return Container(
-      margin: const EdgeInsets.only(top: 10, bottom: 10),
-      child: Row(
-        children: [
-          Text(
-            'Template ID',
-            style: TextStyles.s16_w700_c137700
-          ),
-        ],
-      ),
     );
   }
 
@@ -100,7 +172,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     return Container(
       margin: const EdgeInsets.only(top: 10, bottom: 10),
       child: Row(
-        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _cmnRectangularActnBtn(
             true, 
