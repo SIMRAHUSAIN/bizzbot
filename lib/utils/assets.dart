@@ -19,4 +19,5 @@ class ImageAssets {
   static const String sortIcon = 'assets/sort.png';
   static const String logOutIcon = 'assets/logout.png';
   static const String mimLogo = 'assets/mim_logo.png';
+  static const String uploadPng = 'assets/upload.png';
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
@@ -48,19 +49,169 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
       children: [
         _getCountryCodeTxtFld(),
         _getWhtsAppTypTxtFld(),
-        _getCmpgnNmTxtFld()
+        _getCmpgnNmTxtFld(),
+        _getMobNumRow(),
+        _getDuplicate(),
+        _getUploadFileRow(),
+        _getLinkRow(),
+        _tempIdDrpdwn()
       ],
     );
   }
 
+  _getLinkRow() {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.06,
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+      decoration: BoxDecoration(
+        color: cC2FFA0.withOpacity(0.5),
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        border: Border.all(
+          color: cC2FFA0.withOpacity(0.5),
+        ),
+      ),
+      // child: Row(
+      //   children: [
+      //     // Container(
+      //     //   child: Text(
+      //     //     'https://'
+      //     //   ),
+      //     // ),
+      //   ],
+      // ),
+    );
+  }
+
+  _tempIdDrpdwn() {
+    return Container(
+      margin: const EdgeInsets.only(top: 10, bottom: 10),
+      child: Row(
+        children: [
+          Text(
+            'Template ID',
+            style: TextStyles.s16_w700_c137700
+          ),
+        ],
+      ),
+    );
+  }
+
+  _getUploadFileRow() {
+    return Container(
+      margin: const EdgeInsets.only(top: 10, bottom: 10),
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _cmnRectangularActnBtn(
+            true, 
+            () { }, 
+            'Upload Files'
+          ),
+          _cmnRectangularActnBtn(
+            false, 
+            () { }, 
+            'No Files Chosen'
+          )
+        ],
+      ),
+    );
+  }
+
   _getMobNumRow() {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           Strings.mobNum,
-          style: TextStyles.s12_w500_c939292_lato,
+          style: TextStyles.s14_w500_c939292_lato,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _cmnCircularActnBtn(
+              true,
+              () {},
+              'Upload Files(TXT/CSV)'
+            ),
+            _cmnCircularActnBtn(
+              false,
+              () {},
+              'Group'
+            ),
+            _cmnCircularActnBtn(
+              false,
+              () {},
+              'Mobile Number'
+            ),
+          ]
+        ),
+        const SizedBox(
+          height: 10,
         ),
       ],
+    );
+  }
+
+  _cmnCircularActnBtn(bool isTapped, void Function()? onTap, String title) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.05,
+        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+        decoration: BoxDecoration(
+          color: isTapped ? c137700 : cFFFFFF,
+          borderRadius: const BorderRadius.all(Radius.circular(25)),
+        ),
+        child: Center(
+          child: Text(
+            title,
+            style: isTapped ? TextStyles.s12_w400_cFFFFFF : TextStyles.s14_w500_c939292_lato,
+          ),
+        ),
+      ),
+    );
+  }
+
+  _cmnRectangularActnBtn(bool isTapped, void Function()? onTap, String title) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.06,
+        width: MediaQuery.of(context).size.height * 0.225,
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+        decoration: BoxDecoration(
+          color: isTapped ? c3690E3.withOpacity(0.08) : cE2DEDE.withOpacity(0.2),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          border: Border.all(
+            color: isTapped ? c3690E3 : cE2DEDE.withOpacity(0.2),
+          )
+        ),
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              title == 'Upload Files'
+              ? SizedBox(
+                width: 20,
+                height: 20,
+                child: Image.asset(
+                  ImageAssets.uploadPng,
+                  fit: BoxFit.fill,
+                ),
+              ) : const SizedBox.shrink(),
+              title == 'Upload Files'
+              ? const SizedBox(width: 5) : const SizedBox.shrink(),
+              Text(
+                title,
+                style: isTapped ? TextStyles.s14_w500_c3690E3 : TextStyles.s14_w500_c000000,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -188,6 +339,26 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         ),
         onChanged: (value) {},
       ),
+    );
+  }
+
+  _getDuplicate() {
+    return Row(
+      children: [
+        SizedBox(
+          height: 30,
+          width: 30,
+          child: Checkbox(
+            onChanged: (newValue) {},
+            value: false,
+            activeColor: c137700,
+          ),
+        ),
+        Text(
+          'Allow Duplicate',
+          style: TextStyles.s14_w600_c000000,
+        ),
+      ],
     );
   }
 }

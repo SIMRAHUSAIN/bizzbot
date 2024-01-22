@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mim_whatsup/features/individual_chat/bloc/bloc.dart';
-import 'package:mim_whatsup/features/individual_chat/repo/repo.dart';
 import 'package:mim_whatsup/features/user_chat/model/user_chat_model.dart';
 import 'package:mim_whatsup/features/individual_chat/screen/individual_chatting_screen.dart';
 import 'package:mim_whatsup/utils/strings.dart';
@@ -18,7 +15,6 @@ class UserChatList extends StatefulWidget {
 class _UserChatListState extends State<UserChatList> {
   @override
   Widget build(BuildContext context) {
-    print("YOY " + (widget.userChatModel.data?[0].contact??""));
     return Container(
       color: Colors.white,
       child: widget.userChatModel.data!.isEmpty?const Center(

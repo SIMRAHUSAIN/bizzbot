@@ -129,6 +129,13 @@ class TextStyles {
     fontFamily: 'Lato',
   );
 
+  static var s12_w400_cFFFFFF = const TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 12,
+    color: cFFFFFF,
+    fontFamily: 'Lato',
+  );
+
   static var s20_w400_cA8A3A3 = const TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 20, 
@@ -175,6 +182,13 @@ class TextStyles {
     fontFamily: 'Lato',
   );
 
+  static var s14_w500_c939292_lato = const TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: 14,
+    color: c939292,
+    fontFamily: 'Lato',
+  );
+
   static var s12_w700_c000000_lato = const TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 12,
@@ -190,6 +204,12 @@ class TextStyles {
 
   static var s14_w500_c374A5E = const TextStyle(
     color: c374A5E,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+  );
+
+  static var s14_w500_c3690E3 = const TextStyle(
+    color: c3690E3,
     fontWeight: FontWeight.w500,
     fontSize: 14,
   );

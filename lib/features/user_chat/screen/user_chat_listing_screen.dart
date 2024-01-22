@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_final_fields
 
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/user_chat/bloc/bloc.dart';
@@ -150,7 +149,6 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
           data: tempDataModel!.data!.where((data) =>
               data.contact!.toLowerCase().contains(searchText.toLowerCase())).toList(),
         );
-        print("KAMA " + userChatModel!.data![0].contact.toString());
       } else {
         userChatModel = unfilteredChatModel;
       }
@@ -170,7 +168,6 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
               searchController: _searchController,
               barWidth: MediaQuery.of(context).size.width * 0.5,
               onChanged: (text) {
-                print("RAHUL " + text);
                 _filterChatList(text);
               },
             ),
