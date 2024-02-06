@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors, import_of_legacy_library_into_null_safe, unnecessary_null_comparison
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/dashboard/bloc/bloc.dart';
@@ -10,8 +8,6 @@ import 'package:mim_whatsup/features/dashboard/bloc/state.dart';
 import 'package:mim_whatsup/features/dashboard/model/dashboard_model.dart';
 import 'package:mim_whatsup/features/login/bloc/bloc.dart';
 import 'package:mim_whatsup/features/login/bloc/event.dart';
-import 'package:mim_whatsup/features/login/bloc/state.dart';
-import 'package:mim_whatsup/features/login/model/login_model.dart';
 import 'package:mim_whatsup/features/profile/screen/profile_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
@@ -20,7 +16,6 @@ import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/box_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:mim_whatsup/widgets/dashline_separator.dart';
 
 class DashboardScreen extends StatefulWidget {
   // final LoginSuccessModel loginSuccessModel;

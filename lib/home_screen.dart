@@ -4,7 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:mim_whatsup/features/dashboard/screen/dashboard_screen.dart';
 import 'package:mim_whatsup/features/report/report_main.dart';
-import 'package:mim_whatsup/features/send_msg/send_msg_main.dart';
+import 'package:mim_whatsup/features/send_msg/screen/send_msg_main.dart';
 import 'package:mim_whatsup/features/user_chat/screen/user_chat_listing_screen.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';

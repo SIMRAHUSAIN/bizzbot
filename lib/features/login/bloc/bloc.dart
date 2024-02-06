@@ -28,7 +28,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         if(tokenModel.statusCode == 200) {
           debugPrint('Auth 2');
           GlobalVar.globalToken = tokenModel.data?.token?? '';
-          print("LOL " + GlobalVar.globalToken);
           emit(AuthTokenSuccessState(tokenModel));
         } else {
           debugPrint('Auth 3');

@@ -58,14 +58,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getSharedPref();
   }
 
   void getSharedPref() async {
     var prefs = await SharedPreferences.getInstance();
-    print("IOP " + prefs.getString("Id").toString());
      _userNameController.text = prefs.getString("Id")??"";
      _passwordController.text = prefs.getString("Password")??"";
   }
@@ -123,7 +121,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                     GlobalVar.visitedCount++;
                   } else {
-                    print("KELA " + GlobalVar.globalToken);
                     if(GlobalVar.recentEvent[0] is DashboardFailedState){
                       BlocProvider.of<DashboardBloc>(context).add(
                           GetDashboardEvent()
