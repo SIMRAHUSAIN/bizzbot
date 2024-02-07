@@ -7,18 +7,13 @@ import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/widgets/log_printer.dart';
 
 abstract class SendMsgRepo {
-  Future<CountryCodeModel> getCountryCode({
-    required jsonPostData
-  }); 
+  Future<CountryCodeModel> getCountryCode();
 } 
 
 class SendMsgRepoImpl extends SendMsgRepo {
 
   @override
-  Future<CountryCodeModel> getCountryCode({required jsonPostData}) async {
-    Map map = {
-      'JSONPostData': jsonPostData,
-    };
+  Future<CountryCodeModel> getCountryCode() async {
     try {
       http.Response response = await http.get(
         Uri.parse(Apis.getCntryCd),
@@ -28,7 +23,7 @@ class SendMsgRepoImpl extends SendMsgRepo {
         }
       );
       var data = json.decode(response.body);
-      LogPrinter().logPrinter(response, map, jsonPretty: true);
+      LogPrinter().logPrinter(response, {}, jsonPretty: true);
       if (response.statusCode == 200) {
         debugPrint('Code 01');
         CountryCodeModel cntryCdModel = CountryCodeModel.fromJson(data);

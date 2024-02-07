@@ -5,11 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/event.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/state.dart';
 import 'package:mim_whatsup/features/send_msg/model/countryCode_model.dart';
+import 'package:mim_whatsup/features/send_msg/repo/repo.dart';
 
 class SendMessageBloc extends Bloc<SendMsgEvent, SendMessageState> {
   
-  var repo;
-  SendMessageBloc({this.repo}) : super(SendMsgInitialState()) {
+  SendMsgRepo repo;
+  SendMessageBloc({required this.repo}) : super(SendMsgInitialState()) {
 
     on<GetCountryCodeEvent>(((event, emit) async {
       emit(SendMsgLoadingState());
