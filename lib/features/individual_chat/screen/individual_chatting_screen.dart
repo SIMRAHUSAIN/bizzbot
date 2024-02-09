@@ -417,7 +417,11 @@ class _IndividualChattingScreenState extends State<IndividualChattingScreen> {
                                       builder: (context) {
                                         return AudioRecordScreen();
                                       }
-                                  );
+                                  ).then((value){
+                                    BlocProvider.of<IndividualChatBloc>(context).add(
+                                        SendFileEvent(fileType: File(value))
+                                    );
+                                  });
                                 }
                               },
                             ),
