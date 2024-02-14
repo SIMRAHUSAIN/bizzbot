@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/bloc.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/event.dart';
+import 'package:mim_whatsup/features/send_msg/bloc/state.dart';
+import 'package:mim_whatsup/features/send_msg/model/countryCode_model.dart';
+import 'package:mim_whatsup/features/send_msg/model/templateType_model.dart';
 import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
@@ -19,7 +22,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   final TextEditingController _cmpgnNmController = TextEditingController();
 
-  List<String?>? whatsAppTypeList = [
+  List<String?>? templateTypeList = [
     'Text',
     'Image',
     'Video',
@@ -36,7 +39,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     'Text 4',
   ];
 
-  String whatsAppTypeInitVal = 'Text';
+  String templateTypeInitVal = 'Text';
   String? countryCdInitVal;
   String templateIdInitVal = 'Text 1';
 
@@ -47,7 +50,13 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     BlocProvider.of<SendMessageBloc>(context).add(
       GetCountryCodeEvent()
     );
+    BlocProvider.of<SendMessageBloc>(context).add(
+      GetTemplateTypeEvent()
+    );
   }
+
+  CountryCodeModelSuccess? cntryCdData;
+  List<TemplateTypeModelSuccess>? tempTypList;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +76,25 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: _getBodyContent()
+          child: SingleChildScrollView(
+            child: BlocListener<SendMessageBloc, SendMessageState>(
+              listener: ((context, state) {
+                debugPrint('SIM Send Message states --> $state');
+                if(state is CountryCdSuccessState) {
+                  cntryCdData = state.countryCodeModelSuccess;
+                  countryCdInitVal = cntryCdData!.countryCode;
+                }
+                else if(state is TemplateTypeSuccessState) {
+                  tempTypList = state.templateTypeModel.data;
+                }
+              }),
+              child: BlocBuilder<SendMessageBloc, SendMessageState>(
+                builder: (((context, state) {
+                  return _getBodyContent();
+                })),
+              )
+            )
+          )
         ),
       ),
     );
@@ -79,7 +106,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _getCountryCodeDrpdwn(),
-        _getWhtsAppTypDrpdwn(),
+        _getTemplateTypDrpdwn(),
         _getCmpgnNmTxtFld(),
         _getMobNumRow(),
         _getDuplicate(),
@@ -92,7 +119,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     );
   }
 
-  _getWhtsAppTypDrpdwn() {
+  _getTemplateTypDrpdwn() {
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(top: 10),
@@ -100,7 +127,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         child: DropdownButtonFormField<String>(
           borderRadius: BorderRadius.circular(12),
           elevation: 4,
-          items: whatsAppTypeList!.map<DropdownMenuItem<String>>((String? value) {
+          items: templateTypeList!.map<DropdownMenuItem<String>>((String? value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(
@@ -115,9 +142,9 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
             color: c137700,
           ),
           iconSize: 30,
-          value: whatsAppTypeInitVal,
+          value: templateTypeInitVal,
           style: TextStyles.s16_w700_c137700,
-          onChanged: _whatsAppTypecallBack,
+          onChanged: _templateTypecallBack,
           decoration: const InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             enabledBorder: OutlineInputBorder(
@@ -138,9 +165,9 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     );
   }
 
-  _whatsAppTypecallBack(newValue) {
+  _templateTypecallBack(newValue) {
     setState(() {
-      whatsAppTypeInitVal = newValue;
+      templateTypeInitVal = newValue;
     });
   }
 
@@ -208,7 +235,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
             color: c137700,
           ),
           iconSize: 30,
-          value: countryCdInitVal,
+          value: countryCdInitVal ?? '',
           style: TextStyles.s16_w700_c137700,
           onChanged: _countryCdCallBack,
           decoration: const InputDecoration(
@@ -231,7 +258,11 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     );
   } 
 
-  _countryCdCallBack(newValue) {}
+  _countryCdCallBack(newValue) {
+    setState(() {
+      countryCdInitVal = newValue;
+    });
+  }
   
   _getWhtAppTxt() {
     return Container(

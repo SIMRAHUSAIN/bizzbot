@@ -10,3 +10,8 @@ class GetCountryCodeEvent extends SendMsgEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetTemplateTypeEvent extends SendMsgEvent {
+  @override
+  List<Object> get props => [];
+}

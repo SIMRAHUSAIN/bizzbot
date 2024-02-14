@@ -41,6 +41,7 @@ class Apis {
   //SendMessage
   static const sendMessage = '$domain/sendwaba';
   static const getCntryCd = '$domain/GetCountryCode1';
+  static const getTemplateType = '$domain/GetActiveTemplateType';
 
   //SendFile
   static const sendFile = '$domain/UploadFile';
