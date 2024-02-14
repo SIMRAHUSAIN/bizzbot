@@ -89,13 +89,16 @@ class _AudioRecordScreenState extends State<AudioRecordScreen> {
 
   void _refreshWave() {
     if (isRecording) recorderController.refresh();
+    else {
+      Navigator.pop(context, path);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.5,
+        height: MediaQuery.of(context).size.height * 0.35,
         child: Column(
           children: [
             Container(
@@ -116,7 +119,9 @@ class _AudioRecordScreenState extends State<AudioRecordScreen> {
               child: Row(
                 children: [
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _startOrStopRecording();
+                    },
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
@@ -135,7 +140,9 @@ class _AudioRecordScreenState extends State<AudioRecordScreen> {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _startOrStopRecording();
+                    },
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
@@ -154,7 +161,9 @@ class _AudioRecordScreenState extends State<AudioRecordScreen> {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      _refreshWave();
+                    },
                     child: Container(
                       margin: const EdgeInsets.only(right: 8),
                       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
@@ -175,7 +184,11 @@ class _AudioRecordScreenState extends State<AudioRecordScreen> {
                 ],
               ),
             ),
+            SizedBox(
+              height: 20,
+            ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 200),
@@ -192,29 +205,32 @@ class _AudioRecordScreenState extends State<AudioRecordScreen> {
                     ),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.0),
-                      color: Colors.grey,
+                      color: Color(0xff292D3E).withOpacity(0.1),
                     ),
                     padding: const EdgeInsets.only(left: 18),
                     margin: const EdgeInsets.symmetric(
                         horizontal: 15),
                   )
                 ),
-                IconButton(
-                  onPressed: _refreshWave,
-                  icon: Icon(
-                    isRecording ? Icons.refresh : Icons.send,
-                    color: Colors.grey,
-                  ),
-                ),
-                const SizedBox(width: 16),
+                // IconButton(
+                //   onPressed: _refreshWave,
+                //   icon: Icon(
+                //     isRecording ? Icons.refresh : Icons.send,
+                //     color: Colors.grey,
+                //   ),
+                // ),
+                // const SizedBox(width: 16),
               ],
             ),
-            IconButton(
-              onPressed: _startOrStopRecording,
-              icon: Icon(isRecording ? Icons.stop : Icons.mic),
-              color: Colors.grey,
-              iconSize: 28,
+            SizedBox(
+              height: 20,
             ),
+            // IconButton(
+            //   onPressed: _startOrStopRecording,
+            //   icon: Icon(isRecording ? Icons.stop : Icons.mic),
+            //   color: Colors.grey,
+            //   iconSize: 28,
+            // ),
             InkWell(
               onTap: () {
                 Navigator.pop(context);
