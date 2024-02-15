@@ -1,13 +1,11 @@
+// ignore_for_file: file_names
+
 class TemplateTypeModel {
   int? statusCode;
   String? error;
   List<TemplateTypeModelSuccess>? data;
 
-  TemplateTypeModel({
-    this.statusCode,
-    this.error,
-    this.data
-  });
+  TemplateTypeModel({this.statusCode, this.error, this.data});
 
   TemplateTypeModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
@@ -35,10 +33,7 @@ class TemplateTypeModelSuccess {
   int? nid;
   String? templateType;
 
-  TemplateTypeModelSuccess({
-    this.nid,
-    this.templateType,
-  });
+  TemplateTypeModelSuccess({this.nid, this.templateType});
 
   TemplateTypeModelSuccess.fromJson(Map<String, dynamic> json) {
     nid = json['nid'];

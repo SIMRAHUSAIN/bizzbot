@@ -85,7 +85,12 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   countryCdInitVal = cntryCdData!.countryCode;
                 }
                 else if(state is TemplateTypeSuccessState) {
-                  tempTypList = state.templateTypeModel.data;
+                  templateTypeInitVal = state.templateTypeModel.data![0].templateType!;
+                  debugPrint('SIM temp type length ${state.templateTypeModel.data!.length}');
+                  debugPrint('SIM temp type init val $templateTypeInitVal');
+                  for(int i = 0; i < state.templateTypeModel.data!.length; i++) {
+                    templateIdList!.add(state.templateTypeModel.data![i].templateType);
+                  }
                 }
               }),
               child: BlocBuilder<SendMessageBloc, SendMessageState>(
@@ -136,7 +141,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 style: TextStyles.s16_w700_c137700,
               ),
             );
-          }).toList(),
+          }).toSet().toList(),
           icon: const Icon(
             Icons.keyboard_arrow_down,
             color: c137700,
@@ -169,6 +174,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     setState(() {
       templateTypeInitVal = newValue;
     });
+    debugPrint('SIM Template Type new value $newValue');
   }
 
   _getCmpgnNmTxtFld() {

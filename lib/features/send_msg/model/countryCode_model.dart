@@ -5,11 +5,7 @@ class CountryCodeModel {
   String? error;
   CountryCodeModelSuccess? data;
 
-  CountryCodeModel({
-    this.statusCode,
-    this.error,
-    this.data
-  });
+  CountryCodeModel({this.statusCode, this.error, this.data});
 
   CountryCodeModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
@@ -29,12 +25,9 @@ class CountryCodeModel {
 }
 
 class CountryCodeModelSuccess {
-
   String? countryCode;
 
-  CountryCodeModelSuccess({
-    this.countryCode
-  });
+  CountryCodeModelSuccess({this.countryCode});
 
   CountryCodeModelSuccess.fromJson(Map<String, dynamic> json) {
     countryCode = json['CountryCode'];
