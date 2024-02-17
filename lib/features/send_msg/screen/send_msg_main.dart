@@ -22,15 +22,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   final TextEditingController _cmpgnNmController = TextEditingController();
 
-  List<String?>? templateTypeList = [
-    'Text',
-    'Image',
-    'Video',
-    'Document',
-    'Audio',
-    'Location'
-  ];
-
+  List<String?>? templateTypeList = [];
   List<String?>? countryCdList = [];
   List<String?>? templateIdList = [
     'Text 1',
@@ -46,7 +38,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   @override
   void initState() {
     super.initState();
-    debugPrint('SIM 1');
     BlocProvider.of<SendMessageBloc>(context).add(
       GetCountryCodeEvent()
     );
@@ -54,9 +45,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
       GetTemplateTypeEvent()
     );
   }
-
-  CountryCodeModelSuccess? cntryCdData;
-  List<TemplateTypeModelSuccess>? tempTypList;
 
   @override
   Widget build(BuildContext context) {
@@ -81,15 +69,19 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
               listener: ((context, state) {
                 debugPrint('SIM Send Message states --> $state');
                 if(state is CountryCdSuccessState) {
-                  cntryCdData = state.countryCodeModelSuccess;
-                  countryCdInitVal = cntryCdData!.countryCode;
+                  countryCdInitVal = state.countryCodeModel.data![0].countryCode;
+                  debugPrint('SIM temp type length 1 ${state.countryCodeModel.data!.length}');
+                  debugPrint('SIM temp type init val 1 $countryCdInitVal');
+                  for(int i = 0; i < state.countryCodeModel.data!.length; i++) {
+                    countryCdList!.add(state.countryCodeModel.data![i].countryCode);
+                  }
                 }
                 else if(state is TemplateTypeSuccessState) {
                   templateTypeInitVal = state.templateTypeModel.data![0].templateType!;
                   debugPrint('SIM temp type length ${state.templateTypeModel.data!.length}');
                   debugPrint('SIM temp type init val $templateTypeInitVal');
                   for(int i = 0; i < state.templateTypeModel.data!.length; i++) {
-                    templateIdList!.add(state.templateTypeModel.data![i].templateType);
+                    templateTypeList!.add(state.templateTypeModel.data![i].templateType);
                   }
                 }
               }),
@@ -219,7 +211,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   }
 
   _getCountryCodeDrpdwn() {
-    return Container(
+    return countryCdList != null
+    ? Container(
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.only(top: 10),
       child: DropdownButtonHideUnderline(
@@ -235,7 +228,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 style: TextStyles.s16_w700_c137700,
               ),
             );
-          }).toList(),
+          }).toSet().toList(),
           icon: const Icon(
             Icons.keyboard_arrow_down,
             color: c137700,
@@ -261,7 +254,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           )
         ),
       ),
-    );
+    ) : const SizedBox.shrink();
   } 
 
   _countryCdCallBack(newValue) {

@@ -22,9 +22,9 @@ class SendMsgLoadingState extends SendMessageState {
 }
 
 class CountryCdSuccessState extends SendMessageState {
-  final CountryCodeModelSuccess countryCodeModelSuccess;
+  final CountryCodeModel countryCodeModel;
 
-  CountryCdSuccessState(this.countryCodeModelSuccess);
+  CountryCdSuccessState(this.countryCodeModel);
 
   @override
   List<Object> get props => [];

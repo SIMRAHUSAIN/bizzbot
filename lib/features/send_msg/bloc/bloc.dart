@@ -19,7 +19,7 @@ class SendMessageBloc extends Bloc<SendMsgEvent, SendMessageState> {
         CountryCodeModel countryCodeModel = await repo.getCountryCode();
         if(countryCodeModel.statusCode == 200) {
           debugPrint('Code 001');
-          emit(CountryCdSuccessState(countryCodeModel.data!));
+          emit(CountryCdSuccessState(countryCodeModel));
         } else {
           debugPrint('Code 002');
           emit(CountryCdFailedState(countryCodeModel.error.toString()));

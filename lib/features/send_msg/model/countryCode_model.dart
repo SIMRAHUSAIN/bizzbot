@@ -3,14 +3,19 @@
 class CountryCodeModel {
   int? statusCode;
   String? error;
-  CountryCodeModelSuccess? data;
+  List<CountryCodeModelSuccess>? data;
 
   CountryCodeModel({this.statusCode, this.error, this.data});
 
   CountryCodeModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     error = json['error'];
-    data = json['data'] != null ? CountryCodeModelSuccess.fromJson(json['data']) : null;
+    if (json['data'] != null) {
+      data = <CountryCodeModelSuccess>[];
+      json['data'].forEach((v) {
+        data!.add(CountryCodeModelSuccess.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -18,7 +23,7 @@ class CountryCodeModel {
     data['statusCode'] = statusCode;
     data['error'] = error;
     if (this.data != null) {
-      data['data'] = this.data!.toJson();
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -30,12 +35,12 @@ class CountryCodeModelSuccess {
   CountryCodeModelSuccess({this.countryCode});
 
   CountryCodeModelSuccess.fromJson(Map<String, dynamic> json) {
-    countryCode = json['CountryCode'];
+    countryCode = json["defaultCountry"];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['CountryCode'] = countryCode;
+    data["defaultCountry"] = countryCode;
     return data;
   }
 }
