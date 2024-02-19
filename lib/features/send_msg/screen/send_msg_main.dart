@@ -26,14 +26,12 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   List<String?>? countryCdList = [];
   List<String?>? templateIdList = [
     'Text 1',
-    'Text 2',
-    'Text 3',
-    'Text 4',
+    'Text 2'
   ];
 
-  String templateTypeInitVal = 'Text';
-  String? countryCdInitVal;
-  String templateIdInitVal = 'Text 1';
+  String? templateTypeInitVal = '';
+  String? countryCdInitVal = '';
+  String? templateIdInitVal = '';
 
   @override
   void initState() {
@@ -43,6 +41,9 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     );
     BlocProvider.of<SendMessageBloc>(context).add(
       GetTemplateTypeEvent()
+    );
+    BlocProvider.of<SendMessageBloc>(context).add(
+      GetTemplateIdEvent()
     );
   }
 
@@ -70,20 +71,34 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 debugPrint('SIM Send Message states --> $state');
                 if(state is CountryCdSuccessState) {
                   countryCdInitVal = state.countryCodeModel.data![0].countryCode;
-                  debugPrint('SIM temp type length 1 ${state.countryCodeModel.data!.length}');
-                  debugPrint('SIM temp type init val 1 $countryCdInitVal');
                   for(int i = 0; i < state.countryCodeModel.data!.length; i++) {
                     countryCdList!.add(state.countryCodeModel.data![i].countryCode);
                   }
+                  // state.countryCodeModel.data!.map(
+                  //   (e) => templateIdList!.add(e.templateType)
+                  // ).toList();
                 }
                 else if(state is TemplateTypeSuccessState) {
-                  templateTypeInitVal = state.templateTypeModel.data![0].templateType!;
-                  debugPrint('SIM temp type length ${state.templateTypeModel.data!.length}');
-                  debugPrint('SIM temp type init val $templateTypeInitVal');
+                  templateTypeInitVal = state.templateTypeModel.data![6].templateType!;
+                  debugPrint('SIM Send Msg Type length ${state.templateTypeModel.data!.length}');
+                  debugPrint('SIM Send Msg Type init val $templateTypeInitVal');
                   for(int i = 0; i < state.templateTypeModel.data!.length; i++) {
                     templateTypeList!.add(state.templateTypeModel.data![i].templateType);
                   }
-                }
+                } 
+                // else if(state is TemplateIdSuccessState) {
+                //   templateIdInitVal = state.templateIdModel.data![0].name!;
+                //   debugPrint('SIM Send Msg Type length ${state.templateIdModel.data!.length}');
+                //   debugPrint('SIM Send Msg Type init val $templateIdInitVal');
+                //   // for(int i = 0; i < state.templateIdModel.data!.length; i++) {
+                //   //   templateIdList!.add(state.templateIdModel.data![i].templateType);
+                //   //   debugPrint('SIM temp id list $templateIdList');
+                //   // }
+                //   state.templateIdModel.data!.map(
+                //     (e) => templateIdList!.add(e.templateType)
+                //   ).toList();
+                //   debugPrint('SIM temp id list $templateIdList');
+                // }
               }),
               child: BlocBuilder<SendMessageBloc, SendMessageState>(
                 builder: (((context, state) {
@@ -106,57 +121,60 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         _getTemplateTypDrpdwn(),
         _getCmpgnNmTxtFld(),
         _getMobNumRow(),
-        _getDuplicate(),
-        _getUploadFileRow(),
-        _getLinkRow(),
-        _tempIdDrpdwn(),
+        // _getUploadFileRow(),
+        // _getLinkRow(),
+        // _tempIdDrpdwn(),
         _getWhtAppTxt(),
+        _getDuplicate(),
         _getActnBtnRow()
       ],
     );
   }
 
   _getTemplateTypDrpdwn() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.only(top: 10),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButtonFormField<String>(
-          borderRadius: BorderRadius.circular(12),
-          elevation: 4,
-          items: templateTypeList!.map<DropdownMenuItem<String>>((String? value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value!,
-                maxLines: 1,
-                style: TextStyles.s16_w700_c137700,
+    return IgnorePointer(
+      ignoring: true,  // disabled dropdown for default value to be media template
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.only(top: 10),
+        child: DropdownButtonHideUnderline(
+          child: DropdownButtonFormField<String>(
+            borderRadius: BorderRadius.circular(12),
+            elevation: 4,
+            items: templateTypeList!.map<DropdownMenuItem<String>>((String? value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value!,
+                  maxLines: 1,
+                  style: TextStyles.s16_w700_c137700,
+                ),
+              );
+            }).toSet().toList(),
+            icon: const Icon(
+              Icons.keyboard_arrow_down,
+              color: c137700,
+            ),
+            iconSize: 30,
+            value: templateTypeInitVal,
+            style: TextStyles.s16_w700_c137700,
+            onChanged: _templateTypecallBack,
+            decoration: const InputDecoration(
+              contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderSide: BorderSide(width: 1.5, color: c137700),
               ),
-            );
-          }).toSet().toList(),
-          icon: const Icon(
-            Icons.keyboard_arrow_down,
-            color: c137700,
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderSide: BorderSide(width: 1.5, color: c137700),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderSide: BorderSide(width: 1.5, color: c137700),
+              ),
+            )
           ),
-          iconSize: 30,
-          value: templateTypeInitVal,
-          style: TextStyles.s16_w700_c137700,
-          onChanged: _templateTypecallBack,
-          decoration: const InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(width: 1.5, color: c137700),
-            ),
-            disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(width: 1.5, color: c137700),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(width: 1.5, color: c137700),
-            ),
-          )
         ),
       ),
     );
@@ -238,6 +256,22 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           style: TextStyles.s16_w700_c137700,
           onChanged: _countryCdCallBack,
           decoration: const InputDecoration(
+            label: Text(
+              'Country Code',
+            ),
+            labelStyle: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 16,
+                color: c137700,
+                fontFamily: 'Lato',
+            ),
+            prefixText: 'INDIA- ',
+            prefixStyle: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                color: c137700,
+                fontFamily: 'Lato',
+            ),
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -265,8 +299,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   
   _getWhtAppTxt() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      height: MediaQuery.of(context).size.height * 0.06,
+      margin: const EdgeInsets.only(bottom: 20),
+      height: MediaQuery.of(context).size.height * 0.1,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
@@ -285,7 +319,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   _getActnBtnRow() {
     return Container(
-      margin: const EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -350,10 +384,10 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
               child: DropdownButtonFormField<String>(
                 borderRadius: BorderRadius.circular(12),
                 elevation: 4,
-                hint: Text(
-                  '--Select--',
-                  style: TextStyles.s14_w400_cB3AEAE,
-                ),
+                // hint: Text(
+                //   '--Select--',
+                //   style: TextStyles.s14_w400_cB3AEAE,
+                // ),
                 items: templateIdList!.map<DropdownMenuItem<String>>((String? value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -363,13 +397,13 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                       style: TextStyles.s16_w700_c137700,
                     ),
                   );
-                }).toList(),
+                }).toSet().toList(),
                 icon: const Icon(
                   Icons.keyboard_arrow_down,
                   color: c137700,
                 ),
                 iconSize: 30,
-                value: templateIdInitVal,
+                value: templateIdInitVal ?? '',
                 style: TextStyles.s16_w700_c137700,
                 onChanged: _templateIdCallback,
                 decoration: const InputDecoration(
@@ -399,41 +433,42 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     setState(() {
       templateIdInitVal = newValue;
     });
+    debugPrint('SIM temp id callback $newValue');
   }
 
-  _getLinkRow() {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.05,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
-      decoration: BoxDecoration(
-        color: cC2FFA0.withOpacity(0.5),
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        border: Border.all(
-          color: cC2FFA0.withOpacity(0.5),
-        ),
-      ),
-    );
-  }
+  // _getLinkRow() {
+  //   return Container(
+  //     height: MediaQuery.of(context).size.height * 0.05,
+  //     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+  //     decoration: BoxDecoration(
+  //       color: cC2FFA0.withOpacity(0.5),
+  //       borderRadius: const BorderRadius.all(Radius.circular(8)),
+  //       border: Border.all(
+  //         color: cC2FFA0.withOpacity(0.5),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  _getUploadFileRow() {
-    return Container(
-      margin: const EdgeInsets.only(top: 10, bottom: 10),
-      child: Row(
-        children: [
-          _cmnRectangularActnBtn(
-            true, 
-            () { }, 
-            'Upload Files'
-          ),
-          _cmnRectangularActnBtn(
-            false, 
-            () { }, 
-            'No Files Chosen'
-          )
-        ],
-      ),
-    );
-  }
+  // _getUploadFileRow() {
+  //   return Container(
+  //     margin: const EdgeInsets.only(top: 10, bottom: 10),
+  //     child: Row(
+  //       children: [
+  //         _cmnRectangularActnBtn(
+  //           true, 
+  //           () { }, 
+  //           'Upload Files'
+  //         ),
+  //         _cmnRectangularActnBtn(
+  //           false, 
+  //           () { }, 
+  //           'No Files Chosen'
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   _getMobNumRow() {
     return Column(
@@ -493,45 +528,45 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     );
   }
 
-  _cmnRectangularActnBtn(bool isTapped, void Function()? onTap, String title) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.06,
-        width: MediaQuery.of(context).size.height * 0.225,
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
-        decoration: BoxDecoration(
-          color: isTapped ? c3690E3.withOpacity(0.08) : cE2DEDE.withOpacity(0.2),
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          border: Border.all(
-            color: isTapped ? c3690E3 : cE2DEDE.withOpacity(0.2),
-          )
-        ),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              title == 'Upload Files'
-              ? SizedBox(
-                width: 20,
-                height: 20,
-                child: Image.asset(
-                  ImageAssets.uploadPng,
-                  fit: BoxFit.fill,
-                ),
-              ) : const SizedBox.shrink(),
-              title == 'Upload Files'
-              ? const SizedBox(width: 5) : const SizedBox.shrink(),
-              Text(
-                title,
-                style: isTapped ? TextStyles.s14_w500_c3690E3 : TextStyles.s14_w500_c000000,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }   
+  // _cmnRectangularActnBtn(bool isTapped, void Function()? onTap, String title) {
+  //   return InkWell(
+  //     onTap: onTap,
+  //     child: Container(
+  //       height: MediaQuery.of(context).size.height * 0.06,
+  //       width: MediaQuery.of(context).size.height * 0.225,
+  //       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+  //       decoration: BoxDecoration(
+  //         color: isTapped ? c3690E3.withOpacity(0.08) : cE2DEDE.withOpacity(0.2),
+  //         borderRadius: const BorderRadius.all(Radius.circular(8)),
+  //         border: Border.all(
+  //           color: isTapped ? c3690E3 : cE2DEDE.withOpacity(0.2),
+  //         )
+  //       ),
+  //       child: Center(
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             title == 'Upload Files'
+  //             ? SizedBox(
+  //               width: 20,
+  //               height: 20,
+  //               child: Image.asset(
+  //                 ImageAssets.uploadPng,
+  //                 fit: BoxFit.fill,
+  //               ),
+  //             ) : const SizedBox.shrink(),
+  //             title == 'Upload Files'
+  //             ? const SizedBox(width: 5) : const SizedBox.shrink(),
+  //             Text(
+  //               title,
+  //               style: isTapped ? TextStyles.s14_w500_c3690E3 : TextStyles.s14_w500_c000000,
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }   
 
   _getDuplicate() {
     return Row(

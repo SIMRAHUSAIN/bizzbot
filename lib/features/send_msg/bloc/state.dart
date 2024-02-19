@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:mim_whatsup/features/send_msg/model/countryCode_model.dart';
+import 'package:mim_whatsup/features/send_msg/model/templateId_model.dart';
 import 'package:mim_whatsup/features/send_msg/model/templateType_model.dart';
 
 abstract class SendMessageState extends Equatable {
@@ -53,6 +54,24 @@ class TemplateTypeFailedState extends SendMessageState {
 
   TemplateTypeFailedState(this.message);
 
+  @override
+  List<Object> get props => [];
+}
+
+class TemplateIdSuccessState extends SendMessageState {
+  final TemplateIdModel templateIdModel;
+
+  TemplateIdSuccessState(this.templateIdModel);
+
+  @override
+  List<Object> get props => [];
+}
+
+class TemplateIdFailedState extends SendMessageState {
+  final String? message;
+
+  TemplateIdFailedState(this.message);
+  
   @override
   List<Object> get props => [];
 }

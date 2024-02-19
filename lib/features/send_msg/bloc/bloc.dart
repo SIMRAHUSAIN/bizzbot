@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/event.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/state.dart';
 import 'package:mim_whatsup/features/send_msg/model/countryCode_model.dart';
+import 'package:mim_whatsup/features/send_msg/model/templateId_model.dart';
 import 'package:mim_whatsup/features/send_msg/model/templateType_model.dart';
 import 'package:mim_whatsup/features/send_msg/repo/repo.dart';
 
@@ -44,6 +45,23 @@ class SendMessageBloc extends Bloc<SendMsgEvent, SendMessageState> {
       } catch(e) {
         debugPrint('Temp 003');
         emit(TemplateTypeFailedState(e.toString()));
+      }
+    }));
+
+    on<GetTemplateIdEvent>(((event, emit) async {
+      emit(SendMsgLoadingState());
+      try{
+        TemplateIdModel templateIdModel = await repo.getTemplateId();
+        if(templateIdModel.statusCode == 200) {
+          debugPrint('TempId 001');
+          emit(TemplateIdSuccessState(templateIdModel));
+        } else {
+          debugPrint('TempId 002');
+          emit(TemplateIdFailedState(templateIdModel.error.toString()));
+        }
+      } catch(e) {
+        debugPrint('TempId 003 $e.toString()');
+        emit(TemplateIdFailedState(e.toString()));
       }
     }));
   }

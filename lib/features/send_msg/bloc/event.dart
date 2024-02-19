@@ -15,3 +15,8 @@ class GetTemplateTypeEvent extends SendMsgEvent {
   @override
   List<Object> get props => [];
 }
+
+class GetTemplateIdEvent extends SendMsgEvent {
+  @override
+  List<Object> get props => [];
+}
