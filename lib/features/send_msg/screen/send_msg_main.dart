@@ -3,9 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/bloc.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/event.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/state.dart';
-import 'package:mim_whatsup/features/send_msg/model/countryCode_model.dart';
-import 'package:mim_whatsup/features/send_msg/model/templateType_model.dart';
-import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
@@ -24,10 +21,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   List<String?>? templateTypeList = [];
   List<String?>? countryCdList = [];
-  List<String?>? templateIdList = [
-    'Text 1',
-    'Text 2'
-  ];
+  List<String?>? templateIdList = [];
 
   String? templateTypeInitVal = '';
   String? countryCdInitVal = '';
@@ -74,9 +68,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   for(int i = 0; i < state.countryCodeModel.data!.length; i++) {
                     countryCdList!.add(state.countryCodeModel.data![i].countryCode);
                   }
-                  // state.countryCodeModel.data!.map(
-                  //   (e) => templateIdList!.add(e.templateType)
-                  // ).toList();
                 }
                 else if(state is TemplateTypeSuccessState) {
                   templateTypeInitVal = state.templateTypeModel.data![6].templateType!;
@@ -86,19 +77,15 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                     templateTypeList!.add(state.templateTypeModel.data![i].templateType);
                   }
                 } 
-                // else if(state is TemplateIdSuccessState) {
-                //   templateIdInitVal = state.templateIdModel.data![0].name!;
-                //   debugPrint('SIM Send Msg Type length ${state.templateIdModel.data!.length}');
-                //   debugPrint('SIM Send Msg Type init val $templateIdInitVal');
-                //   // for(int i = 0; i < state.templateIdModel.data!.length; i++) {
-                //   //   templateIdList!.add(state.templateIdModel.data![i].templateType);
-                //   //   debugPrint('SIM temp id list $templateIdList');
-                //   // }
-                //   state.templateIdModel.data!.map(
-                //     (e) => templateIdList!.add(e.templateType)
-                //   ).toList();
-                //   debugPrint('SIM temp id list $templateIdList');
-                // }
+                else if(state is TemplateIdSuccessState) {
+                  templateIdInitVal = state.templateIdModel.data![0].name!;
+                  debugPrint('SIM 1 Send Msg Type length ${state.templateIdModel.data!.length}');
+                  debugPrint('SIM 1 Send Msg Type init val $templateIdInitVal');
+                  for(int i = 0; i < state.templateIdModel.data!.length; i++) {
+                    templateIdList!.add(state.templateIdModel.data![i].name.toString());
+                    debugPrint('SIM 1 temp id list $templateIdList');
+                  }
+                }
               }),
               child: BlocBuilder<SendMessageBloc, SendMessageState>(
                 builder: (((context, state) {
@@ -123,7 +110,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         _getMobNumRow(),
         // _getUploadFileRow(),
         // _getLinkRow(),
-        // _tempIdDrpdwn(),
+        _tempIdDrpdwn(),
         _getWhtAppTxt(),
         _getDuplicate(),
         _getActnBtnRow()
@@ -300,7 +287,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   _getWhtAppTxt() {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
-      height: MediaQuery.of(context).size.height * 0.1,
+      height: MediaQuery.of(context).size.height * 0.15,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
@@ -367,60 +354,66 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   }
 
   _tempIdDrpdwn() {
+    debugPrint('SIM 1 $templateIdList');
     return Container(
-      margin: const EdgeInsets.only(top: 10, bottom: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             'Template ID',
             style: TextStyles.s16_w700_c137700
           ),
-          Container(
+          const SizedBox(width: 10),
+          SizedBox(
             width: MediaQuery.of(context).size.width * .65,
             height: MediaQuery.of(context).size.height * .1,
-            margin: const EdgeInsets.only(top: 10),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButtonFormField<String>(
-                borderRadius: BorderRadius.circular(12),
-                elevation: 4,
-                // hint: Text(
-                //   '--Select--',
-                //   style: TextStyles.s14_w400_cB3AEAE,
-                // ),
-                items: templateIdList!.map<DropdownMenuItem<String>>((String? value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value!,
-                      maxLines: 1,
-                      style: TextStyles.s16_w700_c137700,
+            // margin: const EdgeInsets.only(top: 10),
+            // padding: const EdgeInsets.only(left: 10),
+            child: Center(
+              child: DropdownButtonHideUnderline(
+                child: DropdownButtonFormField<String>(
+                  borderRadius: BorderRadius.circular(12),
+                  elevation: 4,
+                  hint: Text(
+                    '--Select--',
+                    style: TextStyles.s14_w400_cB3AEAE,
+                  ),
+                  items: templateIdList != null
+                  ? templateIdList!.map<DropdownMenuItem<String>>((String? value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value!,
+                        maxLines: 1,
+                        style: TextStyles.s16_w700_c137700,
+                      ),
+                    );
+                  }).toSet().toList() : [],
+                  // icon: const Icon(
+                  //   Icons.keyboard_arrow_down,
+                  //   color: c137700,
+                  // ),
+                  // iconSize: 30,
+                  value: templateIdInitVal!.isNotEmpty ? templateIdInitVal : '',
+                  style: TextStyles.s16_w700_c137700,
+                  onChanged: _templateIdCallback,
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(width: 1.5, color: c137700),
                     ),
-                  );
-                }).toSet().toList(),
-                icon: const Icon(
-                  Icons.keyboard_arrow_down,
-                  color: c137700,
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(width: 1.5, color: c137700),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      borderSide: BorderSide(width: 1.5, color: c137700),
+                    ),
+                  )
                 ),
-                iconSize: 30,
-                value: templateIdInitVal ?? '',
-                style: TextStyles.s16_w700_c137700,
-                onChanged: _templateIdCallback,
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide(width: 1.5, color: c137700),
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide(width: 1.5, color: c137700),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide(width: 1.5, color: c137700),
-                  ),
-                )
               ),
             ),
           ),
@@ -433,7 +426,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     setState(() {
       templateIdInitVal = newValue;
     });
-    debugPrint('SIM temp id callback $newValue');
+    debugPrint('SIM 1 temp id callback $newValue');
   }
 
   // _getLinkRow() {
