@@ -314,29 +314,29 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
               //     countrycode: countryCdInitVal,
               //     whatsappType: templateTypeInitVal,
               //     campaignName: _cmpgnNmController.text,
-              //     xLUPLOADED: ,
-              //     uPLOADFILENM: ,
-              //     group: ,
-              //     dTXLDistinct: event.dTXLDistinct,
-              //     totalgroupMember: event.totalgroupMember,
-              //     mobileList: event.mobileList,
-              //     allowDuplicate: isDuplicateData,
-              //     duplicate: event.duplicate,
-              //     notDuplicate: event.notDuplicate,
-              //     mobileCount: event.mobileCount,
-              //     manual: event.manual,
-              //     templateId: templateIdInitVal,
-              //     cbFailover: event.cbFailover,
+              //     xLUPLOADED: '',
+              //     uPLOADFILENM: '',
+              //     group: false,
+              //     dTXLDistinct: '',
+              //     totalgroupMember: '',
+              //     mobileList: '',
+              //     allowDuplicate: false,  
+              //     duplicate: false,
+              //     notDuplicate: false,
+              //     mobileCount: '',
+              //     manual: true,
+              //     templateId: '',
+              //     cbFailover: false,
               //     fileOrUrl: event.fileOrUrl,
               //     mediaUName: event.mediaUName,
               //     fileUrl: event.fileUrl,
               //     caption: event.caption,
-              //     msgText: event.msgText,
-              //     locnameid: event.locnameid,
+              //     msgText: '',
+              //     locnameid: '',
               //     headerType: event.headerType,
               //     lstMappedField: event.lstMappedField,
               //     senderId: event.senderId,
-              //     chkOptOut: event.chkOptOut,
+              //     chkOptOut: false,
               //     optOut: event.optOut,
               //     lstTemplateFld: event.lstTemplateFld,
               //     lstScheduleDate: event.lstScheduleDate,
@@ -357,6 +357,56 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
               //     textBox10: event.textBox10,
               //   )
               // );
+              /* 
+              "{
+    ""JSONPostData"": {
+        ""Countrycode"": ""91"",
+        ""WhatsappType"": ""Media Template"",
+        ""CampaignName"": ""25OCTtesting1"",
+        ""XLUPLOADED"": ""Y"",
+        ""UPLOADFILENM"": ""MIM2200038_20231025113546045.csv"",
+        ""group"": """",
+        ""DTXLDistinct"": [],
+        ""TotalgroupMember"": """",
+        ""MobileList"": """",
+        ""AllowDuplicate"": ""false"",
+        ""Duplicate"": """",
+        ""NotDuplicate"": ""2"",
+        ""MobileCount"": ""2"",
+        ""Manual"": ""false"",
+        ""TemplateId"": ""1716"",
+        ""CbFailover"": ""false"",
+        ""FileOrUrl"": ""FILE"",
+        ""MediaUName"": ""2ec7bbd3-3cbc-445b-8593-277af7b98790.png"",
+        ""FileUrl"": """",
+        ""Caption"": """",
+        ""MsgText"": ""Hello {{1}} Testing image"",
+        ""Locname"": """",
+        ""HeaderType"": """",
+        ""lstMappedField"": [],
+        ""SenderId"": """",
+        ""chkOptOut"": ""false"",
+        ""OptOut"": ""DND7726"",
+        ""lstTemplateFld"": [],
+        ""lstScheduleDate"": [],
+        ""MediaFileName"": """",
+        ""MediaUrl"": ""2ec7bbd3-3cbc-445b-8593-277af7b98790.png"",
+        ""ScratchCard"": ""0"",
+        ""TotCount"": ""2"",
+        ""Preview"": """",
+        ""TextBox1"": ""Hello"",
+        ""TextBox2"": """",
+        ""TextBox3"": """",
+        ""TextBox4"": """",
+        ""TextBox5"": """",
+        ""TextBox6"": """",
+        ""TextBox7"": """",
+        ""TextBox8"": """",
+        ""TextBox9"": """",
+        ""TextBox10"": """"
+    }
+}"
+              */
             },
             btnColor: cECF7FF,
           ),
@@ -402,50 +452,48 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
             width: MediaQuery.of(context).size.width * .65,
             height: MediaQuery.of(context).size.height * .1,
             child: Center(
-              child: Expanded(
-                child: DropdownButtonFormField<String>(
-                  borderRadius: BorderRadius.circular(12),
-                  elevation: 4,
-                  hint: Text(
-                    '--Select--',
-                    style: TextStyles.s14_w400_cB3AEAE,
-                  ),
-                  isExpanded: true,
-                  items: templateIdList!.map<DropdownMenuItem<String>>((String? value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value!,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyles.s16_w700_c137700,
-                      ),
-                    );
-                  }).toList(),
-                  icon: const Icon(
-                    Icons.keyboard_arrow_down,
-                    color: c137700,
-                  ),
-                  iconSize: 30,
-                  value: templateIdInitVal,
-                  style: TextStyles.s16_w700_c137700,
-                  onChanged: _templateIdCallback,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide(width: 1.5, color: c137700),
-                    ),
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide(width: 1.5, color: c137700),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      borderSide: BorderSide(width: 1.5, color: c137700),
-                    ),
-                  )
+              child: DropdownButtonFormField<String>(
+                borderRadius: BorderRadius.circular(12),
+                elevation: 4,
+                hint: Text(
+                  '--Select--',
+                  style: TextStyles.s14_w400_cB3AEAE,
                 ),
+                isExpanded: true,
+                items: templateIdList!.map<DropdownMenuItem<String>>((String? value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyles.s16_w700_c137700,
+                    ),
+                  );
+                }).toList(),
+                icon: const Icon(
+                  Icons.keyboard_arrow_down,
+                  color: c137700,
+                ),
+                iconSize: 30,
+                value: templateIdInitVal,
+                style: TextStyles.s16_w700_c137700,
+                onChanged: _templateIdCallback,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(width: 1.5, color: c137700),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(width: 1.5, color: c137700),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(width: 1.5, color: c137700),
+                  ),
+                )
               ),
             ),
           ),
@@ -640,20 +688,104 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
             ),
             Container(
               color: cFFFFFF,
+              height: MediaQuery.of(context).size.height * 0.28,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  // sche date 1 column
-                  // time column
-                  // + column
+                  Column(
+                    children: [
+                      Text(
+                        'Schedule Date 1',
+                        style: TextStyles.s14_w600_c000000,
+                      ),
+                      Container(
+                        height: 40,
+                        width: 100,
+                        margin: const EdgeInsets.only(top: 5),
+                        decoration: BoxDecoration(
+                          color: cFFFFFF,
+                          border: Border.all(
+                            color: c000000,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text(''),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        'Time (HH:MM)',
+                        style: TextStyles.s14_w600_c000000,
+                      ),
+                      Container(
+                        height: 40,
+                        width: 100,
+                        margin: const EdgeInsets.only(top: 5),
+                        decoration: BoxDecoration(
+                          color: cFFFFFF,
+                          border: Border.all(
+                            color: c000000,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text(''),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: Text(
-                  Strings.cancelBtn,
-                  style: TextStyles.s14_w500_cFFFFFF,
-              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                      onTap: () {},
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 10, right: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: c544FFF,
+                          border: Border.all(
+                            color: c544FFF,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          'Schedule Message',
+                          style: TextStyles.s14_w500_cFFFFFF,
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 10, right: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 6, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: cCC2525,
+                          border: Border.all(
+                            color: cCC2525,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          Strings.cancelBtn,
+                          style: TextStyles.s14_w500_cFFFFFF,
+                        ),
+                      ),
+                    ),
+                ],
+              )
             ),
           ]
         )
