@@ -33,11 +33,9 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
   int counter = 0;
   @override
   Widget build(BuildContext context) {
-    print("Hello " + (widget.modelData?.data?[0].flag3nm??""));
     return Scaffold(
       body: BlocConsumer<ChatBloc, ChatState>(
         listener: (context, state){
-          print("JOJo " + state.toString());
           // if(state is ChatInitialState){
           //   displayWidget = Container();
           // }
@@ -85,7 +83,6 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
             //     userChatModel: data
             // );
           } else if(state is OldChatFailedState){
-            print("AOAO" + state.message.toString());
             if(state.message!.contains("Token Expire")){
               GlobalVar.recentEvent = [];
               GlobalVar.recentEvent.add(state);
@@ -188,7 +185,6 @@ class _UserChatDataLoaderState extends State<UserChatDataLoader> {
           // }
         },
         builder: (context, state) {
-          print("ULO " + state.toString());
           if(counter == 0){
             return const Center(
               child: CircularProgressIndicator()

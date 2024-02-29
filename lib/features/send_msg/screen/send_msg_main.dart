@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/bloc.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/event.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/state.dart';
+import 'package:mim_whatsup/utils/assets.dart';
 import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
+import 'package:mim_whatsup/widgets/action_button.dart';
 import 'package:mim_whatsup/widgets/app_bar.dart';
 
 class SendMsgMainScreen extends StatefulWidget {
@@ -25,7 +27,9 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   String? templateTypeInitVal = '';
   String? countryCdInitVal = '';
-  String? templateIdInitVal = '';
+  String? templateIdInitVal;
+
+  bool? isDuplicateData = false;
 
   @override
   void initState() {
@@ -59,39 +63,34 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: SingleChildScrollView(
-            child: BlocListener<SendMessageBloc, SendMessageState>(
-              listener: ((context, state) {
-                debugPrint('SIM Send Message states --> $state');
-                if(state is CountryCdSuccessState) {
-                  countryCdInitVal = state.countryCodeModel.data![0].countryCode;
-                  for(int i = 0; i < state.countryCodeModel.data!.length; i++) {
-                    countryCdList!.add(state.countryCodeModel.data![i].countryCode);
-                  }
+          child: BlocListener<SendMessageBloc, SendMessageState>(
+            listener: ((context, state) {
+              debugPrint('SIM Send Message states --> $state');
+              if(state is CountryCdSuccessState) {
+                countryCdInitVal = state.countryCodeModel.data![0].countryCode;
+                for(int i = 0; i < state.countryCodeModel.data!.length; i++) {
+                  countryCdList!.add(state.countryCodeModel.data![i].countryCode);
                 }
-                else if(state is TemplateTypeSuccessState) {
-                  templateTypeInitVal = state.templateTypeModel.data![6].templateType!;
-                  debugPrint('SIM Send Msg Type length ${state.templateTypeModel.data!.length}');
-                  debugPrint('SIM Send Msg Type init val $templateTypeInitVal');
-                  for(int i = 0; i < state.templateTypeModel.data!.length; i++) {
-                    templateTypeList!.add(state.templateTypeModel.data![i].templateType);
-                  }
-                } 
-                else if(state is TemplateIdSuccessState) {
-                  templateIdInitVal = state.templateIdModel.data![0].name!;
-                  debugPrint('SIM 1 Send Msg Type length ${state.templateIdModel.data!.length}');
-                  debugPrint('SIM 1 Send Msg Type init val $templateIdInitVal');
-                  for(int i = 0; i < state.templateIdModel.data!.length; i++) {
-                    templateIdList!.add(state.templateIdModel.data![i].name.toString());
-                    debugPrint('SIM 1 temp id list $templateIdList');
-                  }
+              }
+              else if(state is TemplateTypeSuccessState) {
+                templateTypeInitVal = state.templateTypeModel.data![6].templateType!;
+                for(int i = 0; i < state.templateTypeModel.data!.length; i++) {
+                  templateTypeList!.add(state.templateTypeModel.data![i].templateType);
                 }
-              }),
-              child: BlocBuilder<SendMessageBloc, SendMessageState>(
-                builder: (((context, state) {
-                  return _getBodyContent();
-                })),
-              )
+              } 
+              else if(state is TemplateIdSuccessState) {
+                for(int i = 0; i < state.templateIdModel.data!.length; i++) {
+                  templateIdList!.add(state.templateIdModel.data![i].name.toString());
+                }
+              }
+              else if(state is SendOrScheduleSuccessState) {
+                //
+              }
+            }),
+            child: BlocBuilder<SendMessageBloc, SendMessageState>(
+              builder: (((context, state) {
+                return _getBodyContent();
+              })),
             )
           )
         ),
@@ -108,8 +107,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         _getTemplateTypDrpdwn(),
         _getCmpgnNmTxtFld(),
         _getMobNumRow(),
-        // _getUploadFileRow(),
-        // _getLinkRow(),
         _tempIdDrpdwn(),
         _getWhtAppTxt(),
         _getDuplicate(),
@@ -171,7 +168,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     setState(() {
       templateTypeInitVal = newValue;
     });
-    debugPrint('SIM Template Type new value $newValue');
   }
 
   _getCmpgnNmTxtFld() {
@@ -310,51 +306,88 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _actionBtn(
-            'Send', 
-            () {},
-            cECF7FF,
+          CommonActionButton(
+            title: 'Send', 
+            onTap: () {
+              // BlocProvider.of<SendMessageBloc>(context).add(
+              //   GetSendorScheduleEvent(
+              //     countrycode: countryCdInitVal,
+              //     whatsappType: templateTypeInitVal,
+              //     campaignName: _cmpgnNmController.text,
+              //     xLUPLOADED: ,
+              //     uPLOADFILENM: ,
+              //     group: ,
+              //     dTXLDistinct: event.dTXLDistinct,
+              //     totalgroupMember: event.totalgroupMember,
+              //     mobileList: event.mobileList,
+              //     allowDuplicate: isDuplicateData,
+              //     duplicate: event.duplicate,
+              //     notDuplicate: event.notDuplicate,
+              //     mobileCount: event.mobileCount,
+              //     manual: event.manual,
+              //     templateId: templateIdInitVal,
+              //     cbFailover: event.cbFailover,
+              //     fileOrUrl: event.fileOrUrl,
+              //     mediaUName: event.mediaUName,
+              //     fileUrl: event.fileUrl,
+              //     caption: event.caption,
+              //     msgText: event.msgText,
+              //     locnameid: event.locnameid,
+              //     headerType: event.headerType,
+              //     lstMappedField: event.lstMappedField,
+              //     senderId: event.senderId,
+              //     chkOptOut: event.chkOptOut,
+              //     optOut: event.optOut,
+              //     lstTemplateFld: event.lstTemplateFld,
+              //     lstScheduleDate: event.lstScheduleDate,
+              //     mediaFileName: event.mediaFileName,
+              //     mediaUrl: event.mediaUrl,
+              //     scratchCard: event.scratchCard,
+              //     totCount: event.totCount,
+              //     preview: event.preview,
+              //     textBox1: event.textBox1,
+              //     textBox2: event.textBox2,
+              //     textBox3: event.textBox3,
+              //     textBox4: event.textBox4,
+              //     textBox5: event.textBox5,
+              //     textBox6: event.textBox6,
+              //     textBox7: event.textBox7,
+              //     textBox8: event.textBox8,
+              //     textBox9: event.textBox9,
+              //     textBox10: event.textBox10,
+              //   )
+              // );
+            },
+            btnColor: cECF7FF,
           ),
-          _actionBtn(
-            'Cancel', 
-            () {},
-            cFFF1F1,
+          CommonActionButton(
+            title: 'Cancel', 
+            onTap: () {
+              setState(() {
+                _cmpgnNmController.clear();
+                // to reset dropdowns
+              });
+            },
+            btnColor: cFFF1F1,
           ),
-          _actionBtn(
-            'Schedule', 
-            () {},
-            cFFF7EF,
+          CommonActionButton(
+            title: 'Schedule', 
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return _getScheduleDialog();
+                }
+              );
+            },
+            btnColor: cFFF7EF,
           ),
         ],
       ),
     );
   }
 
-  _actionBtn(String title, void Function()? onTap, Color btnColor) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.05,
-        width: MediaQuery.of(context).size.width * 0.24,
-        decoration: BoxDecoration(
-          color: btnColor,
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          border: Border.all(width: 1, color: btnColor)
-        ),
-        margin: const EdgeInsets.only(left: 10, right: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-        child: Center(
-          child: Text(
-            title,
-            style: TextStyles.s14_w500_c939292_lato,
-          ),
-        ),
-      ),
-    );
-  }
-
   _tempIdDrpdwn() {
-    debugPrint('SIM 1 $templateIdList');
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -368,10 +401,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           SizedBox(
             width: MediaQuery.of(context).size.width * .65,
             height: MediaQuery.of(context).size.height * .1,
-            // margin: const EdgeInsets.only(top: 10),
-            // padding: const EdgeInsets.only(left: 10),
             child: Center(
-              child: DropdownButtonHideUnderline(
+              child: Expanded(
                 child: DropdownButtonFormField<String>(
                   borderRadius: BorderRadius.circular(12),
                   elevation: 4,
@@ -379,27 +410,28 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                     '--Select--',
                     style: TextStyles.s14_w400_cB3AEAE,
                   ),
-                  items: templateIdList != null
-                  ? templateIdList!.map<DropdownMenuItem<String>>((String? value) {
+                  isExpanded: true,
+                  items: templateIdList!.map<DropdownMenuItem<String>>((String? value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(
                         value!,
                         maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyles.s16_w700_c137700,
                       ),
                     );
-                  }).toSet().toList() : [],
-                  // icon: const Icon(
-                  //   Icons.keyboard_arrow_down,
-                  //   color: c137700,
-                  // ),
-                  // iconSize: 30,
-                  value: templateIdInitVal!.isNotEmpty ? templateIdInitVal : '',
+                  }).toList(),
+                  icon: const Icon(
+                    Icons.keyboard_arrow_down,
+                    color: c137700,
+                  ),
+                  iconSize: 30,
+                  value: templateIdInitVal,
                   style: TextStyles.s16_w700_c137700,
                   onChanged: _templateIdCallback,
                   decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(8)),
                       borderSide: BorderSide(width: 1.5, color: c137700),
@@ -426,42 +458,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     setState(() {
       templateIdInitVal = newValue;
     });
-    debugPrint('SIM 1 temp id callback $newValue');
   }
-
-  // _getLinkRow() {
-  //   return Container(
-  //     height: MediaQuery.of(context).size.height * 0.05,
-  //     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
-  //     decoration: BoxDecoration(
-  //       color: cC2FFA0.withOpacity(0.5),
-  //       borderRadius: const BorderRadius.all(Radius.circular(8)),
-  //       border: Border.all(
-  //         color: cC2FFA0.withOpacity(0.5),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // _getUploadFileRow() {
-  //   return Container(
-  //     margin: const EdgeInsets.only(top: 10, bottom: 10),
-  //     child: Row(
-  //       children: [
-  //         _cmnRectangularActnBtn(
-  //           true, 
-  //           () { }, 
-  //           'Upload Files'
-  //         ),
-  //         _cmnRectangularActnBtn(
-  //           false, 
-  //           () { }, 
-  //           'No Files Chosen'
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
 
   _getMobNumRow() {
     return Column(
@@ -479,7 +476,14 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           children: [
             _cmnCircularActnBtn(
               true,
-              () {},
+              () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return _getUploadFileDialog();
+                    }
+                  );
+              },
               'Upload Files(TXT/CSV)'
             ),
             _cmnCircularActnBtn(
@@ -521,46 +525,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     );
   }
 
-  // _cmnRectangularActnBtn(bool isTapped, void Function()? onTap, String title) {
-  //   return InkWell(
-  //     onTap: onTap,
-  //     child: Container(
-  //       height: MediaQuery.of(context).size.height * 0.06,
-  //       width: MediaQuery.of(context).size.height * 0.225,
-  //       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
-  //       decoration: BoxDecoration(
-  //         color: isTapped ? c3690E3.withOpacity(0.08) : cE2DEDE.withOpacity(0.2),
-  //         borderRadius: const BorderRadius.all(Radius.circular(8)),
-  //         border: Border.all(
-  //           color: isTapped ? c3690E3 : cE2DEDE.withOpacity(0.2),
-  //         )
-  //       ),
-  //       child: Center(
-  //         child: Row(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             title == 'Upload Files'
-  //             ? SizedBox(
-  //               width: 20,
-  //               height: 20,
-  //               child: Image.asset(
-  //                 ImageAssets.uploadPng,
-  //                 fit: BoxFit.fill,
-  //               ),
-  //             ) : const SizedBox.shrink(),
-  //             title == 'Upload Files'
-  //             ? const SizedBox(width: 5) : const SizedBox.shrink(),
-  //             Text(
-  //               title,
-  //               style: isTapped ? TextStyles.s14_w500_c3690E3 : TextStyles.s14_w500_c000000,
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }   
-
   _getDuplicate() {
     return Row(
       children: [
@@ -568,8 +532,12 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           height: 30,
           width: 30,
           child: Checkbox(
-            onChanged: (newValue) {},
-            value: false,
+            onChanged: (newValue) {
+              setState(() {
+                isDuplicateData = newValue!;
+              });
+            },
+            value: isDuplicateData,
             activeColor: c137700,
           ),
         ),
@@ -578,6 +546,118 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           style: TextStyles.s14_w600_c000000,
         ),
       ],
+    );
+  }
+
+  _getUploadFileDialog() {
+    return Dialog(
+      backgroundColor: cFFFFFF,
+      elevation: 1,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+        height: MediaQuery.of(context).size.height * .18,
+        width: MediaQuery.of(context).size.width * .7,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InkWell(
+                  onTap: () {
+                    // upload file on tap
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    margin: const EdgeInsets.only(left: 10, right: 5),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        width: 1,
+                        color: c606CC4
+                      )
+                    ),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          ImageAssets.uploadPng, 
+                          fit: BoxFit.fill, 
+                          height: 25, 
+                          width: 25,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          'Upload File',
+                          style: TextStyles.s14_w700_c606CC4,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Text(
+                    'No File Chosen',
+                    style: TextStyles.s14_w600_c000000
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Maximum File Size 6MB',
+              style: TextStyles.s14_w400_cCC2525,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              '(Mobile numbers with Country code)',
+              style: TextStyles.s14_w600_cCC2525,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _getScheduleDialog() {
+    return Dialog(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.4,
+        child: Column(
+          children: [
+            Container(
+              color: c0D8578,
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Schedule Message',
+                    style: TextStyles.s14_w500_cFFFFFF,
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              color: cFFFFFF,
+              child: Row(
+                children: [
+                  // sche date 1 column
+                  // time column
+                  // + column
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                  Strings.cancelBtn,
+                  style: TextStyles.s14_w500_cFFFFFF,
+              ),
+            ),
+          ]
+        )
+      )
     );
   }
 }

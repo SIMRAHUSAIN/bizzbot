@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:mim_whatsup/features/send_msg/model/countryCode_model.dart';
+import 'package:mim_whatsup/features/send_msg/model/send_schedule_model.dart';
 import 'package:mim_whatsup/features/send_msg/model/templateId_model.dart';
 import 'package:mim_whatsup/features/send_msg/model/templateType_model.dart';
 
@@ -71,6 +72,24 @@ class TemplateIdFailedState extends SendMessageState {
   final String? message;
 
   TemplateIdFailedState(this.message);
+  
+  @override
+  List<Object> get props => [];
+}
+
+class SendOrScheduleSuccessState extends SendMessageState {
+  final SendScheduleModel sendScheduleModel;
+
+  SendOrScheduleSuccessState(this.sendScheduleModel);
+
+  @override
+  List<Object> get props => [];
+}
+
+class SendOrScheduleFailedState extends SendMessageState {
+  final String? message;
+
+  SendOrScheduleFailedState(this.message);
   
   @override
   List<Object> get props => [];

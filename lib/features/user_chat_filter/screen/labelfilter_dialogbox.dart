@@ -16,7 +16,6 @@ import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
-import 'package:mim_whatsup/features/user_chat_filter/screen/addnewlabel_dialogbox.dart';
 
 class LabelListDialogBox extends StatefulWidget {
 

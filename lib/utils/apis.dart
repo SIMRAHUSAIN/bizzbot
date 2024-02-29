@@ -43,6 +43,7 @@ class Apis {
   static const getCntryCd = '$domain/GetCountryCode';
   static const getTemplateType = '$domain/GetActiveTemplateType';
   static const getTemplateId = '$domain/GetWabaTemplate?TemplateText=';
+  static const getSendorSchedule = '$domain/SendOrSchedule';
 
   //SendFile
   static const sendFile = '$domain/UploadFile';

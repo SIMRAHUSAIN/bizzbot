@@ -140,7 +140,6 @@ class _UserChatMainScreenState extends State<UserChatMainScreen> with SingleTick
   }
 
   void _filterChatList(String searchText) {
-    // print("LAMA " + userFilterChatModel!.data![0].toString());
     setState(() {
       tempDataModel = userFilterChatModel!.data!.isEmpty?unfilteredChatModel:userFilterChatModel;
       if(searchText.isNotEmpty){

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mim_whatsup/features/send_msg/model/countryCode_model.dart';
+import 'package:mim_whatsup/features/send_msg/model/send_schedule_model.dart';
 import 'package:mim_whatsup/features/send_msg/model/templateId_model.dart';
 import 'package:mim_whatsup/features/send_msg/model/templateType_model.dart';
 import 'package:mim_whatsup/utils/apis.dart';
@@ -14,6 +15,10 @@ abstract class SendMsgRepo {
   Future<TemplateTypeModel> getTemplateType();
 
   Future<TemplateIdModel> getTemplateId();
+
+  Future<SendScheduleModel> getSendorSchedule(
+    jsonPostData
+  );
 } 
 
 class SendMsgRepoImpl extends SendMsgRepo {
@@ -105,6 +110,43 @@ class SendMsgRepoImpl extends SendMsgRepo {
       }
     } catch(e) {
       debugPrint('TempId 04');
+      throw Exception();
+    }
+  }
+  
+  @override
+  Future<SendScheduleModel> getSendorSchedule(jsonPostData) async {
+    try {
+      Map map = {
+        'JSONPostData': jsonPostData,
+      };
+      http.Response response = await http.post(
+        Uri.parse(Apis.getSendorSchedule),
+        body: json.encode(map),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${GlobalVar.globalToken}"
+        }
+      );
+      var data = json.decode(response.body);
+      LogPrinter().logPrinter(response, {}, jsonPretty: true);
+      debugPrint('Send 01');
+      if (response.statusCode == 200) {
+        debugPrint('Send 02');
+        SendScheduleModel sendScheduleModel = SendScheduleModel.fromJson(data);
+        return sendScheduleModel;
+      } else {
+        debugPrint('Send 03');
+        var jsonData = {
+          "statusCode": data["statusCode"],
+          "error": data["error"],
+          "data": null
+        };
+        SendScheduleModel sendScheduleModel = SendScheduleModel.fromJson(jsonData);
+        return sendScheduleModel;
+      }
+    } catch(e) {
+      debugPrint('Send 04');
       throw Exception();
     }
   }
