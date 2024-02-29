@@ -6,6 +6,8 @@ import 'package:mim_whatsup/features/send_msg/bloc/event.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/state.dart';
 import 'package:mim_whatsup/features/send_msg/model/countryCode_model.dart';
 import 'package:mim_whatsup/features/send_msg/model/templateId_model.dart';
+import 'package:mim_whatsup/features/send_msg/model/csv_model.dart';
+import 'package:mim_whatsup/features/send_msg/model/get_group_model.dart';
 import 'package:mim_whatsup/features/send_msg/model/templateType_model.dart';
 import 'package:mim_whatsup/features/send_msg/repo/repo.dart';
 
@@ -62,6 +64,39 @@ class SendMessageBloc extends Bloc<SendMsgEvent, SendMessageState> {
       } catch(e) {
         debugPrint('TempId 003 $e.toString()');
         emit(TemplateIdFailedState(e.toString()));
+      }
+    }));
+    on<GetGroupEvent>(((event, emit) async {
+      emit(GetGroupLoadingState());
+      try{
+        GetGroupModel getGroupModel = await repo.getGroup();
+        if(getGroupModel.statusCode == 200) {
+          debugPrint('Temp 001');
+          emit(GetGroupSuccessState(getGroupModel));
+        } else {
+          debugPrint('Temp 002');
+          emit(GetGroupFailedState(getGroupModel.error.toString()));
+        }
+      } catch(e) {
+        debugPrint('Temp 003');
+        emit(GetGroupFailedState(e.toString()));
+      }
+    }));
+
+    on<UploadCsv>(((event, emit) async {
+      emit(UploadCsvLoadingState());
+      try{
+        CsvModel csvModel = await repo.getCsv(file: event.fileType!);
+        if(csvModel.statusCode == "200") {
+          debugPrint('Temp 001');
+          emit(UploadCsvSuccessState(csvModel));
+        } else {
+          debugPrint('Temp 002');
+          emit(UploadCsvFailedState(csvModel.error.toString()));
+        }
+      } catch(e) {
+        debugPrint('Temp 003');
+        emit(UploadCsvFailedState(e.toString()));
       }
     }));
   }

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/bloc.dart';
@@ -7,6 +10,8 @@ import 'package:mim_whatsup/utils/colors.dart';
 import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/app_bar.dart';
+
+import 'group_list.dart';
 
 class SendMsgMainScreen extends StatefulWidget {
   const SendMsgMainScreen({Key? key}) : super(key: key);
@@ -108,6 +113,28 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         _getTemplateTypDrpdwn(),
         _getCmpgnNmTxtFld(),
         _getMobNumRow(),
+        currentIndex == 2?Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: 200,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey), // Add border
+              borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                maxLines: 5, // Set maxLines to allow at least 5 lines
+                keyboardType: TextInputType.multiline,
+                decoration: InputDecoration(
+                  hintText: 'Enter up to five lines of text',
+                  border: InputBorder.none, // Hide TextField's border
+                ),
+              ),
+            ),
+          ),
+        ):SizedBox(),
+        _getDuplicate(),
         // _getUploadFileRow(),
         // _getLinkRow(),
         _tempIdDrpdwn(),
@@ -463,6 +490,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   //   );
   // }
 
+  int currentIndex = 0;
+
   _getMobNumRow() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -478,18 +507,47 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _cmnCircularActnBtn(
+              0,
               true,
-              () {},
+              () async {
+                setState((){
+                  currentIndex = 0;
+                });
+                FilePickerResult? result = await FilePicker.platform.pickFiles();
+                if (result != null) {
+                  String filePath = result.files.single.path!;
+                  BlocProvider.of<SendMessageBloc>(context).add(
+                      UploadCsv(fileType: File(filePath))
+                  );
+                  // Use the file path as needed
+                }
+              },
               'Upload Files(TXT/CSV)'
             ),
             _cmnCircularActnBtn(
+              1,
               false,
-              () {},
+              () {
+                setState((){
+                  currentIndex = 1;
+                });
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const GroupList();
+                  }
+                );
+              },
               'Group'
             ),
             _cmnCircularActnBtn(
+              2,
               false,
-              () {},
+              () {
+                setState((){
+                  currentIndex = 2;
+                });
+              },
               'Mobile Number'
             ),
           ]
@@ -501,20 +559,20 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     );
   }
 
-  _cmnCircularActnBtn(bool isTapped, void Function()? onTap, String title) {
+  _cmnCircularActnBtn(int index, bool isTapped, void Function()? onTap, String title) {
     return InkWell(
       onTap: onTap,
       child: Container(
         height: MediaQuery.of(context).size.height * 0.05,
-        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
         decoration: BoxDecoration(
-          color: isTapped ? c137700 : cFFFFFF,
+          color: index == currentIndex ? c137700 : cFFFFFF,
           borderRadius: const BorderRadius.all(Radius.circular(25)),
         ),
         child: Center(
           child: Text(
             title,
-            style: isTapped ? TextStyles.s12_w400_cFFFFFF : TextStyles.s14_w500_c939292_lato,
+            style: index == currentIndex ? TextStyles.s12_w400_cFFFFFF : TextStyles.s12_w500_c939292_lato,
           ),
         ),
       ),

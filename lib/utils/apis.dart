@@ -43,6 +43,8 @@ class Apis {
   static const getCntryCd = '$domain/GetCountryCode';
   static const getTemplateType = '$domain/GetActiveTemplateType';
   static const getTemplateId = '$domain/GetWabaTemplate?TemplateText=';
+  static const getGroup = '$domain/GetGroup';
+  static const uploadCsv = '$domain/UploadFileCsvText';
 
   //SendFile
   static const sendFile = '$domain/UploadFile';
