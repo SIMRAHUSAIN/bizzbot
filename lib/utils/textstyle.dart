@@ -254,4 +254,22 @@ class TextStyles {
     color: c000000,
     fontFamily: 'Inter',
   );
+
+  static var s14_w700_c606CC4 = const TextStyle(
+    fontWeight: FontWeight.w700,
+    fontSize: 14,
+    color: c606CC4,
+  );
+
+  static var s14_w400_cCC2525 = const TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    color: cCC2525,
+  );
+
+  static var s14_w600_cCC2525 = const TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: 14,
+    color: cCC2525,
+  );
 }

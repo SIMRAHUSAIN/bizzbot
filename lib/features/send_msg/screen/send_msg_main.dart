@@ -11,6 +11,7 @@ import 'package:mim_whatsup/utils/strings.dart';
 import 'package:mim_whatsup/utils/textstyle.dart';
 import 'package:mim_whatsup/widgets/app_bar.dart';
 
+import '../../../utils/assets.dart';
 import 'group_list.dart';
 
 class SendMsgMainScreen extends StatefulWidget {
@@ -513,14 +514,12 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 setState((){
                   currentIndex = 0;
                 });
-                FilePickerResult? result = await FilePicker.platform.pickFiles();
-                if (result != null) {
-                  String filePath = result.files.single.path!;
-                  BlocProvider.of<SendMessageBloc>(context).add(
-                      UploadCsv(fileType: File(filePath))
-                  );
-                  // Use the file path as needed
-                }
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return _getUploadFileDialog();
+                    }
+                );
               },
               'Upload Files(TXT/CSV)'
             ),
@@ -636,6 +635,250 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           style: TextStyles.s14_w600_c000000,
         ),
       ],
+    );
+  }
+
+  _getUploadFileDialog() {
+    return Dialog(
+      backgroundColor: cFFFFFF,
+      elevation: 1,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+        height: MediaQuery.of(context).size.height * .16,
+        width: MediaQuery.of(context).size.width * .7,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    FilePickerResult? result = await FilePicker.platform.pickFiles();
+                    if (result != null) {
+                      String filePath = result.files.single.path!;
+                      BlocProvider.of<SendMessageBloc>(context).add(
+                          UploadCsv(fileType: File(filePath))
+                      );
+                      // Use the file path as needed
+                    }
+                    // upload file on tap
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    margin: const EdgeInsets.only(left: 10, right: 5),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            width: 1,
+                            color: c606CC4
+                        )
+                    ),
+                    child: Row(
+                      children: [
+                        Image.asset(
+                          ImageAssets.uploadPng,
+                          fit: BoxFit.fill,
+                          height: 25,
+                          width: 25,
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          'Upload File',
+                          style: TextStyles.s14_w700_c606CC4,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                BlocBuilder<SendMessageBloc, SendMessageState>(
+                    builder: (context, state){
+                      if(state is UploadCsvLoadingState){
+                        return Text(
+                          'No File Chosen',
+                          style: TextStyles.s14_w600_c000000
+                        );
+                      }
+                      else if(state is UploadCsvFailedState){
+                        return Text(
+                          'No File Chosen',
+                          style: TextStyles.s14_w600_c000000
+                        );
+                      } else if(state is UploadCsvSuccessState){
+                        return Spacer();
+                      } else {
+                        return Text(
+                            'No File Chosen',
+                            style: TextStyles.s14_w600_c000000
+                        );
+                      }
+                    }
+                ),
+              ],
+            ),
+            BlocBuilder<SendMessageBloc, SendMessageState>(
+              builder: (context, state){
+                if(state is UploadCsvLoadingState){
+                  return Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else if(state is UploadCsvSuccessState){
+                  return Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                        state.csvModel.data?.fileName??"",
+                        style: TextStyles.s14_w600_c000000
+                    ),
+                  );
+                }
+                else if(state is UploadCsvFailedState){
+                  return Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      Text(
+                        state.message??"",
+                        style: TextStyles.s14_w400_cCC2525,
+                      ),
+                    ],
+                  );
+                } else {
+                  return Container();
+                }
+              }
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  _getScheduleDialog() {
+    return Dialog(
+        child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.4,
+            child: Column(
+                children: [
+                  Container(
+                    color: c0D8578,
+                    height: 50,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Schedule Message',
+                          style: TextStyles.s14_w500_cFFFFFF,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    color: cFFFFFF,
+                    height: MediaQuery.of(context).size.height * 0.28,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              'Schedule Date 1',
+                              style: TextStyles.s14_w600_c000000,
+                            ),
+                            Container(
+                              height: 40,
+                              width: 100,
+                              margin: const EdgeInsets.only(top: 5),
+                              decoration: BoxDecoration(
+                                color: cFFFFFF,
+                                border: Border.all(
+                                  color: c000000,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Text(''),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              'Time (HH:MM)',
+                              style: TextStyles.s14_w600_c000000,
+                            ),
+                            Container(
+                              height: 40,
+                              width: 100,
+                              margin: const EdgeInsets.only(top: 5),
+                              decoration: BoxDecoration(
+                                color: cFFFFFF,
+                                border: Border.all(
+                                  color: c000000,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Text(''),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 10, right: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: c544FFF,
+                                border: Border.all(
+                                  color: c544FFF,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                'Schedule Message',
+                                style: TextStyles.s14_w500_cFFFFFF,
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 10, right: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: cCC2525,
+                                border: Border.all(
+                                  color: cCC2525,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                Strings.cancelBtn,
+                                style: TextStyles.s14_w500_cFFFFFF,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                  ),
+                ]
+            )
+        )
     );
   }
 }

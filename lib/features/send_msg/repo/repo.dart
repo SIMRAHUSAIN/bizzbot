@@ -171,7 +171,11 @@ class SendMsgRepoImpl extends SendMsgRepo {
         print("D");
         return sendFileModel;
       } else {
-        throw Exception();
+        var responseBody = await response.stream.bytesToString();
+        print("RAHUL ${json.decode(responseBody)}");
+        var data = {"statusCode": "500", "error": "Upload Failed", "data": null};
+        CsvModel sendFileModel = CsvModel.fromJson(data);
+        return sendFileModel;
       }
     } catch(e) {
       throw Exception();
