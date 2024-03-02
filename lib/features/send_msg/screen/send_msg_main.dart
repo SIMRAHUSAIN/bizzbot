@@ -456,7 +456,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 borderRadius: BorderRadius.circular(12),
                 elevation: 4,
                 hint: Text(
-                  '--Select--',
+                  '--Select--', 
                   style: TextStyles.s14_w400_cB3AEAE,
                 ),
                 isExpanded: true,
