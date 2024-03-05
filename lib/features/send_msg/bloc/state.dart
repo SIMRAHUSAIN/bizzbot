@@ -5,6 +5,10 @@ import 'package:mim_whatsup/features/send_msg/model/csv_model.dart';
 import 'package:mim_whatsup/features/send_msg/model/get_group_model.dart';
 import 'package:mim_whatsup/features/send_msg/model/templateType_model.dart';
 
+import '../model/template_id_message_model.dart';
+import '../unique_count/model/get_unique_count_model.dart';
+import '../model/post_group_model.dart';
+
 abstract class SendMessageState extends Equatable {
   @override
   List<Object> get props => []; 
@@ -122,6 +126,56 @@ class UploadCsvFailedState extends SendMessageState {
   final String? message;
 
   UploadCsvFailedState(this.message);
+
+  @override
+  List<Object> get props => [];
+}
+
+class PostGroupLoadingState extends SendMessageState {
+  PostGroupLoadingState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class PostGroupSuccessState extends SendMessageState {
+  final PostGroupModel postGroupModel;
+
+  PostGroupSuccessState(this.postGroupModel);
+
+  @override
+  List<Object> get props => [];
+}
+
+class PostGroupFailedState extends SendMessageState {
+  final String? message;
+
+  PostGroupFailedState(this.message);
+
+  @override
+  List<Object> get props => [];
+}
+
+class GetTemplateIdMessageLoadingState extends SendMessageState {
+  GetTemplateIdMessageLoadingState();
+
+  @override
+  List<Object> get props => [];
+}
+
+class GetTemplateIdMessageSuccessState extends SendMessageState {
+  final TemplateIdMessageModel templateIdMessageModel;
+
+  GetTemplateIdMessageSuccessState(this.templateIdMessageModel);
+
+  @override
+  List<Object> get props => [];
+}
+
+class GetTemplateIdMessageFailedState extends SendMessageState {
+  final String? message;
+
+  GetTemplateIdMessageFailedState(this.message);
 
   @override
   List<Object> get props => [];

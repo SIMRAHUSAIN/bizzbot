@@ -24,6 +24,7 @@ class SendMsgMainScreen extends StatefulWidget {
 class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   final TextEditingController _cmpgnNmController = TextEditingController();
+  final TextEditingController _whatsAppMessageController = TextEditingController();
 
   List<String?>? templateTypeList = [];
   List<String?>? countryCdList = [];
@@ -32,6 +33,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   String? templateTypeInitVal = '';
   String? countryCdInitVal = '';
   String? templateIdInitVal = '';
+  String uploadFilePath = "";
 
   @override
   void initState() {
@@ -91,6 +93,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                     templateIdList!.add(state.templateIdModel.data![i].name.toString());
                     debugPrint('SIM 1 temp id list $templateIdList');
                   }
+                } else if(state is GetTemplateIdMessageSuccessState){
+                  _whatsAppMessageController.text = state.templateIdMessageModel.data?[0].tbodytext??"";
                 }
               }),
               child: BlocBuilder<SendMessageBloc, SendMessageState>(
@@ -324,10 +328,22 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
       ),
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text(
-          'Whatsapp Text',
-          style: TextStyles.s14_w500_c939292_lato,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _whatsAppMessageController,
+            maxLines: 10, // Set maxLines to allow at least 5 lines
+            keyboardType: TextInputType.multiline,
+            decoration: InputDecoration(
+              hintText: 'Whatsapp Text',
+              border: InputBorder.none, // Hide TextField's border
+            ),
+          ),
         ),
+        // Text(
+        //   'Whatsapp Text',
+        //   style: TextStyles.s14_w500_c939292_lato,
+        // ),
       ),
     );
   }
@@ -454,6 +470,11 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     setState(() {
       templateIdInitVal = newValue;
     });
+    BlocProvider.of<SendMessageBloc>(context).add(
+        GetTemplateIdMessageEvent(
+          groupId: templateIdInitVal?.split(' ').first??""
+        )
+    );
     debugPrint('SIM 1 temp id callback $newValue');
   }
 
@@ -691,7 +712,12 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                     ),
                   ),
                 ),
-                BlocBuilder<SendMessageBloc, SendMessageState>(
+                BlocConsumer<SendMessageBloc, SendMessageState>(
+                  listener: (context, state){
+                    if(state is UploadCsvSuccessState){
+                      uploadFilePath = state.csvModel.data?.fileName??"";
+                    }
+                  },
                     builder: (context, state){
                       if(state is UploadCsvLoadingState){
                         return Text(
