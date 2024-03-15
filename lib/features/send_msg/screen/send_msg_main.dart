@@ -26,6 +26,7 @@ class SendMsgMainScreen extends StatefulWidget {
 class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   final TextEditingController _cmpgnNmController = TextEditingController();
+  final TextEditingController _whatsAppMessageController = TextEditingController();
 
   List<String?>? templateTypeList = [];
   List<String?>? countryCdList = [];
@@ -34,6 +35,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   String? templateTypeInitVal = '';
   String? countryCdInitVal = '';
   String? templateIdInitVal;
+  String uploadFilePath = "";
 
   bool isDuplicateData = false;
   bool isUploadFile = false;
@@ -92,6 +94,9 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
               }
               else if(state is SendOrScheduleSuccessState) {
                 //
+              } 
+              else if(state is GetTemplateIdMessageSuccessState){
+                  _whatsAppMessageController.text = state.templateIdMessageModel.data?[0].tbodytext??"";
               }
             }),
             child: BlocBuilder<SendMessageBloc, SendMessageState>(
@@ -135,9 +140,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
             ),
           ),
         ):const SizedBox(),
-        _getDuplicate(),
-        // _getUploadFileRow(),
-        // _getLinkRow(),
         _tempIdDrpdwn(),
         _getWhtAppTxt(),
         _getDuplicate(),
@@ -352,8 +354,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   totalgroupMember: '',
                   mobileList: '',
                   allowDuplicate: isDuplicateData ? true : false,  
-                  duplicate: '',
-                  notDuplicate: '',
+                  duplicate: '0', // always
+                  notDuplicate: '0', // always
                   mobileCount: '',
                   manual: true,
                   templateId: '',
@@ -365,14 +367,14 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   msgText: '',
                   locnameid: '',
                   headerType: '', 
-                  lstMappedField: const [],
-                  senderId: '',
-                  chkOptOut: false,
-                  optOut: '',
-                  lstTemplateFld: const [],
+                  lstMappedField: const [],  // always
+                  senderId: '', // always
+                  chkOptOut: false, // always
+                  optOut: '', // always
+                  lstTemplateFld: const [], // always
                   lstScheduleDate: const [],
-                  mediaFileName: '',
-                  mediaUrl: '',
+                  mediaFileName: '', // always
+                  mediaUrl: '', // always
                   scratchCard: false,
                   totCount: '',
                   preview: '',
@@ -538,6 +540,12 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     setState(() {
       templateIdInitVal = newValue;
     });
+
+    BlocProvider.of<SendMessageBloc>(context).add(
+      GetTemplateIdMessageEvent(
+        groupId: templateIdInitVal?.split(' ').first??""
+      )
+    );
   }
 
   int currentIndex = 0;
@@ -579,7 +587,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 setState((){
                   currentIndex = 1;
                 });
-                var data = showDialog(
+                showDialog(
                   context: context,
                   builder: (context) {
                     return const GroupList();
@@ -606,6 +614,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
       ],
     );
   }
+
 
   _cmnCircularActnBtn(int index, bool isTapped, void Function()? onTap, String title) {
     return InkWell(
@@ -673,9 +682,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                       BlocProvider.of<SendMessageBloc>(context).add(
                           UploadCsv(fileType: File(filePath))
                       );
-                      setState(() {
-                        isUploadFile = true;
-                      });
                       // Use the file path as needed
                     }
                     // upload file on tap
@@ -707,7 +713,12 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                     ),
                   ),
                 ),
-                BlocBuilder<SendMessageBloc, SendMessageState>(
+                BlocConsumer<SendMessageBloc, SendMessageState>(
+                  listener: (context, state){
+                    if(state is UploadCsvSuccessState){
+                      uploadFilePath = state.csvModel.data?.fileName??"";
+                    }
+                  },
                     builder: (context, state){
                       if(state is UploadCsvLoadingState){
                         return Text(
@@ -770,6 +781,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
       ),
     );
   }
+
 
   _getScheduleDialog() {
     return Dialog(
