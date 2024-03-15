@@ -15,6 +15,9 @@ import 'package:mim_whatsup/features/user_chat/repo/repo.dart';
 import 'package:mim_whatsup/features/user_chat_filter/bloc/bloc.dart';
 import 'package:mim_whatsup/features/user_chat_filter/repo/repo.dart';
 
+import '../features/send_msg/unique_count/bloc/unique_bloc.dart';
+import '../features/send_msg/unique_count/repo/unique_repo.dart';
+
 class ParentBlocProviders extends StatelessWidget {
 
   final Widget child;
@@ -55,6 +58,11 @@ class ParentBlocProviders extends StatelessWidget {
           create: (BuildContext context) => SendMessageBloc(
             repo: SendMsgRepoImpl()
           )
+        ),
+        BlocProvider<UniqueBloc>(
+            create: (BuildContext context) => UniqueBloc(
+                repo: UniqueRepoImpl()
+            )
         ),
       ],
       child: child,

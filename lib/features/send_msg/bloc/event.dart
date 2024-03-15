@@ -34,6 +34,20 @@ class UploadCsv extends SendMsgEvent {
   List<Object> get props => [];
 }
 
+class PostGroupEvent extends SendMsgEvent {
+  List<String> groupId;
+  PostGroupEvent({required this.groupId});
+  @override
+  List<Object> get props => [];
+}
+
+class GetTemplateIdMessageEvent extends SendMsgEvent {
+  String groupId;
+  GetTemplateIdMessageEvent({required this.groupId});
+  @override
+  List<Object> get props => [];
+}
+
 class GetSendorScheduleEvent extends SendMsgEvent {
 
   String? countrycode;

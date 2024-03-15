@@ -13,6 +13,10 @@ import 'package:mim_whatsup/features/send_msg/model/templateType_model.dart';
 import 'package:mim_whatsup/features/send_msg/repo/repo.dart';
 import 'package:mim_whatsup/utils/jsonPostData.dart';
 
+import '../model/template_id_message_model.dart';
+import '../unique_count/model/get_unique_count_model.dart';
+import '../model/post_group_model.dart';
+
 class SendMessageBloc extends Bloc<SendMsgEvent, SendMessageState> {
   
   SendMsgRepo repo;
@@ -164,6 +168,43 @@ class SendMessageBloc extends Bloc<SendMsgEvent, SendMessageState> {
       } catch(e) {
         debugPrint('Temp 003');
         emit(UploadCsvFailedState(e.toString()));
+      }
+    }));
+
+    on<PostGroupEvent>(((event, emit) async {
+      emit(PostGroupLoadingState());
+      try{
+        Map jsonPostData = {
+          "ListGroupItem": event.groupId,
+        };
+        PostGroupModel postGroupModel = await repo.postGroup(jsonPostData: jsonPostData);
+        if(postGroupModel.statusCode == 200) {
+          debugPrint('Temp 001');
+          emit(PostGroupSuccessState(postGroupModel));
+        } else {
+          debugPrint('Temp 002');
+          emit(PostGroupFailedState(postGroupModel.error.toString()));
+        }
+      } catch(e) {
+        debugPrint('Temp 003');
+        emit(PostGroupFailedState(e.toString()));
+      }
+    }));
+
+    on<GetTemplateIdMessageEvent>(((event, emit) async {
+      emit(GetTemplateIdMessageLoadingState());
+      try{
+        TemplateIdMessageModel getTemplateIdMessageModel = await repo.getTemplateIdMessage(id: event.groupId);
+        if(getTemplateIdMessageModel.statusCode == 200) {
+          debugPrint('Temp 001');
+          emit(GetTemplateIdMessageSuccessState(getTemplateIdMessageModel));
+        } else {
+          debugPrint('Temp 002');
+          emit(GetTemplateIdMessageFailedState(getTemplateIdMessageModel.error.toString()));
+        }
+      } catch(e) {
+        debugPrint('Temp 003');
+        emit(GetTemplateIdMessageFailedState(e.toString()));
       }
     }));
   }

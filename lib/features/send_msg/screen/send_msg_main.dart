@@ -352,8 +352,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   totalgroupMember: '',
                   mobileList: '',
                   allowDuplicate: isDuplicateData ? true : false,  
-                  duplicate: '0', // always pass 0
-                  notDuplicate: '0', // always pass 0
+                  duplicate: '',
+                  notDuplicate: '',
                   mobileCount: '',
                   manual: true,
                   templateId: '',
@@ -365,14 +365,14 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   msgText: '',
                   locnameid: '',
                   headerType: '', 
-                  lstMappedField: const [], // always blank
-                  senderId: '', // always blank
-                  chkOptOut: false, // always false
-                  optOut: '', // always blank
+                  lstMappedField: const [],
+                  senderId: '',
+                  chkOptOut: false,
+                  optOut: '',
                   lstTemplateFld: const [],
                   lstScheduleDate: const [],
-                  mediaFileName: '', // always blank
-                  mediaUrl: '', // always blank
+                  mediaFileName: '',
+                  mediaUrl: '',
                   scratchCard: false,
                   totCount: '',
                   preview: '',

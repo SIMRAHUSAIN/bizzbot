@@ -61,4 +61,13 @@ class Apis {
 
   //Get Report
   static const getReport = '$domain/GetSummaryReport?';
+
+  //Get Group Unique count
+  static const uniqueCount = '$domain/GetGroupIdWiseMobileCount?GroupId=';
+
+  //Post the group number
+  static const groupNumberSave = '$domain/GroupListNumber';
+
+  //Get Message As Per template Id
+  static const getTemplateIdMessage = '$domain/GetMsgText?TemplateId=';
 }
