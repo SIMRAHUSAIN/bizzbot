@@ -34,7 +34,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   String? templateTypeInitVal = '';
   String? countryCdInitVal = '';
-  String? templateIdInitVal;
+  String? templateIdInitVal = '';
   String uploadFilePath = "";
 
   bool isDuplicateData = false;
@@ -88,9 +88,15 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 }
               } 
               else if(state is TemplateIdSuccessState) {
+                templateIdInitVal = state.templateIdModel.data![0].name!;
                 for(int i = 0; i < state.templateIdModel.data!.length; i++) {
                   templateIdList!.add(state.templateIdModel.data![i].name.toString());
                 }
+                BlocProvider.of<SendMessageBloc>(context).add(
+                    GetTemplateIdMessageEvent(
+                        groupId: templateIdInitVal?.split(' ').first??""
+                    )
+                );
               }
               else if(state is SendOrScheduleSuccessState) {
                 //
@@ -139,7 +145,10 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
               ),
             ),
           ),
-        ):const SizedBox(),
+        ):SizedBox(),
+        _getDuplicate(),
+        // _getUploadFileRow(),
+        // _getLinkRow(),
         _tempIdDrpdwn(),
         _getWhtAppTxt(),
         _getDuplicate(),
@@ -325,9 +334,17 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
       ),
       child: Align(
         alignment: Alignment.centerLeft,
-        child: Text(
-          'Whatsapp Text',
-          style: TextStyles.s14_w500_c939292_lato,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _whatsAppMessageController,
+            maxLines: 10, // Set maxLines to allow at least 5 lines
+            keyboardType: TextInputType.multiline,
+            decoration: InputDecoration(
+              hintText: 'Whatsapp Text',
+              border: InputBorder.none, // Hide TextField's border
+            ),
+          ),
         ),
       ),
     );
@@ -494,7 +511,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   style: TextStyles.s14_w400_cB3AEAE,
                 ),
                 isExpanded: true,
-                items: templateIdList!.map<DropdownMenuItem<String>>((String? value) {
+                items: templateIdList != null
+                    ? templateIdList!.map<DropdownMenuItem<String>>((String? value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
@@ -504,13 +522,13 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                       style: TextStyles.s16_w700_c137700,
                     ),
                   );
-                }).toList(),
+                }).toSet().toList() : [],
                 icon: const Icon(
                   Icons.keyboard_arrow_down,
                   color: c137700,
                 ),
                 iconSize: 30,
-                value: templateIdInitVal,
+                value: templateIdInitVal!.isNotEmpty ? templateIdInitVal : '',
                 style: TextStyles.s16_w700_c137700,
                 onChanged: _templateIdCallback,
                 decoration: const InputDecoration(
