@@ -36,9 +36,14 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   String? countryCdInitVal = '';
   String? templateIdInitVal = '';
   String uploadFilePath = "";
+  String totalCount = "0", uniqueCount = "0";
+  Map<String, Map<String, int>> mapData = {};
+  Map<int, TextEditingController> textControllers = {};
+
 
   bool isDuplicateData = false;
   bool isUploadFile = false;
+  List<Widget> textFields = [];
 
   @override
   void initState() {
@@ -103,6 +108,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
               } 
               else if(state is GetTemplateIdMessageSuccessState){
                   _whatsAppMessageController.text = state.templateIdMessageModel.data?[0].tbodytext??"";
+                  _getVarTextField();
               }
             }),
             child: BlocBuilder<SendMessageBloc, SendMessageState>(
@@ -151,6 +157,10 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         // _getLinkRow(),
         _tempIdDrpdwn(),
         _getWhtAppTxt(),
+        _whatsAppMessageController.text.contains("{{")?
+        Column(
+          children: textFields,
+        ):Container(),
         _getDuplicate(),
         _getActnBtnRow()
       ],
@@ -348,6 +358,84 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         ),
       ),
     );
+  }
+
+  _getVarTextField() {
+    String inputText = _whatsAppMessageController.text;
+    List<String> splitText = inputText.split(RegExp(r'\{\{\d+\}\}'));
+    for (int i = 0; i < splitText.length - 1; i++) {
+      mapData["{{${i+1}}}"] = {"{{${i+1}}}": _whatsAppMessageController.text.indexOf("{{${i+1}}}")};
+      print(mapData["{{${i+1}}}"]);
+        TextEditingController controller = TextEditingController(text: '');
+        textControllers[i] = controller;
+        int initialIndex = 0;
+        textFields.add(
+            Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              height: MediaQuery.of(context).size.height * 0.07,
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: c137700.withOpacity(0.08),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: controller,
+                    onChanged: (value) {
+                      if(_whatsAppMessageController.text.contains("{{${i+1}}")){
+                        initialIndex = _whatsAppMessageController.text.indexOf("{{${i+1}}}");
+                      }
+                      _updateText(i + 1, value, mapData, initialIndex, splitText.length);
+                    },
+                    maxLines: 1,
+                    textAlign: TextAlign.left,
+                    textAlignVertical: TextAlignVertical.center,
+                    decoration: InputDecoration(
+                      hintText: "{{${i+1}}}",
+                      border: InputBorder.none, // Hide TextField's border
+                    ),
+                  ),
+                ),
+              ),
+            )
+        );
+      }
+  }
+
+  void _updateText(int index, String value, Map targetMapValue, int initialIndex, int splitTextLength) {
+    Map<String, int> placeholderMap = targetMapValue["{{${index}}}"];
+    print("Hi index: $index value: $value map: $targetMapValue intialIndex: $initialIndex");
+    String currentText = _whatsAppMessageController.text;
+    // initialIndex = currentText.indexOf(index>1?targetMapValue["{{${index-1}}}"]:targetMapValue["{{${index}}}"], initialIndex);
+    // int placeholderIndex = currentText.indexOf(placeholder, initialIndex);
+    // if (placeholderIndex != -1) {
+    //   int endIndex = placeholderIndex + placeholder.length;
+    String placeHolderKey = placeholderMap.entries.first.key;
+    int initial = placeholderMap[placeHolderKey]??0;
+    print("HELLO Key: $placeHolderKey Value: $initial PlaceholderKey: ${placeHolderKey.length}");
+    print("Interim Index Value: $index Value Length: ${value.length} Intial Value: $initial Total Length: ${initial+placeHolderKey.length}");
+    String newText = currentText.replaceRange(
+          initial, initial+placeHolderKey.length, value);
+    if(index == 1){
+      mapData["{{${index}}}"] = {value: initial};
+    }
+    for (int i = index; i<splitTextLength-1; i++) {
+      mapData["{{${i+1}}}"] = {mapData["{{${i+1}}}"]?.entries.first.key??"": ((mapData["{{${i+1}}}"]?.entries.first.value??0)+1-(_whatsAppMessageController.text.contains("{{1}}")?5:0))};
+    }
+    if(index > 1){
+      mapData["{{${index}}}"] = {value: ((mapData["{{${index}}}"]?.entries.first.value??0))};
+    }
+    print("BYE New Map Value: $mapData");
+      _whatsAppMessageController.text = newText;
+    // }    // String newText = currentText.replaceAll(targetMapValue["{{$index}}"], value);
+    // print("OK ${newText}");
+    // mapData["{{$index}}"] = value;
+    // _whatsAppMessageController.text = newText;
+    // print("HII ${_whatsAppMessageController.text}");
   }
 
   _getActnBtnRow() {
@@ -564,6 +652,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         groupId: templateIdInitVal?.split(' ').first??""
       )
     );
+    textFields = [];
   }
 
   int currentIndex = 0;
@@ -608,7 +697,12 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return const GroupList();
+                    return GroupList(
+                      callBack: (String totalCountValue, String uniqueCountValue){
+                        totalCount = totalCountValue;
+                        uniqueCount = uniqueCountValue;
+                      }
+                    );
                   }
                 );
               },
