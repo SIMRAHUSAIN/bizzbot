@@ -11,25 +11,18 @@ import 'package:mim_whatsup/features/send_msg/model/templateType_model.dart';
 import 'package:mim_whatsup/utils/apis.dart';
 import 'package:mim_whatsup/utils/global_variables.dart';
 import 'package:mim_whatsup/widgets/log_printer.dart';
-
 import '../model/template_id_message_model.dart';
-import '../unique_count/model/get_unique_count_model.dart';
 import '../model/post_group_model.dart';
 
 abstract class SendMsgRepo {
   Future<CountryCodeModel> getCountryCode();
-
   Future<TemplateTypeModel> getTemplateType();
-
   Future<TemplateIdModel> getTemplateId();
   Future<GetGroupModel> getGroup();
   Future<CsvModel> getCsv({required File file});
   Future<PostGroupModel> postGroup({required Map jsonPostData});
   Future<TemplateIdMessageModel> getTemplateIdMessage({required String id});
-
-  Future<SendScheduleModel> getSendorSchedule(
-    jsonPostData
-  );
+  Future<SendScheduleModel> getSendorSchedule(jsonPostData);
 }
 
 class SendMsgRepoImpl extends SendMsgRepo {
@@ -159,7 +152,7 @@ class SendMsgRepoImpl extends SendMsgRepo {
 
   @override
   Future<CsvModel> getCsv({required File file}) async {
-    print("HELLO");
+    debugPrint("LAMA HELLO");
     Map<String, String> customHeaders = {
       'Authorization': 'Bearer ${GlobalVar.globalToken}',
       'Content-Type': 'multipart/form-data',
@@ -173,17 +166,17 @@ class SendMsgRepoImpl extends SendMsgRepo {
       print(response.statusCode);
       //LogPrinter().logPrinter(response, {}, jsonPretty: true);
       if (response.statusCode == 200) {
-        print("A");
+        debugPrint("LAMA A");
         var responseBody = await response.stream.bytesToString();
-        print("B");
+        debugPrint("LAMA B");
         var data = json.decode(responseBody);
-        print("C $data");
+        debugPrint("LAMA C $data");
         CsvModel sendFileModel = CsvModel.fromJson(data);
-        print("D");
+        debugPrint("LAMA D");
         return sendFileModel;
       } else {
         var responseBody = await response.stream.bytesToString();
-        print("RAHUL ${json.decode(responseBody)}");
+        debugPrint("RAHUL ${json.decode(responseBody)}");
         var data = {"statusCode": "500", "error": "Upload Failed", "data": null};
         CsvModel sendFileModel = CsvModel.fromJson(data);
         return sendFileModel;
@@ -259,38 +252,6 @@ class SendMsgRepoImpl extends SendMsgRepo {
       throw Exception();
     }
   }
-
-  // @override
-  // Future<GetUniqueCountModel> getUniqueCount({required String id}) async {
-  //   try {
-  //     http.Response response = await http.get(
-  //         Uri.parse(Apis.uniqueCount+id),
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           "Authorization": "Bearer ${GlobalVar.globalToken}"
-  //         }
-  //     );
-  //     var data = json.decode(response.body);
-  //     LogPrinter().logPrinter(response, {}, jsonPretty: true);
-  //     if (response.statusCode == 200) {
-  //       debugPrint('Temp Type 01');
-  //       GetUniqueCountModel model = GetUniqueCountModel.fromJson(data);
-  //       return model;
-  //     } else {
-  //       debugPrint('Temp Type 02');
-  //       var jsonData = {
-  //         "statusCode": data["statusCode"],
-  //         "error": data["error"],
-  //         "data": null
-  //       };
-  //       GetUniqueCountModel model = GetUniqueCountModel.fromJson(jsonData);
-  //       return model;
-  //     }
-  //   } catch(e) {
-  //     debugPrint('Temp Type 03');
-  //     throw Exception();
-  //   }
-  // }
 
   @override
   Future<TemplateIdMessageModel> getTemplateIdMessage({required String id}) async {

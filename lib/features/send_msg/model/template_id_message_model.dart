@@ -11,15 +11,15 @@ class TemplateIdMessageModel {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['statusCode'] = this.statusCode;
-    data['error'] = this.error;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['statusCode'] = statusCode;
+    data['error'] = error;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -179,55 +179,55 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['TemplateID'] = this.templateID;
-    data['tbodytext'] = this.tbodytext;
-    data['nId'] = this.nId;
-    data['UserId'] = this.userId;
-    data['tName'] = this.tName;
-    data['tType'] = this.tType;
-    data['tCategory'] = this.tCategory;
-    data['tLanguage'] = this.tLanguage;
-    data['MsgText'] = this.msgText;
-    data['caption'] = this.caption;
-    data['FileUploadOrURL'] = this.fileUploadOrURL;
-    data['URL'] = this.uRL;
-    data['fileupload'] = this.fileupload;
-    data['filename'] = this.filename;
-    data['RequestDate'] = this.requestDate;
-    data['AllotorReject'] = this.allotorReject;
-    data['AllotorRejectBy'] = this.allotorRejectBy;
-    data['AllotorRejectDate'] = this.allotorRejectDate;
-    data['IsActive'] = this.isActive;
-    data['InsertDateTime'] = this.insertDateTime;
-    data['tHeadType'] = this.tHeadType;
-    data['tHeadText'] = this.tHeadText;
-    data['tFootText'] = this.tFootText;
-    data['tBodyText1'] = this.tBodyText1;
-    data['tHeadLocLatitude'] = this.tHeadLocLatitude;
-    data['tHeadLocLongitude'] = this.tHeadLocLongitude;
-    data['tButton1Id'] = this.tButton1Id;
-    data['tButton1Title'] = this.tButton1Title;
-    data['tButton2Id'] = this.tButton2Id;
-    data['tButton2Title'] = this.tButton2Title;
-    data['tButton3Id'] = this.tButton3Id;
-    data['tButton3Title'] = this.tButton3Title;
-    data['tListTitle'] = this.tListTitle;
-    data['Phone'] = this.phone;
-    data['VartBodyText'] = this.vartBodyText;
-    data['btnAutoReply1'] = this.btnAutoReply1;
-    data['btnAutoReply2'] = this.btnAutoReply2;
-    data['btnAutoReply3'] = this.btnAutoReply3;
-    data['btnType'] = this.btnType;
-    data['CTA_URL'] = this.cTAURL;
-    data['CTA_PHONENO'] = this.cTAPHONENO;
-    data['CTA_COUNTRYCODE'] = this.cTACOUNTRYCODE;
-    data['EnableScratch'] = this.enableScratch;
-    data['Connect_Agent'] = this.connectAgent;
-    data['Connect_Agent_Code'] = this.connectAgentCode;
-    data['ctaCallStaticOrDynamic'] = this.ctaCallStaticOrDynamic;
-    data['ctaUrlStaticOrDynamic'] = this.ctaUrlStaticOrDynamic;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['TemplateID'] = templateID;
+    data['tbodytext'] = tbodytext;
+    data['nId'] = nId;
+    data['UserId'] = userId;
+    data['tName'] = tName;
+    data['tType'] = tType;
+    data['tCategory'] = tCategory;
+    data['tLanguage'] = tLanguage;
+    data['MsgText'] = msgText;
+    data['caption'] = caption;
+    data['FileUploadOrURL'] = fileUploadOrURL;
+    data['URL'] = uRL;
+    data['fileupload'] = fileupload;
+    data['filename'] = filename;
+    data['RequestDate'] = requestDate;
+    data['AllotorReject'] = allotorReject;
+    data['AllotorRejectBy'] = allotorRejectBy;
+    data['AllotorRejectDate'] = allotorRejectDate;
+    data['IsActive'] = isActive;
+    data['InsertDateTime'] = insertDateTime;
+    data['tHeadType'] = tHeadType;
+    data['tHeadText'] = tHeadText;
+    data['tFootText'] = tFootText;
+    data['tBodyText1'] = tBodyText1;
+    data['tHeadLocLatitude'] = tHeadLocLatitude;
+    data['tHeadLocLongitude'] = tHeadLocLongitude;
+    data['tButton1Id'] = tButton1Id;
+    data['tButton1Title'] = tButton1Title;
+    data['tButton2Id'] = tButton2Id;
+    data['tButton2Title'] = tButton2Title;
+    data['tButton3Id'] = tButton3Id;
+    data['tButton3Title'] = tButton3Title;
+    data['tListTitle'] = tListTitle;
+    data['Phone'] = phone;
+    data['VartBodyText'] = vartBodyText;
+    data['btnAutoReply1'] = btnAutoReply1;
+    data['btnAutoReply2'] = btnAutoReply2;
+    data['btnAutoReply3'] = btnAutoReply3;
+    data['btnType'] = btnType;
+    data['CTA_URL'] = cTAURL;
+    data['CTA_PHONENO'] = cTAPHONENO;
+    data['CTA_COUNTRYCODE'] = cTACOUNTRYCODE;
+    data['EnableScratch'] = enableScratch;
+    data['Connect_Agent'] = connectAgent;
+    data['Connect_Agent_Code'] = connectAgentCode;
+    data['ctaCallStaticOrDynamic'] = ctaCallStaticOrDynamic;
+    data['ctaUrlStaticOrDynamic'] = ctaUrlStaticOrDynamic;
     return data;
   }
 }

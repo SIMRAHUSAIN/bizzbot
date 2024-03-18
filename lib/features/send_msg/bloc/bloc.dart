@@ -12,9 +12,7 @@ import 'package:mim_whatsup/features/send_msg/model/get_group_model.dart';
 import 'package:mim_whatsup/features/send_msg/model/templateType_model.dart';
 import 'package:mim_whatsup/features/send_msg/repo/repo.dart';
 import 'package:mim_whatsup/utils/jsonPostData.dart';
-
 import '../model/template_id_message_model.dart';
-import '../unique_count/model/get_unique_count_model.dart';
 import '../model/post_group_model.dart';
 
 class SendMessageBloc extends Bloc<SendMsgEvent, SendMessageState> {

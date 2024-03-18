@@ -20,4 +20,5 @@ class ImageAssets {
   static const String logOutIcon = 'assets/logout.png';
   static const String mimLogo = 'assets/mim_logo.png';
   static const String uploadPng = 'assets/upload.png';
+  static const String calenderPng = 'assets/calender.png';
 }

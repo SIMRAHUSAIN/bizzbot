@@ -1,9 +1,10 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_typing_uninitialized_variables
 
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/bloc.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/event.dart';
 import 'package:mim_whatsup/features/send_msg/bloc/state.dart';
@@ -27,6 +28,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   final TextEditingController _cmpgnNmController = TextEditingController();
   final TextEditingController _whatsAppMessageController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
 
   List<String?>? templateTypeList = [];
   List<String?>? countryCdList = [];
@@ -39,6 +42,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   bool isDuplicateData = false;
   bool isUploadFile = false;
+  
+  var groupData;
 
   @override
   void initState() {
@@ -67,11 +72,11 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         ),
       ),
       backgroundColor: cFFFFFF,
-      body: SingleChildScrollView(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: SingleChildScrollView(
           child: BlocListener<SendMessageBloc, SendMessageState>(
             listener: ((context, state) {
               debugPrint('SIM Send Message states --> $state');
@@ -110,8 +115,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 return _getBodyContent();
               })),
             )
-          )
-        ),
+          ),
+        )
       ),
     );
   }
@@ -130,25 +135,22 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           child: Container(
             height: 200,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey), // Add border
-              borderRadius: BorderRadius.circular(8.0), // Optional: Add border radius
+              border: Border.all(color: Colors.grey), 
+              borderRadius: BorderRadius.circular(8.0), 
             ),
             child: const Padding(
               padding: EdgeInsets.all(8.0),
               child: TextField(
-                maxLines: 5, // Set maxLines to allow at least 5 lines
+                maxLines: 5, 
                 keyboardType: TextInputType.multiline,
                 decoration: InputDecoration(
                   hintText: 'Enter up to five lines of text',
-                  border: InputBorder.none, // Hide TextField's border
+                  border: InputBorder.none,
                 ),
               ),
             ),
           ),
-        ):SizedBox(),
-        _getDuplicate(),
-        // _getUploadFileRow(),
-        // _getLinkRow(),
+        ):const SizedBox(),
         _tempIdDrpdwn(),
         _getWhtAppTxt(),
         _getDuplicate(),
@@ -338,11 +340,11 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           padding: const EdgeInsets.all(8.0),
           child: TextField(
             controller: _whatsAppMessageController,
-            maxLines: 10, // Set maxLines to allow at least 5 lines
+            maxLines: 10,
             keyboardType: TextInputType.multiline,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Whatsapp Text',
-              border: InputBorder.none, // Hide TextField's border
+              border: InputBorder.none,
             ),
           ),
         ),
@@ -367,8 +369,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   xLUPLOADED: isUploadFile ? 'Y' : '',
                   uPLOADFILENM: '',
                   group: false,
-                  dTXLDistinct: '',
-                  totalgroupMember: '',
+                  dTXLDistinct: const [], // pass fetched group list
+                  totalgroupMember: groupData ?? '',
                   mobileList: '',
                   allowDuplicate: isDuplicateData ? true : false,  
                   duplicate: '0', // always
@@ -407,56 +409,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   textBox10: "",
                 )
               );
-              /* 
-              "{
-    ""JSONPostData"": {
-        ""Countrycode"": ""91"",
-        ""WhatsappType"": ""Media Template"",
-        ""CampaignName"": ""25OCTtesting1"",
-        ""XLUPLOADED"": ""Y"",
-        ""UPLOADFILENM"": ""MIM2200038_20231025113546045.csv"",
-        ""group"": """",
-        ""DTXLDistinct"": [],
-        ""TotalgroupMember"": """",
-        ""MobileList"": """",
-        ""AllowDuplicate"": ""false"",
-        ""Duplicate"": """",
-        ""NotDuplicate"": ""2"",
-        ""MobileCount"": ""2"",
-        ""Manual"": ""false"",
-        ""TemplateId"": ""1716"",
-        ""CbFailover"": ""false"",
-        ""FileOrUrl"": ""FILE"",
-        ""MediaUName"": ""2ec7bbd3-3cbc-445b-8593-277af7b98790.png"",
-        ""FileUrl"": """",
-        ""Caption"": """",
-        ""MsgText"": ""Hello {{1}} Testing image"",
-        ""Locname"": """",
-        ""HeaderType"": """",
-        ""lstMappedField"": [],
-        ""SenderId"": """",
-        ""chkOptOut"": ""false"",
-        ""OptOut"": ""DND7726"",
-        ""lstTemplateFld"": [],
-        ""lstScheduleDate"": [],
-        ""MediaFileName"": """",
-        ""MediaUrl"": ""2ec7bbd3-3cbc-445b-8593-277af7b98790.png"",
-        ""ScratchCard"": ""0"",
-        ""TotCount"": ""2"",
-        ""Preview"": """",
-        ""TextBox1"": ""Hello"",
-        ""TextBox2"": """",
-        ""TextBox3"": """",
-        ""TextBox4"": """",
-        ""TextBox5"": """",
-        ""TextBox6"": """",
-        ""TextBox7"": """",
-        ""TextBox8"": """",
-        ""TextBox9"": """",
-        ""TextBox10"": """"
-            }
-        }"
-              */
             },
             btnColor: cECF7FF,
           ),
@@ -605,7 +557,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 setState((){
                   currentIndex = 1;
                 });
-                showDialog(
+                groupData = showDialog(
                   context: context,
                   builder: (context) {
                     return const GroupList();
@@ -632,7 +584,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
       ],
     );
   }
-
 
   _cmnCircularActnBtn(int index, bool isTapped, void Function()? onTap, String title) {
     return InkWell(
@@ -733,6 +684,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 ),
                 BlocConsumer<SendMessageBloc, SendMessageState>(
                   listener: (context, state){
+                    debugPrint('LAMA 4 $state');
                     if(state is UploadCsvSuccessState){
                       uploadFilePath = state.csvModel.data?.fileName??"";
                     }
@@ -800,7 +752,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     );
   }
 
-
   _getScheduleDialog() {
     return Dialog(
         child: SizedBox(
@@ -811,6 +762,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                     color: c0D8578,
                     height: 50,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
+                    margin: const EdgeInsets.only(bottom: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -823,7 +775,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   ),
                   Container(
                     color: cFFFFFF,
-                    height: MediaQuery.of(context).size.height * 0.28,
+                    height: MediaQuery.of(context).size.height * 0.25,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -833,19 +785,70 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                               'Schedule Date 1',
                               style: TextStyles.s14_w600_c000000,
                             ),
-                            Container(
-                              height: 40,
-                              width: 100,
-                              margin: const EdgeInsets.only(top: 5),
-                              decoration: BoxDecoration(
-                                color: cFFFFFF,
-                                border: Border.all(
-                                  color: c000000,
-                                  width: 1,
+                            GestureDetector(
+                              onTap: () async {
+                                  DateTime? date = await showDatePicker(
+                                    context: context,
+                                    lastDate: DateTime(2100),
+                                    firstDate: DateTime(1900),
+                                    initialDate: DateTime.now(),
+                                  );
+                                  if(date != null) {
+                                    debugPrint('SIM calender date $date');
+                                    String formattedDate = DateFormat('dd-mm-yyyy').format(date);
+                                    debugPrint('SIM formateDate $formattedDate');
+                                    setState(() {
+                                      dateController.text = formattedDate;
+                                    });
+                                  } 
+                                },
+                              child: Container(
+                                height: 40,
+                                width: 130,
+                                margin: const EdgeInsets.only(top: 5),
+                                decoration: BoxDecoration(
+                                  color: cFFFFFF,
+                                  border: Border.all(
+                                    color: c000000,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: 60,
+                                      height: 40,
+                                      child: TextField(
+                                        controller: dateController,
+                                        enabled: false,
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w700,
+                                          color: c000000,
+                                        ),
+                                        decoration: const InputDecoration(
+                                            hintText: "dd-mm-yyyy",
+                                            hintStyle: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.grey,
+                                            ),
+                                          contentPadding: EdgeInsets.zero
+                                        ),
+                                      ),
+                                    ),
+                                    Image.asset(
+                                      ImageAssets.calenderPng,
+                                      fit: BoxFit.cover,
+                                      height: 18,
+                                      width: 18,
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: const Text(''),
                             ),
                           ],
                         ),
@@ -855,19 +858,44 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                               'Time (HH:MM)',
                               style: TextStyles.s14_w600_c000000,
                             ),
-                            Container(
-                              height: 40,
-                              width: 100,
-                              margin: const EdgeInsets.only(top: 5),
-                              decoration: BoxDecoration(
-                                color: cFFFFFF,
-                                border: Border.all(
-                                  color: c000000,
-                                  width: 1,
+                            GestureDetector(
+                              onTap: () async {
+                                final TimeOfDay? timePicker = await showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay.now()
+                                );
+                                if(timePicker != null) {
+                                  setState(() {
+                                    timeController.text = "${timePicker.hour}:${timePicker.minute}";
+                                  });
+                                }
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 120,
+                                margin: const EdgeInsets.only(top: 5),
+                                decoration: BoxDecoration(
+                                  color: cFFFFFF,
+                                  border: Border.all(
+                                    color: c000000,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                borderRadius: BorderRadius.circular(8),
+                                child: TextField(
+                                  controller: timeController,
+                                    enabled: false,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      color: c000000,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    decoration: const InputDecoration(
+                                    contentPadding: EdgeInsets.zero
+                                  ),
+                                ),
                               ),
-                              child: const Text(''),
                             ),
                           ],
                         ),
@@ -900,7 +928,13 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                             ),
                           ),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              setState(() {
+                                dateController.clear();
+                                timeController.clear();
+                              });
+                              Navigator.pop(context);
+                            },
                             child: Container(
                               margin: const EdgeInsets.only(left: 10, right: 8),
                               padding: const EdgeInsets.symmetric(

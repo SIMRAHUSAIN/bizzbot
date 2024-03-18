@@ -40,38 +40,28 @@ class _GroupListState extends State<GroupList> {
         children: [
           BlocConsumer<SendMessageBloc, SendMessageState>(
             listener: (context, state){
-              print("LAMA ${state.toString()} ${isCheckedList}");
+              debugPrint("LAMA 1 ${state.toString()} $isCheckedList");
               if(state is PostGroupSuccessState){
                 groupMobileNumber = state.postGroupModel.data!.map((e) => e.mobile!.toString()).toList();
-                Navigator.pop(context);
+                Navigator.pop(context, totalCount);
               } else if(state is PostGroupFailedState){
                 Navigator.pop(context);
               }
             },
-            // buildWhen: (prev, current){
-            //   if(current is GetUniqueCountLoadingState || current is GetUniqueCountSuccessState || current is GetUniqueCountFailedState
-            //    || current is PostGroupLoadingState || current is PostGroupSuccessState || current is PostGroupFailedState
-            //   ){
-            //     return false;
-            //   } else {
-            //     return  true;
-            //   }
-            // },
             builder: (context, state){
-              print("RAHUL ${state.toString()} ${isCheckedList}");
+              debugPrint("LAMA 2 ${state.toString()} $isCheckedList");
               if(state is GetGroupLoadingState){
-                return Container(
+                return SizedBox(
                   height: MediaQuery.of(context).size.height * 0.5,
                   child: const Center(
                     child: CircularProgressIndicator(),
                   ),
                 );
-              }
-              else if(state is GetGroupSuccessState){
+              } else if(state is GetGroupSuccessState){
                 isCheckedList = [];
                 isCheckedList = List.generate(state.getGroupModel.data?.length??0, (index) => false);
                 groupListCount = state.getGroupModel.data?.length??0;
-                return Container(
+                return SizedBox(
                   height: MediaQuery.of(context).size.height * 0.47,
                   child: StatefulBuilder(
                     builder: (context, stateChange){
@@ -96,12 +86,12 @@ class _GroupListState extends State<GroupList> {
                             padding: const EdgeInsets.only(left: 10, top: 15),
                             child: Row(
                               children: [
-                                Container(
+                                SizedBox(
                                   height: 25,
                                   width: 25,
                                   child: Checkbox(
                                     onChanged: (newValue) {
-                                      print("RAHUL $groupListCount $isCheckedList");
+                                      debugPrint("RAHUL $groupListCount $isCheckedList");
                                       if(newValue == true){
                                         isCheckedList = [];
                                         isCheckedList = List.generate(groupListCount, (index) => true);
@@ -117,14 +107,8 @@ class _GroupListState extends State<GroupList> {
                                         totalCount = "0";
                                         uniqueCount = "0";
                                       }
-                                      print("LAMA $groupListCount $isCheckedList");
+                                      debugPrint("LAMA $groupListCount $isCheckedList");
                                       stateChange(() {});
-                                      // setState(() {});
-                                      // print(newValue.toString() + index.toString() + label);
-                                      // stateChange(() {
-                                      //   isCheckedList[index] = newValue ?? true;
-                                      // });
-                                      // newValue!?checkBoxId.add(id):checkBoxId.removeLast();
                                     },
                                     value: selectAll,
                                     activeColor: c137700,
@@ -167,7 +151,6 @@ class _GroupListState extends State<GroupList> {
                                                   );
                                                 }
                                               });
-                                              // newValue!?checkBoxId.add(id):checkBoxId.removeLast();
                                             },
                                             value: isCheckedList[index],
                                             activeColor: c137700,
@@ -186,36 +169,35 @@ class _GroupListState extends State<GroupList> {
                     },
                   ),
                 );
-              }
-              else if (state is GetGroupFailedState){
+              } else if (state is GetGroupFailedState){
                 return const Text("No Data Found");
               } else if(state is PostGroupLoadingState){
-                return Container(
+                return SizedBox(
                   height: MediaQuery.of(context).size.height * 0.47,
                   child: const Center(
-                    child: const CircularProgressIndicator(),
+                    child: CircularProgressIndicator(),
                   ),
                 );
               } else if(state is PostGroupSuccessState){
-                return Container(
-                    height: MediaQuery.of(context).size.height * 0.47,
-                    child: const Center(
-                      child: const CircularProgressIndicator(),
-                    ));
-              } else if (state is PostGroupFailedState){
-                return Container(
+                return SizedBox(
                     height: MediaQuery.of(context).size.height * 0.47,
                     child: const Center(
                       child: CircularProgressIndicator(),
                     ));
-              }
-              else {
+              } else if (state is PostGroupFailedState){
+                return SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.47,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ));
+              } else {
                 return Container();
               }
             }
           ),
           BlocConsumer<UniqueBloc, UniqueState>(
             listener: (context, state){
+              debugPrint("LAMA 3 ${state.toString()}");
               if(state is GetUniqueCountSuccessState){
                 totalCount = state.getUniqueCountModel.data?.totalMobileCount??"0";
                 uniqueCount = state.getUniqueCountModel.data?.totalUniqueMobilecount??"0";
@@ -282,7 +264,6 @@ class _GroupListState extends State<GroupList> {
                     stateChange(() {
                       isCheckedList[index] = newValue ?? true;
                     });
-                    // newValue!?checkBoxId.add(id):checkBoxId.removeLast();
                   },
                   value: isCheckedList[index],
                   activeColor: c137700,
