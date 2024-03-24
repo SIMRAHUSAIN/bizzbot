@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, prefer_typing_uninitialized_variables
+// ignore_for_file: use_build_context_synchronously, prefer_typing_uninitialized_variables, avoid_print
 
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
@@ -41,13 +41,19 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   String? templateTypeInitVal = '';
   String? countryCdInitVal = '';
-  String? templateIdInitVal = '';
+  String? templateIdNameInitVal = '';
   String uploadFilePath = "";
+  String totalCount = "0", uniqueCount = "0";
+  Map<String, Map<String, int>> mapData = {};
+  Map<int, TextEditingController> textControllers = {};
+
 
   bool isDuplicateData = false;
   bool isUploadFile = false;
   
   var groupData;
+  List<Widget> textFields = [];
+  String filePath = '';
 
   @override
   void initState() {
@@ -97,13 +103,13 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 }
               } 
               else if(state is TemplateIdSuccessState) {
-                templateIdInitVal = state.templateIdModel.data![0].name!;
+                templateIdNameInitVal = state.templateIdModel.data![0].name!;
                 for(int i = 0; i < state.templateIdModel.data!.length; i++) {
                   templateIdList!.add(state.templateIdModel.data![i].name.toString());
                 }
                 BlocProvider.of<SendMessageBloc>(context).add(
                     GetTemplateIdMessageEvent(
-                        groupId: templateIdInitVal?.split(' ').first??""
+                        groupId: templateIdNameInitVal?.split(' ').first??""
                     )
                 );
               }
@@ -112,6 +118,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
               } 
               else if(state is GetTemplateIdMessageSuccessState){
                   _whatsAppMessageController.text = state.templateIdMessageModel.data?[0].tbodytext??"";
+                  _getVarTextField();
               }
             }),
             child: BlocBuilder<SendMessageBloc, SendMessageState>(
@@ -157,6 +164,10 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         ):const SizedBox(),
         _tempIdDrpdwn(),
         _getWhtAppTxt(),
+        _whatsAppMessageController.text.contains("{{")?
+        Column(
+          children: textFields,
+        ):Container(),
         _getDuplicate(),
         _getActnBtnRow()
       ],
@@ -356,6 +367,84 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     );
   }
 
+  _getVarTextField() {
+    String inputText = _whatsAppMessageController.text;
+    List<String> splitText = inputText.split(RegExp(r'\{\{\d+\}\}'));
+    for (int i = 0; i < splitText.length - 1; i++) {
+      mapData["{{${i+1}}}"] = {"{{${i+1}}}": _whatsAppMessageController.text.indexOf("{{${i+1}}}")};
+      print(mapData["{{${i+1}}}"]);
+        TextEditingController controller = TextEditingController(text: '');
+        textControllers[i] = controller;
+        int initialIndex = 0;
+        textFields.add(
+            Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              height: MediaQuery.of(context).size.height * 0.07,
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: c137700.withOpacity(0.08),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    controller: controller,
+                    onChanged: (value) {
+                      if(_whatsAppMessageController.text.contains("{{${i+1}}")){
+                        initialIndex = _whatsAppMessageController.text.indexOf("{{${i+1}}}");
+                      }
+                      _updateText(i + 1, value, mapData, initialIndex, splitText.length);
+                    },
+                    maxLines: 1,
+                    textAlign: TextAlign.left,
+                    textAlignVertical: TextAlignVertical.center,
+                    decoration: InputDecoration(
+                      hintText: "{{${i+1}}}",
+                      border: InputBorder.none, // Hide TextField's border
+                    ),
+                  ),
+                ),
+              ),
+            )
+        );
+      }
+  }
+
+  void _updateText(int index, String value, Map targetMapValue, int initialIndex, int splitTextLength) {
+    Map<String, int> placeholderMap = targetMapValue["{{$index}}"];
+    print("Hi index: $index value: $value map: $targetMapValue intialIndex: $initialIndex");
+    String currentText = _whatsAppMessageController.text;
+    // initialIndex = currentText.indexOf(index>1?targetMapValue["{{${index-1}}}"]:targetMapValue["{{${index}}}"], initialIndex);
+    // int placeholderIndex = currentText.indexOf(placeholder, initialIndex);
+    // if (placeholderIndex != -1) {
+    //   int endIndex = placeholderIndex + placeholder.length;
+    String placeHolderKey = placeholderMap.entries.first.key;
+    int initial = placeholderMap[placeHolderKey]??0;
+    print("HELLO Key: $placeHolderKey Value: $initial PlaceholderKey: ${placeHolderKey.length}");
+    print("Interim Index Value: $index Value Length: ${value.length} Intial Value: $initial Total Length: ${initial+placeHolderKey.length}");
+    String newText = currentText.replaceRange(
+          initial, initial+placeHolderKey.length, value);
+    if(index == 1){
+      mapData["{{$index}}"] = {value: initial};
+    }
+    for (int i = index; i<splitTextLength-1; i++) {
+      mapData["{{${i+1}}}"] = {mapData["{{${i+1}}}"]?.entries.first.key??"": ((mapData["{{${i+1}}}"]?.entries.first.value??0)+1-(_whatsAppMessageController.text.contains("{{1}}")?5:0))};
+    }
+    if(index > 1){
+      mapData["{{$index}}"] = {value: ((mapData["{{$index}}"]?.entries.first.value??0))};
+    }
+    print("BYE New Map Value: $mapData");
+      _whatsAppMessageController.text = newText;
+    // }    // String newText = currentText.replaceAll(targetMapValue["{{$index}}"], value);
+    // print("OK ${newText}");
+    // mapData["{{$index}}"] = value;
+    // _whatsAppMessageController.text = newText;
+    // print("HII ${_whatsAppMessageController.text}");
+  }
+
   _getActnBtnRow() {
     return Container(
       margin: const EdgeInsets.only(top: 5),
@@ -371,24 +460,24 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   whatsappType: templateTypeInitVal,
                   campaignName: _cmpgnNmController.text,
                   xLUPLOADED: isUploadFile ? 'Y' : '',
-                  uPLOADFILENM: '',
-                  group: false,
+                  uPLOADFILENM: filePath,
+                  group: totalCount.isNotEmpty ? true : false,
                   dTXLDistinct: const [], // pass fetched group list
-                  totalgroupMember: groupData ?? '',
-                  mobileList: '',
+                  totalgroupMember: totalCount,
+                  mobileList: '', // pas manually entered // it should be a list not string
                   allowDuplicate: isDuplicateData ? true : false,  
                   duplicate: '0', // always
                   notDuplicate: '0', // always
-                  mobileCount: '',
-                  manual: true,
-                  templateId: '',
-                  cbFailover: false,
+                  mobileCount: '', // Total Mobile Count in Case Of Manual
+                  manual: true,  // if user types mobile numbers
+                  templateId: templateIdNameInitVal?.split(' ').first ?? "",
+                  cbFailover: false, // always
                   fileOrUrl: '',
                   mediaUName: '',
                   fileUrl: '',
                   caption: '',
-                  msgText: '',
-                  locnameid: '',
+                  msgText: '', // always
+                  locnameid: '', // always
                   headerType: '', 
                   lstMappedField: const [],  // always
                   senderId: '', // always
@@ -398,7 +487,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   lstScheduleDate: const [],
                   mediaFileName: '', // always
                   mediaUrl: '', // always
-                  scratchCard: false,
+                  scratchCard: false, // always
                   totCount: '',
                   preview: '',
                   textBox1: "",
@@ -484,7 +573,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   color: c137700,
                 ),
                 iconSize: 30,
-                value: templateIdInitVal!.isNotEmpty ? templateIdInitVal : '',
+                value: templateIdNameInitVal!.isNotEmpty ? templateIdNameInitVal : '',
                 style: TextStyles.s16_w700_c137700,
                 onChanged: _templateIdCallback,
                 decoration: const InputDecoration(
@@ -512,14 +601,15 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   _templateIdCallback(newValue) {
     setState(() {
-      templateIdInitVal = newValue;
+      templateIdNameInitVal = newValue;
     });
 
     BlocProvider.of<SendMessageBloc>(context).add(
       GetTemplateIdMessageEvent(
-        groupId: templateIdInitVal?.split(' ').first??""
+        groupId: templateIdNameInitVal?.split(' ').first??""
       )
     );
+    textFields = [];
   }
 
   int currentIndex = 0;
@@ -564,7 +654,12 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 groupData = showDialog(
                   context: context,
                   builder: (context) {
-                    return const GroupList();
+                    return GroupList(
+                      callBack: (String totalCountValue, String uniqueCountValue){
+                        totalCount = totalCountValue;
+                        uniqueCount = uniqueCountValue;
+                      }
+                    );
                   }
                 );
               },
@@ -651,7 +746,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   onTap: () async {
                     FilePickerResult? result = await FilePicker.platform.pickFiles();
                     if (result != null) {
-                      String filePath = result.files.single.path!;
+                      filePath = result.files.single.path!;
                       BlocProvider.of<SendMessageBloc>(context).add(
                           UploadCsv(fileType: File(filePath))
                       );

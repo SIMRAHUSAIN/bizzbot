@@ -10,7 +10,8 @@ import '../unique_count/bloc/unique_event.dart';
 import '../unique_count/bloc/unique_state.dart';
 
 class GroupList extends StatefulWidget {
-  const GroupList({Key? key}) : super(key: key);
+  Function(String, String) callBack;
+  GroupList({Key? key, required this.callBack}) : super(key: key);
 
   @override
   State<GroupList> createState() => _GroupListState();
@@ -201,6 +202,7 @@ class _GroupListState extends State<GroupList> {
               if(state is GetUniqueCountSuccessState){
                 totalCount = state.getUniqueCountModel.data?.totalMobileCount??"0";
                 uniqueCount = state.getUniqueCountModel.data?.totalUniqueMobilecount??"0";
+                widget.callBack(totalCount, uniqueCount);
               }
             },
             builder: (context, state){
