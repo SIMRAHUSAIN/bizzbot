@@ -21,4 +21,5 @@ class ImageAssets {
   static const String mimLogo = 'assets/mim_logo.png';
   static const String uploadPng = 'assets/upload.png';
   static const String calenderPng = 'assets/calender.png';
+  static const String plusSignPng = 'assets/plus_sign.png';
 }
