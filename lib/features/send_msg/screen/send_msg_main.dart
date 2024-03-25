@@ -56,6 +56,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   var groupData;
   List<Widget> textFields = [];
   String filePath = '';
+  List<String> manualMobNumList = [];
 
   @override
   void initState() {
@@ -143,10 +144,29 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         _getTemplateTypDrpdwn(),
         _getCmpgnNmTxtFld(),
         _getMobNumRow(),
-        currentIndex == 2 ? Padding(
+        currentIndex == 2 
+        ? _getManualMobTextfield()
+        :const SizedBox(),
+        _tempIdDrpdwn(),
+        _getWhtAppTxt(),
+        _whatsAppMessageController.text.contains("{{")
+        ? Column(
+          children: textFields,
+        ) : const SizedBox.shrink(),
+        _getDuplicate(),
+        _getActnBtnRow()
+      ],
+    );
+  }
+
+  _getManualMobTextfield() {
+    manualMobNumList = _mobNumController.text.split(',');
+    print('SIM manul mob num list $manualMobNumList');
+    print('SIM length ${manualMobNumList.length}');
+    return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
-            height: 200,
+            height: 150,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey), 
               borderRadius: BorderRadius.circular(8.0), 
@@ -154,27 +174,17 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
-                maxLines: 5, 
+                maxLines: 25, 
                 controller: _mobNumController,
                 keyboardType: TextInputType.multiline,
                 decoration: const InputDecoration(
-                  hintText: 'Enter up to five lines of text',
+                  hintText: 'Enter Mobile numbers, each with comma.',
                   border: InputBorder.none,
                 ),
               ),
             ),
           ),
-        ):const SizedBox(),
-        _tempIdDrpdwn(),
-        _getWhtAppTxt(),
-        _whatsAppMessageController.text.contains("{{")?
-        Column(
-          children: textFields,
-        ):Container(),
-        _getDuplicate(),
-        _getActnBtnRow()
-      ],
-    );
+        );
   }
 
   _getTemplateTypDrpdwn() {
@@ -462,12 +472,12 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   group: totalCount.isNotEmpty ? true : false,
                   dTXLDistinct: groupApiData, // pass fetched group list
                   totalgroupMember: totalCount,
-                  mobileList: '',  // send manual mobile count duplicate
+                  mobileList: manualMobNumList,  // send manual mobile count duplicate
                   allowDuplicate: isDuplicateData ? true : false,  
                   duplicate: '0', // always
                   notDuplicate: '0', // always
-                  mobileCount: '', // Total Mobile Count in Case Of Manual
-                  manual: true,  // if user types mobile numbers
+                  mobileCount: manualMobNumList.length, // Total Mobile Count in Case Of Manual
+                  manual: _mobNumController.text.isNotEmpty ? true : false,  // if user types mobile numbers
                   templateId: templateIdNameInitVal?.split(' ').first ?? "",
                   cbFailover: false, // always
                   fileOrUrl: '',
@@ -486,7 +496,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   mediaFileName: '', // always
                   mediaUrl: '', // always
                   scratchCard: false, // always
-                  totCount: '', // send manual mobile count duplicate
+                  totCount: manualMobNumList.length, // send manual mobile count duplicate
                   preview: '',
                   textBox1: "",
                   textBox2: "",

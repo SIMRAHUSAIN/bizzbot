@@ -60,7 +60,7 @@ class GetSendorScheduleEvent extends SendMsgEvent {
   bool? group;
   List<String>? dTXLDistinct;
   String? totalgroupMember;
-  String? mobileList;
+  List<String>? mobileList;
   bool? allowDuplicate;
   String? duplicate;
   String? notDuplicate;
