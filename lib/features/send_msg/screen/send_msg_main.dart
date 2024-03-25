@@ -19,6 +19,11 @@ import '../../../utils/assets.dart';
 import 'group_list.dart';
 import 'message_scheduler_dialog.dart';
 
+enum UploadType {
+  CSV,
+  IMAGE
+}
+
 class SendMsgMainScreen extends StatefulWidget {
   const SendMsgMainScreen({Key? key}) : super(key: key);
 
@@ -37,6 +42,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   final TextEditingController time2Controller = TextEditingController();
   final TextEditingController date3Controller = TextEditingController();
   final TextEditingController time3Controller = TextEditingController();
+  final TextEditingController uploadImageController = TextEditingController();
 
   List<String?>? templateTypeList = [];
   List<String?>? countryCdList = [];
@@ -46,6 +52,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   String? countryCdInitVal = '';
   String? templateIdNameInitVal = '';
   String uploadFilePath = "";
+  String uploadImagePath = "";
   String totalCount = "0";
   List<String> groupApiData = [];
   Map<String, Map<String, int>> mapData = {};
@@ -60,6 +67,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   var groupData;
   List<Widget> textFields = [];
   String filePath = '';
+  bool enableUploadImageRow = false;
+  Map<String, String> templateIdMap = {};
 
   @override
   void initState() {
@@ -109,9 +118,11 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 }
               } 
               else if(state is TemplateIdSuccessState) {
+
                 templateIdNameInitVal = state.templateIdModel.data![0].name!;
                 for(int i = 0; i < state.templateIdModel.data!.length; i++) {
                   templateIdList!.add(state.templateIdModel.data![i].name.toString());
+                  templateIdMap[state.templateIdModel.data![i].name.toString()] = state.templateIdModel.data![i].templateType.toString();
                 }
                 BlocProvider.of<SendMessageBloc>(context).add(
                     GetTemplateIdMessageEvent(
@@ -170,6 +181,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           ),
         ):const SizedBox(),
         _tempIdDrpdwn(),
+        enableUploadImageRow?_uploadTabRow():Container(),
         _getWhtAppTxt(),
         _whatsAppMessageController.text.contains("{{")?
         Column(
@@ -603,6 +615,11 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   }
 
   _templateIdCallback(newValue) {
+    if(templateIdMap[newValue]?.toLowerCase().contains("image")??false){
+      enableUploadImageRow = true;
+    } else {
+      enableUploadImageRow = false;
+    }
     setState(() {
       templateIdNameInitVal = newValue;
     });
@@ -616,6 +633,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   }
 
   int currentIndex = 0;
+  int uploadTabCurrentIndex = 0;
 
   _getMobNumRow() {
     return Column(
@@ -641,7 +659,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                 showDialog(
                     context: context,
                     builder: (context) {
-                      return _getUploadFileDialog();
+                      return _getUploadFileDialog(UploadType.CSV);
                     }
                 );
               },
@@ -707,6 +725,74 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     );
   }
 
+  _uploadTabRow() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _uploadTab(0, true, () async {
+                  setState((){
+                    uploadTabCurrentIndex = 0;
+                  });
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return _getUploadFileDialog(UploadType.IMAGE);
+                      }
+                  );
+                }, 'Upload Image'
+            ),
+            _uploadTab(1, false, () {
+                setState((){
+                  uploadTabCurrentIndex = 1;
+                });
+              }, 'Enter URL'
+            ),
+          ]
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        TextField(
+          enabled: uploadTabCurrentIndex == 1?true:false,
+          controller: uploadImageController,
+          decoration: InputDecoration(
+            hintText: 'Enter file url',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+      ],
+    );
+  }
+
+  _uploadTab(int index, bool isTapped, void Function()? onTap, String title) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.05,
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+        decoration: BoxDecoration(
+          color: index == uploadTabCurrentIndex ? c137700 : cFFFFFF,
+          borderRadius: const BorderRadius.all(Radius.circular(25)),
+        ),
+        child: Center(
+          child: Text(
+            title,
+            style: index == uploadTabCurrentIndex ? TextStyles.s12_w400_cFFFFFF : TextStyles.s12_w500_c939292_lato,
+          ),
+        ),
+      ),
+    );
+  }
+
   _getDuplicate() {
     return Row(
       children: [
@@ -731,7 +817,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     );
   }
 
-  _getUploadFileDialog() {
+  _getUploadFileDialog(UploadType uploadType) {
     return Dialog(
       backgroundColor: cFFFFFF,
       elevation: 1,
@@ -788,7 +874,12 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   listener: (context, state){
                     debugPrint('LAMA 4 $state');
                     if(state is UploadCsvSuccessState){
-                      uploadFilePath = state.csvModel.data?.fileName??"";
+                      if(uploadType == UploadType.CSV) {
+                        uploadFilePath = state.csvModel.data?.fileName??"";
+                      } else {
+                        uploadImagePath = state.csvModel.data?.fileName??"";
+                        uploadImageController.text = uploadFilePath;
+                      }
                     }
                   },
                     builder: (context, state){
