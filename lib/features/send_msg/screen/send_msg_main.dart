@@ -28,6 +28,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
 
   final TextEditingController _cmpgnNmController = TextEditingController();
   final TextEditingController _whatsAppMessageController = TextEditingController();
+  final TextEditingController _mobNumController = TextEditingController();
   final TextEditingController date1Controller = TextEditingController();
   final TextEditingController time1Controller = TextEditingController();
   final TextEditingController date2Controller = TextEditingController();
@@ -43,7 +44,8 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   String? countryCdInitVal = '';
   String? templateIdNameInitVal = '';
   String uploadFilePath = "";
-  String totalCount = "0", uniqueCount = "0";
+  String totalCount = "0";
+  List<String> groupApiData = [];
   Map<String, Map<String, int>> mapData = {};
   Map<int, TextEditingController> textControllers = {};
 
@@ -141,7 +143,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
         _getTemplateTypDrpdwn(),
         _getCmpgnNmTxtFld(),
         _getMobNumRow(),
-        currentIndex == 2?Padding(
+        currentIndex == 2 ? Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
             height: 200,
@@ -149,12 +151,13 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
               border: Border.all(color: Colors.grey), 
               borderRadius: BorderRadius.circular(8.0), 
             ),
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
               child: TextField(
                 maxLines: 5, 
+                controller: _mobNumController,
                 keyboardType: TextInputType.multiline,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Enter up to five lines of text',
                   border: InputBorder.none,
                 ),
@@ -438,11 +441,6 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
     }
     print("BYE New Map Value: $mapData");
       _whatsAppMessageController.text = newText;
-    // }    // String newText = currentText.replaceAll(targetMapValue["{{$index}}"], value);
-    // print("OK ${newText}");
-    // mapData["{{$index}}"] = value;
-    // _whatsAppMessageController.text = newText;
-    // print("HII ${_whatsAppMessageController.text}");
   }
 
   _getActnBtnRow() {
@@ -460,11 +458,11 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   whatsappType: templateTypeInitVal,
                   campaignName: _cmpgnNmController.text,
                   xLUPLOADED: isUploadFile ? 'Y' : '',
-                  uPLOADFILENM: filePath,
+                  uPLOADFILENM: uploadFilePath,
                   group: totalCount.isNotEmpty ? true : false,
-                  dTXLDistinct: const [], // pass fetched group list
+                  dTXLDistinct: groupApiData, // pass fetched group list
                   totalgroupMember: totalCount,
-                  mobileList: '', // pas manually entered // it should be a list not string
+                  mobileList: '',  // send manual mobile count duplicate
                   allowDuplicate: isDuplicateData ? true : false,  
                   duplicate: '0', // always
                   notDuplicate: '0', // always
@@ -488,7 +486,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   mediaFileName: '', // always
                   mediaUrl: '', // always
                   scratchCard: false, // always
-                  totCount: '',
+                  totCount: '', // send manual mobile count duplicate
                   preview: '',
                   textBox1: "",
                   textBox2: "",
@@ -655,9 +653,9 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                   context: context,
                   builder: (context) {
                     return GroupList(
-                      callBack: (String totalCountValue, String uniqueCountValue){
+                      callBack: (String totalCountValue, List<String> groupDataValue) {
                         totalCount = totalCountValue;
-                        uniqueCount = uniqueCountValue;
+                        groupApiData = groupDataValue;
                       }
                     );
                   }

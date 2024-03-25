@@ -10,7 +10,7 @@ import '../unique_count/bloc/unique_event.dart';
 import '../unique_count/bloc/unique_state.dart';
 
 class GroupList extends StatefulWidget {
-  Function(String, String) callBack;
+  Function(String, List<String>) callBack;
   GroupList({Key? key, required this.callBack}) : super(key: key);
 
   @override
@@ -44,7 +44,8 @@ class _GroupListState extends State<GroupList> {
               debugPrint("LAMA 1 ${state.toString()} $isCheckedList");
               if(state is PostGroupSuccessState){
                 groupMobileNumber = state.postGroupModel.data!.map((e) => e.mobile!.toString()).toList();
-                Navigator.pop(context, totalCount);
+                widget.callBack(totalCount, groupMobileNumber);
+                Navigator.pop(context);
               } else if(state is PostGroupFailedState){
                 Navigator.pop(context);
               }
@@ -202,7 +203,6 @@ class _GroupListState extends State<GroupList> {
               if(state is GetUniqueCountSuccessState){
                 totalCount = state.getUniqueCountModel.data?.totalMobileCount??"0";
                 uniqueCount = state.getUniqueCountModel.data?.totalUniqueMobilecount??"0";
-                widget.callBack(totalCount, uniqueCount);
               }
             },
             builder: (context, state){
