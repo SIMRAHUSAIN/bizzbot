@@ -615,7 +615,9 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
   }
 
   _templateIdCallback(newValue) {
-    if(templateIdMap[newValue]?.toLowerCase().contains("image")??false){
+    if((templateIdMap[newValue]?.toLowerCase().contains("image")??false) ||
+        (templateIdMap[newValue]?.toLowerCase().contains("video")??false) ||
+        (templateIdMap[newValue]?.toLowerCase().contains("document")??false)){
       enableUploadImageRow = true;
     } else {
       enableUploadImageRow = false;
@@ -745,7 +747,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
                         return _getUploadFileDialog(UploadType.IMAGE);
                       }
                   );
-                }, 'Upload Image'
+                }, 'Upload File'
             ),
             _uploadTab(1, false, () {
                 setState((){
@@ -762,7 +764,7 @@ class _SendMsgMainScreenState extends State<SendMsgMainScreen> {
           enabled: uploadTabCurrentIndex == 1?true:false,
           controller: uploadImageController,
           decoration: InputDecoration(
-            hintText: 'Enter file url',
+            hintText: 'Enter File URL',
             border: OutlineInputBorder(),
           ),
         ),
